@@ -10,7 +10,7 @@ const LogIn = () => {
     <div className="App">
       <div id="login-body" className="bodyLogin">
         <div className="col container-img">
-          <img src={LogoEVA} className="" alt="" />
+          <img src={LogoEVA} className="d-sm-block d-lg-none" alt="" />
         </div>
         <div className="login-container container col-sm-12">
           <h2 className="text-start tittle-session">Iniciar Sesión</h2>

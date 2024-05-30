@@ -17,7 +17,7 @@ const HeaderLT2 = () => {
               >
                 <i id="icono" className="fa-solid fa-bars"></i>
               </button>
-              <a className="" href="./index.php">
+              <a className="" href="./index">
                 <img id="logo" src={Logo} alt="" />
               </a>
             </div>

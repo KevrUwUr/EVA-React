@@ -8,6 +8,7 @@ import HeaderLT2 from "./Componentes/header/headerLT2";
 import Index from "./Componentes/Admin/index";
 import Quality from "./Componentes/Admin/quality";
 import Satisfaction from "./Componentes/Admin/satisfaction";
+import AdminList from "./Componentes/Admin/admin_list";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/index" element={<Index />} />
         <Route path="/quality" element={<Quality />} />
         <Route path="/satisfaction" element={<Satisfaction />} />
+        <Route path="/admin_list" element={<AdminList />} />
         
         {/* Pruebas de barras */}
         <Route path="/pruebaAside" element={<SidebarLT1 />} />

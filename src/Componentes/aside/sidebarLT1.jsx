@@ -1,14 +1,24 @@
 import "../../assets/css/header_aside.css";
+import ManageUser from "../Modals/manageUser";
 const SidebarLT1 = () => {
+  const fakeData = {
+    id: '1',
+    primerNombre: 'Juan',
+    segundoNombre: 'Carlos',
+    primerApellido: 'García',
+    email: 'juan.garcia@example.com',
+    password: '',
+    language: 'en'
+  };
   return (
     <div
-      className="col-1 col-md-1 col-lg-1 d-lg-block d-none h-100 rounded-end-4 collapse  navbar-collapse ps-2 align-content-center"
+      className="col-1 col-md-1 col-lg-1 d-lg-block d-none h-100 rounded-end-4 collapse navbar-collapse ps-2 align-content-center"
       id="navbarNav"
     >
       <div id="div_ul" className="h-75 pe-0 ps-2 align-content-center">
         <ul className="pt-3 rounded-end-4">
           <li className="nav-item">
-            <a className="nav-link tooltip-container" href="./index.php">
+            <a className="nav-link tooltip-container" href="./index">
               <i id="iconoDegradado" className="fa-solid fa-house"></i>
             </a>
           </li>
@@ -29,7 +39,7 @@ const SidebarLT1 = () => {
           </li>
           <br />
           <a
-            className="dropdown-toggle nav-link link-dark"
+            className="dropdown-toggle nav-link nav-item link-dark"
             id="dropdownMenuButton"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -49,13 +59,15 @@ const SidebarLT1 = () => {
               </li>
               <li>
                 <a className="dropdown-item">
-                  [//!arreglar LogOut] Cerrar sesión
+                  {/* [//!arreglar LogOut]  */}
+                  Cerrar sesión
                 </a>
               </li>
             </ul>
           </li>
         </ul>
       </div>
+      <ManageUser data={fakeData}/>
     </div>
   );
 };

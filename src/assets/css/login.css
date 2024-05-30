@@ -13,6 +13,7 @@ cuadrar barra index */
     background-position: center;
     background-size: cover;
     height: 100vh;
+    align-content: space-around;
   }
 .login-container {
     border-radius: 10px;

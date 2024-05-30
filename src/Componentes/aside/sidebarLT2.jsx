@@ -33,8 +33,8 @@ const SidebarLT2 = () => {
                 </button>
               </li>
               <li>
-                <a className="dropdown-item">Cerrar sesión</a> [//! Arreglar
-                LogOut]
+                <a className="dropdown-item">Cerrar sesión</a> 
+                {/* [//! Arreglar LogOut] */}
               </li>
             </ul>
           </li>
