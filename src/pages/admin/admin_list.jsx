@@ -1,4 +1,4 @@
-/* import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TableDetalle from "../../components/Tables/table";
 
 import SidebarLT1 from "../../components/aside/sidebarLT1";
@@ -590,4 +590,3 @@ const AdminList = () => {
 };
 
 export default AdminList;
- */
