@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/* import { useState, useEffect } from "react";
 import TableDetalle from "../../components/Tables/table";
 
 import useInput from "../../components/hooks/useInput";
@@ -548,3 +548,4 @@ const AdminList = () => {
 };
 
 export default AdminList;
+ */
