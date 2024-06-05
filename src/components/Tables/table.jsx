@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../../assets/css/tabla.css";
 
 const TableDetalle = ({
   header,
   data,
-  // onCreate,
-  // onRemove,
-  // onUpdate,
-  // onView,
-  // modalId,
-  // modalId2,
+  onCreate,
+  onRemove,
+  onUpdate,
+  onView,
+  modalId,
+  modalId2
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,9 +60,9 @@ const TableDetalle = ({
         <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
           <button
             className="btn btn-block btn-sm btn-default btn-flat fw-bold acces-tabla m-2"
-            // data-bs-toggle="modal"
-            // data-bs-target="#modalCrear"
-            // onClick={() => onCreate(item)}
+            data-bs-toggle="modal"
+            data-bs-target={`#${modalId}`}
+            onClick={() => onCreate(item)}
           >
             <i className="fa fa-plus"></i> Agregar Nuevo Usuario
           </button>
@@ -92,22 +92,22 @@ const TableDetalle = ({
               <td>
                 <button
                   className="btn btn-rect"
-                  // data-bs-toggle="modal"
-                  // data-bs-target={`#${modalId}`}
-                  // onClick={() => onUpdate(item)}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${modalId}`}
+                  onClick={() => onUpdate(item)}
                 >
                   <i className="fa-solid fa-edit"></i>
                 </button>
                 <button className="btn btn-rect" 
-                // onClick={() => onRemove(item)}
+                onClick={() => onRemove(item)}
                 >
                   <i className="fa-solid fa-trash"></i>
                 </button>
                 <button
                   className="btn btn-rect"
-                  // data-bs-toggle="modal"
-                  // data-bs-target={`#${modalId2}`}
-                  // onClick={() => onView(item)}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${modalId2}`}
+                  onClick={() => onView(item)}
                 >
                   <i className="fa-solid fa-search"></i>
                 </button>
