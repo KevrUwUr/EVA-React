@@ -1,22 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import LogIn from "./components/login";
+import LogIn from "./pages/layout/login";
+import Index from "./components/Admin/index"
+import Quality from "./components/Admin/quality"
+import Satisfaction from "./components/Admin/satisfaction"
+import AdminList from "./components/Admin/admin_list";
 import SidebarLT1 from "./components/aside/sidebarLT1";
 import SidebarLT2 from "./components/aside/sidebarLT2";
 import HeaderLT1 from "./components/header/headerLT1";
 import HeaderLT2 from "./components/header/headerLT2";
-import Index from "./components/Admin/index";
-import Quality from "./components/Admin/quality";
-import Satisfaction from "./components/Admin/satisfaction";
-import AdminList from "./Components/Admin/admin_list";
-
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LogIn />} />
-        <Route path="/index" element={<Index />} />
+        <Route path="/index" element={<Index/>} />
         <Route path="/quality" element={<Quality />} />
         <Route path="/satisfaction" element={<Satisfaction />} />
         <Route path="/admin_list" element={<AdminList />} />

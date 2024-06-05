@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../assets/css/login.css";
-import LogoEVA from "../assets/img/logo EVA2.0.png";
+import "../../assets/css/login.css";
+import LogoEVA from "../../assets/img/logo EVA2.0.png";
 
 const LogIn = () => {
   const [username, setUserName] = useState("");
