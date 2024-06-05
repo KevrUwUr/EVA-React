@@ -1,6 +1,4 @@
 import '../../assets/css/ManageUser.css';
-import PropTypes from 'prop-types';
-
 
 const ManageUser = ({ data }) => {
 
@@ -182,17 +180,5 @@ const ManageUser = ({ data }) => {
     </div>
   );
 };
-
-// ManageUser.propTypes = {
-//   data: PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//     primerNombre: PropTypes.string.isRequired,
-//     segundoNombre: PropTypes.string,
-//     primerApellido: PropTypes.string.isRequired,
-//     email: PropTypes.string.isRequired,
-//     password: PropTypes.string,
-//     language: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 export default ManageUser;

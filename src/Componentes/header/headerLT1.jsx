@@ -2,6 +2,7 @@ import Logo from "../../assets/img/logo EVA.webp";
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 
 const HeaderLT1 = () => {
+
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
@@ -40,7 +41,7 @@ const HeaderLT1 = () => {
               </span>
             </div>
             <div
-              className="col-1 col-md-1 col-lg-1 d-lg-none collapse  navbar-collapse"
+              className="col-1 col-md-1 col-lg-1 d-lg-none collapse navbar-collapse"
               id="navbarNav"
               style={{ border: "none" }}
             >
@@ -107,6 +108,8 @@ const HeaderLT1 = () => {
           </div>
         </div>
       </nav>
+      {/* <ManageUser data={fakeData}/> */}
+
     </header>
   );
 };

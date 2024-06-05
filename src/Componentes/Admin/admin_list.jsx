@@ -2,13 +2,36 @@ import { useState, useEffect } from "react";
 import TableDetalle from "../Tables/table";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
+import useInput from "../hooks/useInput";
 
 const AdminList = () => {
-  const [datos, setDatos] = useState([]);
+  //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
+  const url = "ENDPOINT de la API";
+
+  const [accessToken, setAccessToken] = useState("");
+  const [operation, setOperation] = useState([1]);
+  const [title, setTitle] = useState();
+  const [idToEdit, setidToEdit] = useState(null);
+
+  const [admins, setAdmins] = useState([]);
+  const name = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+  const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+  const email = useInput({
+    defaultValue: "",
+    validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/,
+  });
+  const password = useInput({
+    defaultValue: "",
+    validate:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  });
+  const role = useInput({ defaultValue: "", validate: /^[1-2]+$/ });
+  const state = useInput({ defaultValue: "", validate: /^[1-2]+$/ });
 
   useEffect(() => {
-    // Se establecen los datos una vez que el componente se monta
-    setDatos([
+    getAdmins();
+    // Se establecen los admins una vez que el componente se monta
+    setAdmins([
       {
         id: 1,
         nombre: "Juan",
@@ -849,6 +872,150 @@ const AdminList = () => {
     ]);
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
 
+  const config = {
+    headers: {
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      "Cache-Control": "no-cache",
+    },
+  };
+
+  const getAdmins = async () => {
+    try {
+      if (!accessToken) {
+        // Si el token de acceso no está disponible, muestra un mensaje de error o realiza alguna acción adecuada
+        throw new Error("No se proporcionó un token de acceso");
+      }
+      const respuesta = await axios.get(url, config);
+      setAdmins(respuesta.data);
+    } catch (error) {
+      console.error("Error al obtener los administradores:", error.message);
+      // Realiza alguna acción adecuada para manejar el error, como mostrar un mensaje al usuario o redirigirlo a una página de inicio de sesión
+    }
+  };
+
+  const openModal = (op, admin) => {
+    setOperation(op);
+    if (op === 1) {
+      setTitle("Registrar administrador");
+      name.handleChange("");
+      lastName.handleChange("");
+      email.handleChange("");
+      password.handleChange("");
+      role.handleChange("");
+      state.handleChange("");
+    } else if (op === 2) {
+      setTitle("Editar administrador");
+      name.handleChange(admin?.name);
+      lastName.handleChange(admin?.lastName);
+      email.handleChange(admin?.email);
+      password.handleChange(admin?.password);
+      role.handleChange(admin?.role);
+      state.handleChange(admin?.state);
+      setidToEdit(admin?.idAdmin);
+    }
+  };
+
+  const validar = (id) => {
+    var parametros;
+    var metodo;
+
+    if (
+      name.input.trim() === "" ||
+      lastName.input.trim() === "" ||
+      email.input.trim() === "" ||
+      password.input.trim() === "" ||
+      role.input === "" ||
+      state.input === ""
+    ) {
+      show_alert("error", "Completa todos los campos del formulario");
+    } else {
+      if (operation === 1) {
+        parametros = {
+          name: name.input,
+          lastName: lastName.input,
+          email: email.input,
+          password: 123,
+          role: role.input,
+          state: state.input,
+        };
+        metodo = "post";
+      } else if (operation === 2) {
+        parametros = {
+          name: name.input,
+          lastName: lastName.input,
+          email: email.input,
+          password: 123,
+          role: role.input,
+          state: state.input,
+        };
+        metodo = "put";
+      }
+      sendData(metodo, parametros, id);
+    }
+  };
+
+  const enviarSolicitud = async (metodo, parametros, id) => {
+    if (metodo === "POST") {
+      const duplicados = admins.find((u) => u.name === parametros.name);
+
+      if (duplicados) {
+        show_alert("warning", "Este administrador ya existe");
+        return;
+      }
+      await axios
+        .post(url, parametros, config)
+        .then(function (respuesta) {
+          show_alert("success", "Administrador creado");
+
+          document.getElementById("btnCerrar").click();
+          getAdmins();
+        })
+        .catch(function (error) {
+          show_alert("error", "Error de solucitud");
+        });
+    } else if (metodo === "PUT") {
+      await axios
+        .put(`${url}${id}`, parametros, config)
+        .then(function (respuesta) {
+          show_alert("success", "Administrador editado con exito");
+
+          document.getElementById("btnCerrar").click();
+          getAdmins();
+        })
+        .catch(function (error) {
+          show_alert("error", "El administrador no pudo ser editado");
+        });
+    }
+  };
+
+  const deleteCargo = (admin) => {
+    const id = admin.id;
+    const name = admin.name;
+    const MySwal = withReactContent(Swal);
+    MySwal.fire({
+      title: "¿Seguro quieres eliminar el admin " + name + "?",
+      icon: "question",
+      text: "No se podra dar marcha atras",
+      showCancelButton: true,
+      confirmButtonText: "Si, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${url}${id}`, config);
+          show_alert("success", "Cargo eliminado exitosamente");
+          getAdmins();
+        } catch (error) {
+          show_alert("error", "Error al eliminar el admin");
+          console.error(error);
+        }
+      } else {
+        show_alert("info", "El admin no fue eliminado");
+      }
+      getAdmins();
+    });
+  };
+
   return (
     <div className="App">
       <div id="body">
@@ -858,8 +1025,17 @@ const AdminList = () => {
         >
           <SidebarLT1 />
           <div className="container mt-0">
-            {datos.length > 0 && (
-              <TableDetalle header={[...Object.keys(datos[0])]} data={datos} />
+            {admins.length > 0 && (
+              <TableDetalle
+                header={[...Object.keys(admins[0])]}
+                data={admins}
+                onCreate={openModal(1)}
+                onRemove={(item) => deleteCargo(item)}
+                modalId={"modalAdmins"}
+                modalId2={"modalInfoAdmin"}
+                onUpdate={(payload) => openModal(2, payload)}
+                onView={(payload) => openModalCont(payload)}
+              />
             )}
           </div>
         </section>

@@ -43,14 +43,16 @@ const LogIn = () => {
               <label> Contraseña</label>
               <p>● ● ● ● ● ● ● ● ● ●</p>
             </div>
-            <button
-              className="btn access-button"
-              key="titulo"
-              id="bot"
-              type="submit"
-            >
-              Ingresar
-            </button>
+            <a href="./index">
+              <button
+                className="btn access-button"
+                key="titulo"
+                id="bot"
+                href="./Admin/index.jsx"
+              >
+                Ingresar
+              </button>
+            </a>
           </div>
         </div>
       </div>

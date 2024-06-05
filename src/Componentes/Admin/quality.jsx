@@ -125,9 +125,11 @@ const Quality = () => {
                             className="col-12 "
                             onClick="window.location.href='./index.php?page=user_list&access=2'"
                           >
-                            <button className="card-btn">
-                              Lista de agentes
-                            </button>
+                            <a href="./admin_list">
+                              <button className="card-btn">
+                                Lista de agentes
+                              </button>
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -308,7 +310,11 @@ const Quality = () => {
                           className="col col-lg-2"
                           onClick="window.location.href='./index.php?page=user_list&access=2'"
                         >
-                          <button className="card-btn">Lista de agentes</button>
+                          <a href="./admin_list">
+                            <button className="card-btn">
+                              Lista de agentes
+                            </button>
+                          </a>
                         </div>
                         <div className="d-none d-lg-block col-lg-1">
                           <div className="dropdown">

@@ -1,6 +1,7 @@
 import Logo from "../../assets/img/logo EVA.webp";
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 const HeaderLT2 = () => {
+  
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">

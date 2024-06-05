@@ -1,14 +1,13 @@
 import "../../assets/css/header_aside.css";
-import ManageUser from "../Modals/manageUser";
 const SidebarLT1 = () => {
-  const fakeData = {
-    id: '1',
-    primerNombre: 'Juan',
-    segundoNombre: 'Carlos',
-    primerApellido: 'García',
-    email: 'juan.garcia@example.com',
-    password: '',
-    language: 'en'
+  const data = {
+    id: "1",
+    primerNombre: "Juan",
+    segundoNombre: "Carlos",
+    primerApellido: "García",
+    email: "juan.garcia@example.com",
+    password: "",
+    language: "en",
   };
   return (
     <div
@@ -67,7 +66,6 @@ const SidebarLT1 = () => {
           </li>
         </ul>
       </div>
-      <ManageUser data={fakeData}/>
     </div>
   );
 };

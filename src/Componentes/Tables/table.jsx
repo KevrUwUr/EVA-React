@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import "../../assets/css/tabla.css";
 
-const TableDetalle = ({ header, data }) => {
+const TableDetalle = ({
+  header,
+  data,
+  onCreate,
+  onRemove,
+  onUpdate,
+  onView,
+  modalId,
+  modalId2,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
@@ -30,7 +39,10 @@ const TableDetalle = ({ header, data }) => {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = filteredData.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
 
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
@@ -50,6 +62,7 @@ const TableDetalle = ({ header, data }) => {
             className="btn btn-block btn-sm btn-default btn-flat fw-bold acces-tabla m-2"
             data-bs-toggle="modal"
             data-bs-target="#modalCrear"
+            onClick={() => onCreate(item)}
           >
             <i className="fa fa-plus"></i> Agregar Nuevo Usuario
           </button>
@@ -58,8 +71,10 @@ const TableDetalle = ({ header, data }) => {
       <table className="table table-hover" id="tableDefault">
         <thead>
           <tr className="table-light tr-table">
-          {header.map((item, i) => (
-              <th key={i} className="col text-center">{capitalize(item)}</th>
+            {header.map((item, i) => (
+              <th key={i} className="col text-center">
+                {capitalize(item)}
+              </th>
             ))}
             <th className="col text-center">Acciones</th>
           </tr>
@@ -68,16 +83,30 @@ const TableDetalle = ({ header, data }) => {
           {currentRecords.map((item, idx) => (
             <tr key={idx}>
               {Object.keys(item).map((itemkey, i) => (
-                <td key={i}>{itemkey === "id" ? idx + 1 + indexOfFirstRecord : item[itemkey]}</td>
+                <td key={i}>
+                  {itemkey === "id"
+                    ? idx + 1 + indexOfFirstRecord
+                    : item[itemkey]}
+                </td>
               ))}
               <td>
-                <button className="btn btn-rect" style={{ borderRadius: 0 }}>
+                <button
+                  className="btn btn-rect"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${modalId}`}
+                  onClick={() => onUpdate(item)}
+                >
                   <i className="fa-solid fa-edit"></i>
                 </button>
-                <button className="btn btn-rect" style={{ borderRadius: 0 }}>
+                <button className="btn btn-rect" onClick={() => onRemove(item)}>
                   <i className="fa-solid fa-trash"></i>
                 </button>
-                <button className="btn btn-rect" style={{ borderRadius: 0 }}>
+                <button
+                  className="btn btn-rect"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${modalId2}`}
+                  onClick={() => onView(item)}
+                >
                   <i className="fa-solid fa-search"></i>
                 </button>
               </td>
@@ -114,7 +143,11 @@ const TableDetalle = ({ header, data }) => {
           </label>
         </div>
         <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
-          <div className="btn-group" role="group" aria-label="Basic outlined example">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic outlined example"
+          >
             <button
               type="button"
               className="btn"
@@ -128,7 +161,9 @@ const TableDetalle = ({ header, data }) => {
             <button
               type="button"
               className="btn"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
             >
               &gt;
             </button>

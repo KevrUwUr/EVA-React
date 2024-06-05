@@ -67,13 +67,13 @@ table {
 
 .acces-tabla {
   border: 1px solid rgb(199, 14, 143) !important;
-  transition: 2s ease-in-out, background-image 2s ease-in-out;
+  
   border-radius: 20px;
 }
 
 .acces-tabla:hover {
-  color: rgb(0, 0, 0) !important;
-  background-image: linear-gradient(180deg, rgb(199, 14, 143), #ffffff);
+  color: rgb(255, 255, 255) !important;
+  background-color: rgb(199, 14, 143);
 }
 
 #hr-table {
@@ -92,14 +92,15 @@ table {
 .btn-rect {
   background-color: transparent; /* Fondo transparente por defecto */
   color: rgb(199, 14, 143);
-  border: 1px solid rgb(199, 14, 143);
   padding: 5px 10px;
   margin: 2px;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  border-radius: 20px !important;
 }
 
 .btn-rect:hover {
   background-color: rgb(199, 14, 143); /* Color de fondo al hacer hover */
+  border-radius: 20px !important;
   color: white; /* Color del texto al hacer hover */
 }
 
