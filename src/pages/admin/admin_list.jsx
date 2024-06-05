@@ -1,9 +1,9 @@
 /* import { useState, useEffect } from "react";
 import TableDetalle from "../../components/Tables/table";
 
-import useInput from "../../components/hooks/useInput";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import HeaderLT1 from "../../components/header/headerLT1";
+import useInput from "../../components/hooks/useInput";
 
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
@@ -30,7 +30,7 @@ const AdminList = () => {
   const state = useInput({ defaultValue: "", validate: /^[1-2]+$/ });
 
   useEffect(() => {
-    getAdmins();
+    // // getAdmins();
     // Se establecen los admins una vez que el componente se monta
     setAdmins([
       {
@@ -311,7 +311,7 @@ const AdminList = () => {
         password: "jkl46",
         rol: "Usuario",
         estado: "Activo",
-      }
+      },
     ]);
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
 
@@ -322,19 +322,19 @@ const AdminList = () => {
     },
   };
 
-  const getAdmins = async () => {
-    try {
-      if (!accessToken) {
-        // Si el token de acceso no está disponible, muestra un mensaje de error o realiza alguna acción adecuada
-        throw new Error("No se proporcionó un token de acceso");
-      }
-      const respuesta = await axios.get(url, config);
-      setAdmins(respuesta.data);
-    } catch (error) {
-      console.error("Error al obtener los administradores:", error.message);
-      // Realiza alguna acción adecuada para manejar el error, como mostrar un mensaje al usuario o redirigirlo a una página de inicio de sesión
-    }
-  };
+  // const getAdmins = async () => {
+  //   try {
+  //     if (!accessToken) {
+  //
+  //       throw new Error("No se proporcionó un token de acceso");
+  //     }
+  //     const respuesta = await axios.get(url, config);
+  //     setAdmins(respuesta.data);
+  //   } catch (error) {
+  //     console.error("Error al obtener los administradores:", error.message);
+  //
+  //   }
+  // };
 
   const openModal = (op, admin) => {
     setOperation(op);
@@ -354,7 +354,7 @@ const AdminList = () => {
       password.handleChange(admin?.password);
       role.handleChange(admin?.role);
       state.handleChange(admin?.state);
-      setidToEdit(admin?.idAdmin);
+      setidToEdit(admin?.id);
     }
   };
 
@@ -409,21 +409,19 @@ const AdminList = () => {
         .post(url, parametros, config)
         .then(function (respuesta) {
           show_alert("success", "Administrador creado");
-
           document.getElementById("btnCerrar").click();
-          getAdmins();
+          // getAdmins();
         })
         .catch(function (error) {
-          show_alert("error", "Error de solucitud");
+          show_alert("error", "Error de solicitud");
         });
     } else if (metodo === "PUT") {
       await axios
         .put(`${url}${id}`, parametros, config)
         .then(function (respuesta) {
-          show_alert("success", "Administrador editado con exito");
-
+          show_alert("success", "Administrador editado con éxito");
           document.getElementById("btnCerrar").click();
-          getAdmins();
+          // getAdmins();
         })
         .catch(function (error) {
           show_alert("error", "El administrador no pudo ser editado");
@@ -438,16 +436,16 @@ const AdminList = () => {
     MySwal.fire({
       title: "¿Seguro quieres eliminar el admin " + name + "?",
       icon: "question",
-      text: "No se podra dar marcha atras",
+      text: "No se podrá dar marcha atrás",
       showCancelButton: true,
-      confirmButtonText: "Si, eliminar",
+      confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axios.delete(`${url}${id}`, config);
-          show_alert("success", "Cargo eliminado exitosamente");
-          getAdmins();
+          show_alert("success", "Admin eliminado exitosamente");
+          // getAdmins();
         } catch (error) {
           show_alert("error", "Error al eliminar el admin");
           console.error(error);
@@ -455,7 +453,7 @@ const AdminList = () => {
       } else {
         show_alert("info", "El admin no fue eliminado");
       }
-      getAdmins();
+      // getAdmins();
     });
   };
 
@@ -472,19 +470,19 @@ const AdminList = () => {
               <TableDetalle
                 header={[...Object.keys(admins[0])]}
                 data={admins}
-                // onCreate={openModal(1)}
-                // onRemove={(item) => deleteCargo(item)}
-                // modalId={"modalAdmins"}
-                // modalId2={"modalInfoAdmin"}
-                // onUpdate={(payload) => openModal(2, payload)}
-                // onView={(payload) => openModalCont(payload)}
+                onCreate={() => openModal(1)}
+                onRemove={(item) => deleteCargo(item)}
+                modalId={"modalAdmin"}
+                modalId2={"modalAdmin"}
+                onUpdate={(payload) => openModal(2, payload)}
+                onView={(payload) => openModalCont(payload)}
               />
             )}
           </div>
         </section>
       </div>
       <div id="modalAdmin" className="modal fade" aria-hidden="true">
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <label className="h5">{title}</label>
@@ -496,53 +494,97 @@ const AdminList = () => {
               ></button>
             </div>
             <div className="modal-body">
-            
-                <div class="row mb-3">
-                    <div class="col ">
-                        <label class="fw-bold">Nombre:</label>
-                        <span>{}</span>
-                    </div>
+              <div className="row w-50 d-flex flex-column">
+                <div className="col fw-bold">Datos de usuario</div>
+                <div className="col">
+                  <label className="fw-bold">Nombre:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={name.input}
+                    onChange={(e) => name.handleChange(e.target.value)}
+                  />
                 </div>
-                <div class="row mb-3">
-                    <div class="col ">
-                        <label class="fw-bold">Correo Electrónico:</label>
-                        <span><?php echo $row['email']; ?></span>
-                    </div>
-                    <div class="col">
-                        <label class="fw-bold">Idioma:</label>
-                        <span><?php echo $row['language']; ?></span>
-                    </div>
-                    <div class="col ">
-                        <label class="fw-bold">Tipo:</label>
-                        <span><?php $type_arr = ['', "Admin", "Staff", "Suscriptor"]; echo $type_arr[$row['type']]; ?></span>
-                    </div>
+                <div className="col">
+                  <label className="fw-bold">Segundo nombre:</label>
+                  <input type="text" name="lastName" />
                 </div>
-                <div class="row mb-3">
-                    <div class="col ">
-                        <label class="fw-bold">Fecha de Registro:</label>
-                        <span><?php echo $row['registration_date']; ?></span>
-                    </div>
-                    <div class="col ">
-                        <label class="fw-bold">Última Visita:</label>
-                        <span><?php echo $row['last_visit_date']; ?></span>
-                    </div>
+                <div className="col">
+                  <label className="fw-bold">Apellido</label>
+                  <input
+                    type="text"
+                    name="email"
+                    value={lastName.input}
+                    onChange={(e) => lastName.handleChange(e.target.value)}
+                  />
                 </div>
-
+                <div className="col">
+                  <label className="fw-bold">Cliente:</label>
+                  <input type="number" name="role" />
+                </div>
+              </div>
+              <div className="row w-50 f-flex flex-column">
+                <div className="col fw-bold">Datos administrativos</div>
+                <div className="col">
+                  <label className="fw-bold">E-Mail</label>
+                  <input
+                    type="text"
+                    name="email"
+                    value={email.input}
+                    onChange={(e) => email.handleChange(e.target.value)}
+                  />
+                </div>
+                <div className="col">
+                  <label className="fw-bold">Contraseña:</label>
+                  <input
+                    type="number"
+                    name="role"
+                    value={password.input}
+                    onChange={(e) => password.handleChange(e.target.value)}
+                  />
+                </div>
+                <div className="col">
+                  <label className="fw-bold">Confirmar contraseña:</label>
+                  <input type="number" name="role" />
+                </div>
+                <small>Si no desea cambiar la contraseña dejar en blanco</small>
+                <div className="col">
+                  <label className="fw-bold">Rol</label>
+                  <select
+                    name=""
+                    id=""
+                    value={role.input}
+                    onChange={(e) => role.handleChange(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      {" "}
+                      Selecciona un estado{" "}
+                    </option>
+                    <option value="1"> Administrador</option>
+                    <option value="2"> Cliente </option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="modal-footer">
               <button
-                id="btnCerrar"
                 type="button"
+                id="btnCerrar"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Cerrar
               </button>
+              <button
+                onClick={() => validar(idToEdit)}
+                className="btn btn-success"
+              >
+                Guardar
+              </button>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 };
