@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import LogIn from "./Componentes/login";
-import SidebarLT1 from "./Componentes/aside/sidebarLT1";
-import SidebarLT2 from "./Componentes/aside/sidebarLT2";
-import HeaderLT1 from "./Componentes/header/headerLT1";
-import HeaderLT2 from "./Componentes/header/headerLT2";
-import Index from "./Componentes/Admin/index";
-import Quality from "./Componentes/Admin/quality";
-import Satisfaction from "./Componentes/Admin/satisfaction";
-import AdminList from "./Componentes/Admin/admin_list";
+import LogIn from "./components/login";
+import SidebarLT1 from "./components/aside/sidebarLT1";
+import SidebarLT2 from "./components/aside/sidebarLT2";
+import HeaderLT1 from "./components/header/headerLT1";
+import HeaderLT2 from "./components/header/headerLT2";
+import Index from "./components/Admin/index";
+import Quality from "./components/Admin/quality";
+import Satisfaction from "./components/Admin/satisfaction";
+import AdminList from "./Components/Admin/admin_list";
+
 
 function App() {
   return (

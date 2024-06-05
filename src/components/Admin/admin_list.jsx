@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import TableDetalle from "../Tables/table";
+
+import useInput from "../hooks/useInput";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
-import useInput from "../hooks/useInput";
 
 const AdminList = () => {
-  //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
+  // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
   const url = "ENDPOINT de la API";
 
   const [accessToken, setAccessToken] = useState("");
@@ -954,7 +955,7 @@ const AdminList = () => {
     }
   };
 
-  const enviarSolicitud = async (metodo, parametros, id) => {
+  const sendData = async (metodo, parametros, id) => {
     if (metodo === "POST") {
       const duplicados = admins.find((u) => u.name === parametros.name);
 
@@ -1029,12 +1030,12 @@ const AdminList = () => {
               <TableDetalle
                 header={[...Object.keys(admins[0])]}
                 data={admins}
-                onCreate={openModal(1)}
-                onRemove={(item) => deleteCargo(item)}
-                modalId={"modalAdmins"}
-                modalId2={"modalInfoAdmin"}
-                onUpdate={(payload) => openModal(2, payload)}
-                onView={(payload) => openModalCont(payload)}
+                // onCreate={openModal(1)}
+                // onRemove={(item) => deleteCargo(item)}
+                // modalId={"modalAdmins"}
+                // modalId2={"modalInfoAdmin"}
+                // onUpdate={(payload) => openModal(2, payload)}
+                // onView={(payload) => openModalCont(payload)}
               />
             )}
           </div>
