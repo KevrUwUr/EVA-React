@@ -9,6 +9,7 @@ import SidebarLT1 from "./components/aside/sidebarLT1";
 import SidebarLT2 from "./components/aside/sidebarLT2";
 import HeaderLT1 from "./components/header/headerLT1";
 import HeaderLT2 from "./components/header/headerLT2";
+import SurveyList from "./pages/admin/survey_list";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/quality" element={<Quality />} />
         <Route path="/satisfaction" element={<Satisfaction />} />
         <Route path="/admin_list" element={<AdminList />} />
+        <Route path="/survey_list" element={<SurveyList />} />
         
         {/* Pruebas de barras */}
         <Route path="/pruebaAside" element={<SidebarLT1 />} />
