@@ -10,6 +10,7 @@ import HeaderLT1 from "./components/header/headerLT1";
 import HeaderLT2 from "./components/header/headerLT2";
 import Public_survey from "./pages/admin/survey/public_survey";
 import AdminList from "./pages/admin/admin_list";
+import SurveyList from "./pages/admin/survey_list";
 
 function App() {
   return (
