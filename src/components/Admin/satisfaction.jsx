@@ -166,9 +166,10 @@ const Satisfaction = () => {
                           </div>
                         </div>
                         <div className="row button-container">
+                          
                           <div
                             className="col-10"
-                            onClick="window.location.href='./index.php?page=survey_list'"
+                            onClick="./survey_list"
                           >
                             <button className="card-btn check">
                               Crear encuesta

@@ -101,14 +101,13 @@ const TableSurvey = ({
                 <button className="btn btn-rect" onClick={() => onRemove(item)}>
                   <i className="fa-solid fa-trash"></i>
                 </button>
+                <a  href={`./view_survey`}>
                 <button
                   className="btn btn-rect"
-                  data-bs-toggle="modal"
-                  data-bs-target={`#${modalId2}`}
-                  onClick={() => onView(item)}
                 >
                   <i className="fa-solid fa-circle-question"></i>
                 </button>
+                </a>
                 <button
                   className="btn btn-rect"
                   data-bs-toggle="modal"
@@ -117,6 +116,7 @@ const TableSurvey = ({
                 >
                   <i className="fa-solid fa-envelopes-bulk"></i>
                 </button>
+                
               </td>
             </tr>
           ))}

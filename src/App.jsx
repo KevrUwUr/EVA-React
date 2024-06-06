@@ -11,6 +11,7 @@ import HeaderLT2 from "./components/header/headerLT2";
 import Public_survey from "./pages/admin/survey/public_survey";
 import AdminList from "./pages/admin/admin_list";
 import SurveyList from "./pages/admin/survey_list";
+import View_survey from "./pages/admin/survey/view_survey";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
         {/* Pruebas de encuestas */}
         <Route path="/public_survey" element={<Public_survey />} />
+        <Route path="/view_survey" element={<View_survey/>} />
       </Routes>
     </BrowserRouter>
   );

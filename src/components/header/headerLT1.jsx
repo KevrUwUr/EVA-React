@@ -2,7 +2,15 @@ import Logo from "../../assets/img/logo EVA.webp";
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 
 const HeaderLT1 = () => {
-
+  const data = {
+    id: "1",
+    primerNombre: "Juan",
+    segundoNombre: "Carlos",
+    primerApellido: "García",
+    email: "juan.garcia@example.com",
+    password: "",
+    language: "en",
+  };
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
