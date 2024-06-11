@@ -1,6 +1,6 @@
-import React from 'react'
+/* import React from 'react'
 
-export default function ManageQuestion({data}) {
+export default function ManageQuestion({id}) {
   return (
     <div
       className="modal fade"
@@ -26,7 +26,7 @@ export default function ManageQuestion({data}) {
                   id="firstname"
                   className="form-control"
                   placeholder=" "
-                  value={data.primerNombre}
+                  value={data.}
                   required
                 />
               </div>
@@ -179,3 +179,4 @@ export default function ManageQuestion({data}) {
     </div>
   )
 }
+ */

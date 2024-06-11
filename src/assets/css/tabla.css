@@ -120,20 +120,9 @@ table {
   background-color: rgb(214, 10, 170);
   color: white;
 }
-
-.btn-group .btn {
-  background-color: transparent; /* Fondo transparente por defecto */
-  color: rgb(199, 14, 143);
-  border: 1px solid rgb(199, 14, 143);
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-.btn-group .btn:hover {
-  background-color: rgb(214, 10, 170); /* Color de fondo al hacer hover */
-  color: white; /* Color del texto al hacer hover */
-}
-
 .label {
   color: rgb(199, 14, 143);
   font-weight: bold;
 }
+
+/* ? Poner estilos de botones de tabla survey */
