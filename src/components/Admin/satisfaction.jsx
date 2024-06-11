@@ -171,9 +171,11 @@ const Satisfaction = () => {
                             className="col-10"
                             onClick="./survey_list"
                           >
+                            <a href="/survey_list">
                             <button className="card-btn check">
                               Crear encuesta
                             </button>
+                            </a>
                           </div>
                           <div className="col-2">
                             <button className="btn-plus">

@@ -31,7 +31,7 @@ const SidebarLT1 = () => {
           <li className="nav-item">
             <a
               className="nav-link tooltip-container"
-              href="./index.php?page=client_list"
+              href="/client_list"
             >
               <i id="iconoDegradado" className="fa-solid fa-id-card-clip"></i>
             </a>

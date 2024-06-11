@@ -3,6 +3,7 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "../../assets/css/newUser.css";
 import TableDetalle from "../../components/Tables/table";
+import Swal from 'sweetalert2'
 
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import HeaderLT1 from "../../components/header/headerLT1";
@@ -792,8 +793,7 @@ const AdminList = () => {
   const deleteCargo = (admin) => {
     const id = admin.id;
     const name = admin.name;
-    const MySwal = withReactContent(Swal);
-    MySwal.fire({
+    Swal.fire({
       title: "¿Seguro quieres eliminar el admin " + name + "?",
       icon: "question",
       text: "No se podrá dar marcha atrás",
@@ -899,7 +899,7 @@ const AdminList = () => {
                       value={firstName.input}
                       onChange={(e) => firstName.handleChange(e.target.value)}
                     />
-                    <span class="labelName">Primer nombre</span>
+                    <span className="labelName">Primer nombre</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -912,7 +912,7 @@ const AdminList = () => {
                       value={middleName.input}
                       onChange={(e) => middleName.handleChange(e.target.value)}
                     />
-                    <span class="labelName">Segundo nombre:</span>
+                    <span className="labelName">Segundo nombre:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -937,7 +937,7 @@ const AdminList = () => {
                       isMulti
                       options={clientes}
                     />
-                    <span class="labelName">Clientes:</span>
+                    <span className="labelName">Clientes:</span>
                   </label>
                 </div>
               </div>
@@ -955,7 +955,7 @@ const AdminList = () => {
                       value={email.input}
                       onChange={(e) => email.handleChange(e.target.value)}
                     />
-                    <span class="labelName">E-mail:</span>
+                    <span className="labelName">E-mail:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -967,7 +967,7 @@ const AdminList = () => {
                       name="password"
                       onChange={(e) => password.handleChange(e.target.value)}
                     />
-                    <span class="labelName">Contraseña:</span>
+                    <span className="labelName">Contraseña:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -978,7 +978,7 @@ const AdminList = () => {
                       type="password"
                       name="cPassword"
                     />
-                    <span class="labelName">Confirmar contraseña:</span>
+                    <span className="labelName">Confirmar contraseña:</span>
                     <small>
                       Si no desea cambiar la contraseña dejar en blanco
                     </small>
@@ -993,7 +993,7 @@ const AdminList = () => {
                         { value: 2, label: "Cliente" },
                       ]}
                     />
-                    <span class="labelName">Tipo:</span>
+                    <span className="labelName">Tipo:</span>
                   </label>
                 </div>
               </div>

@@ -32,7 +32,7 @@
     background-color: rgb(255, 255, 255);
 }
 
-#client-select,#type{
+#client-select{
     border: 1px solid gray;
     padding-left: 1.5rem
     ;

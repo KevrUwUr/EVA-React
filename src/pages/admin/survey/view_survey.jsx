@@ -159,7 +159,7 @@ export default function View_survey() {
                 <div>
                   <h3 className="text-center">Preguntas de Encuesta</h3>
                   <div className="card-tools">
-                    <button className="btn btn-primary btn-sm" data-bs-toggle="modal"  data-bs-target="#modalManageQuestion" onClick={() => openModal(1,3)}>Agregar Nueva pregunta</button>
+                    <button className="btn fw-bold btn-sm acces-tabla" data-bs-toggle="modal"  data-bs-target="#modalManageQuestion" onClick={() => openModal(1,3)}> + Agregar Nueva pregunta</button>
                   </div>
                 </div>
                 <form action="" id='manage-sort'>
@@ -394,8 +394,8 @@ export default function View_survey() {
                   type="text"
                   name="lastname"
                   id="lastname"
-                  className="form-control"
-                  placeholder=" "
+                  className="form-control text-center"
+                  placeholder="opcional **"
                   required
                   value={percentage.input}
                   onChange={(e) => percentage.handleChange(e.target.value)}
