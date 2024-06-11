@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import "../../assets/css/newUser.css";
 import TableDetalle from "../../components/Tables/table";
 
 import SidebarLT1 from "../../components/aside/sidebarLT1";
@@ -815,34 +818,35 @@ const AdminList = () => {
   };
 
   //? Select
+  const animatedComponents = makeAnimated();
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const clientes = [
-    { id: "1", client: "DirecTv", logo: "320.png" },
-    { id: "29", client: "Claro", logo: "287.png" },
-    { id: "30", client: "Mercado Libre", logo: "700.png" },
-    { id: "31", client: "Vanessa", logo: "796.png" },
-  ];
+  // const [selectedOptions, setSelectedOptions] = useState([]);
+  const clientes = Object.freeze([
+    { value: "1", label: "DirecTv", logo: "320.png" },
+    { value: "29", label: "Claro", logo: "287.png" },
+    { value: "30", label: "Mercado Libre", logo: "700.png" },
+    { value: "31", label: "Vanessa", logo: "796.png" },
+  ]);
 
-  const toggleOption = (id) => {
-    const index = selectedOptions.indexOf(id);
-    if (index === -1) {
-      setSelectedOptions([...selectedOptions, id]);
-    } else {
-      const updatedOptions = [...selectedOptions];
-      updatedOptions.splice(index, 1);
-      setSelectedOptions(updatedOptions);
-    }
-  };
+  // const toggleOption = (id) => {
+  //   const index = selectedOptions.indexOf(id);
+  //   if (index === -1) {
+  //     setSelectedOptions([...selectedOptions, id]);
+  //   } else {
+  //     const updatedOptions = [...selectedOptions];
+  //     updatedOptions.splice(index, 1);
+  //     setSelectedOptions(updatedOptions);
+  //   }
+  // };
 
-  const handleSelectAll = () => {
-    if (selectedOptions.length === clientes.length) {
-      setSelectedOptions([]);
-    } else {
-      const allOptionsIds = clientes.map((cliente) => cliente.id);
-      setSelectedOptions(allOptionsIds);
-    }
-  };
+  // const handleSelectAll = () => {
+  //   if (selectedOptions.length === clientes.length) {
+  //     setSelectedOptions([]);
+  //   } else {
+  //     const allOptionsIds = clientes.map((cliente) => cliente.id);
+  //     setSelectedOptions(allOptionsIds);
+  //   }
+  // };
 
   return (
     <div className="App">
@@ -869,7 +873,7 @@ const AdminList = () => {
         </section>
       </div>
       <div id="modalAdmin" className="modal fade" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-scrollable">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
               <label className="h5">{title}</label>
@@ -880,118 +884,117 @@ const AdminList = () => {
                 aria-label="close"
               ></button>
             </div>
-            <div className="modal-body">
-              <div className="row w-50 d-flex flex-column">
-                <div className="col fw-bold">Datos de usuario</div>
-                <div className="col">
-                  <label className="fw-bold">Primer nombre:</label>
-                  <input
-                    type="text"
-                    name="firstname"
-                    value={firstName.input}
-                    onChange={(e) => firstName.handleChange(e.target.value)}
-                  />
+            <div className="modal-body d-flex justify-content-between">
+              <div className="row flex-column m-0 w-50">
+                <div className="col text-center fs-4 mb-2">
+                  Datos de usuario
                 </div>
-                <div className="col">
-                  <label className="fw-bold">Segundo nombre:</label>
-                  <input
-                    type="text"
-                    name="middleName"
-                    value={middleName.input}
-                    onChange={(e) => middleName.handleChange(e.target.value)}
-                  />
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      placeholder=" "
+                      className="input-new"
+                      type="text"
+                      name="firstname"
+                      value={firstName.input}
+                      onChange={(e) => firstName.handleChange(e.target.value)}
+                    />
+                    <span class="labelName">Primer nombre</span>
+                  </label>
                 </div>
-                <div className="col">
-                  <label className="fw-bold">Apellido</label>
-                  <input
-                    type="text"
-                    name="lastname"
-                    value={lastName.input}
-                    onChange={(e) => lastName.handleChange(e.target.value)}
-                  />
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="text"
+                      name="middleName"
+                      value={middleName.input}
+                      onChange={(e) => middleName.handleChange(e.target.value)}
+                    />
+                    <span class="labelName">Segundo nombre:</span>
+                  </label>
                 </div>
-                <div className="col">
-                  <label>Selecciona múltiples opciones:</label>
-                  <select
-                    multiple
-                    value={selectedOptions}
-                    onChange={() => {}}
-                    style={{ height: "150px" }}
-                  >
-                    <option
-                      value="selectAll"
-                      onClick={handleSelectAll}
-                      style={{ fontWeight: "bold" }}
-                    >
-                      Seleccionar Todos
-                    </option>
-                    {clientes.map((cliente) => (
-                      <option key={cliente.id} value={cliente.id}>
-                        <input
-                          type="checkbox"
-                          checked={selectedOptions.includes(cliente.id)}
-                          onChange={() => toggleOption(cliente.id)}
-                          style={{ marginRight: "5px" }}
-                        />
-                        {cliente.client}
-                      </option>
-                    ))}
-                  </select>
-
-                  <div>
-                    <h3>Opciones Seleccionadas:</h3>
-                    <ul>
-                      {selectedOptions.map((option) => (
-                        <li key={option}>
-                          {
-                            clientes.find((cliente) => cliente.id === option)
-                              .client
-                          }
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="text"
+                      name="lastname"
+                      value={lastName.input}
+                      onChange={(e) => lastName.handleChange(e.target.value)}
+                    />
+                    <span class="labelName">Apellido:</span>
+                  </label>
+                </div>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <Select
+                      className="input-new"
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      options={clientes}
+                    />
+                    <span class="labelName">Clientes:</span>
+                  </label>
                 </div>
               </div>
-              <div className="row w-50 f-flex flex-column">
-                <div className="col fw-bold">Datos administrativos</div>
-                <div className="col">
-                  <label className="fw-bold">E-Mail</label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={email.input}
-                    onChange={(e) => email.handleChange(e.target.value)}
-                  />
+              <div className="row flex-column m-0 w-50">
+                <div className="col text-center fs-4 mb-2">
+                  Datos administrativos
                 </div>
-                <div className="col">
-                  <label className="fw-bold">Contraseña:</label>
-                  <input
-                    type="number"
-                    name="password"
-                    value={password.input}
-                    onChange={(e) => password.handleChange(e.target.value)}
-                  />
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="text"
+                      name="email"
+                      value={email.input}
+                      onChange={(e) => email.handleChange(e.target.value)}
+                    />
+                    <span class="labelName">E-mail:</span>
+                  </label>
                 </div>
-                <div className="col">
-                  <label className="fw-bold">Confirmar contraseña:</label>
-                  <input type="number" name="cPassword" />
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="password"
+                      name="password"
+                      onChange={(e) => password.handleChange(e.target.value)}
+                    />
+                    <span class="labelName">Contraseña:</span>
+                  </label>
                 </div>
-                <small>Si no desea cambiar la contraseña dejar en blanco</small>
-                <div className="col">
-                  <label className="fw-bold">Tipo</label>
-                  <select
-                    name="type"
-                    value={type.input}
-                    onChange={(e) => type.handleChange(e.target.value)}
-                  >
-                    <option value="" disabled selected>
-                      {" "}
-                      Selecciona un estado{" "}
-                    </option>
-                    <option value="1"> Administrador</option>
-                    <option value="2"> Cliente </option>
-                  </select>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="password"
+                      name="cPassword"
+                    />
+                    <span class="labelName">Confirmar contraseña:</span>
+                    <small>
+                      Si no desea cambiar la contraseña dejar en blanco
+                    </small>
+                  </label>
+                </div>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <Select
+                      className="input-new"
+                      options={[
+                        { value: 1, label: "Administrador" },
+                        { value: 2, label: "Cliente" },
+                      ]}
+                    />
+                    <span class="labelName">Tipo:</span>
+                  </label>
                 </div>
               </div>
             </div>
