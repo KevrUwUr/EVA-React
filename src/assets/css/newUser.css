@@ -11,6 +11,7 @@
     border-radius: 5px;
     border: 1px solid gray;
     background-color: transparent;
+    color: black;
 }
 
 .labelName{
@@ -32,6 +33,11 @@
     background-color: rgb(255, 255, 255);
 }
 
+.bg-gradient-guardar{
+    background: rgb(199, 14, 143);
+    color: white;
+  }
+  
 #client-select{
     border: 1px solid gray;
     padding-left: 1.5rem
