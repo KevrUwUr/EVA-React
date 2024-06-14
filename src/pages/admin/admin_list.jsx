@@ -11,19 +11,25 @@ import useInput from "../../components/hooks/useInput";
 
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
-  const url = `http://localhost/API-EVA/userController/putUser`;
-  const selectedKeys = ["firstname", "lastname", "email", "type"];
+  
+  const selectedKeys = ["id","firstname", "lastname", "email", "type","estado"];
   const defaultOption={value:1,label:'Administrador'}
+  const defaultOptionState = { value: 1, label: 'Activo'};
+
   const [accessToken, setAccessToken] = useState("");
   const [operation, setOperation] = useState([1]);
   const [title, setTitle] = useState();
-  const [idToEdit, setidToEdit] = useState(null);
 
+  
+  const [idToEdit, setidToEdit] = useState(null);
+  
   const [admins, setAdmins] = useState([]);
-  const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const firstName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const middleName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const email = useInput({
+  const [clients, setClients] = useState([]);
+
+ const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+ const firstName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+ const middleName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+ const email = useInput({
     defaultValue: "",
     validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/,
   });
@@ -33,6 +39,9 @@ const AdminList = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   });
   const type = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
+  const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
+ 
+  
   const language = useInput({ defaultValue: "", validate: /^(es|en|it|pt)$/ });
   const registrationDate = useInput({
     defaultValue: "",
@@ -43,9 +52,11 @@ const AdminList = () => {
     validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
   });
 
+
   useEffect(() => {
-    // // getAdmins();
+    
     getAdmins();
+    getClients();
     // Se establecen los admins una vez que el componente se monta
     
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
@@ -58,12 +69,25 @@ const AdminList = () => {
       
     }
   };
+
+  const getClients = async () => {
+    try {
+      const response = await axios.get(`http://localhost/API-EVA/userClientController/UsersClients`);
+      setClients(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      
+    }
+  };
+
   const config = {
     headers: {
       Authorization: accessToken ? `Bearer ${accessToken}` : "",
       "Cache-Control": "no-cache",
     },
   };
+
   const openModal = (op, admin) => {
     setOperation(op);
     if (op === 1) {
@@ -75,6 +99,7 @@ const AdminList = () => {
       password.handleChange("");
       type.handleChange("");
       language.handleChange("es");
+      estado.handleChange(1);
       registrationDate.handleChange(new Date());
       lastVisitDate.handleChange(new Date());
     } else if (op === 2) {
@@ -85,13 +110,80 @@ const AdminList = () => {
       email.handleChange(admin?.email || "");
       password.handleChange(admin?.password || "");
       type.handleChange(admin?.type || "");
+      estado.handleChange(admin?.estado || "" );
       language.handleChange(admin?.language || "en");
       registrationDate.handleChange(admin?.registrationDate || new Date());
       lastVisitDate.handleChange(admin?.lastVisitDate || new Date());
       setidToEdit(admin?.id);
     }
   };
-
+  const active=(admin)=>{
+    const url= `http://localhost/API-EVA/userController/patchUser`;
+    const id = admin.id;
+    const name = admin.firstname;
+    console.log("hola")
+    const parametros={
+      "estado":1} 
+          const smallAlertDelete = Swal.mixin({
+            toast: true,
+            didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+          customClass: {
+          container: 'small-alert-container',
+          title: 'small-alert-title',
+          content: 'medium-alert-content',
+          actions: 'small-alert-actions',
+          confirmButton: 'small-alert-confirm-button2',
+          cancelButton: 'small-alert-cancel-button',
+        },buttonsStyling: true, // Para aplicar estilos personalizados
+        width: '400px', // Ajusta el ancho de la alerta
+        padding: '1em', // Reduce el padding para que sea menos invasiva
+        display:'flex',
+        backdrop: false, 
+        position: 'center', 
+        
+      });
+  
+      smallAlertDelete.fire({
+      text: `El usuario ${name} se activara.`,
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.patch(`${url}/${id}`,parametros);
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+            });
+               Toast.fire({
+          icon: "success",
+          title: `El usuario ${admin.firstname} se ha activado exitosamente`,
+        });
+         
+            console.log("El usuario se ha activado con exito", admin.firstname);
+            // getAdmins();
+          } catch (error) {
+            Toast.fire({
+              icon: "error",
+              title: `El usuario ${admin.firstName} no ha sido activado`,
+            });
+            console.error(error);
+          }
+        } 
+        getAdmins();
+      });
+  }
   const validar = (id) => {
     var parametros;
     var metodo;
@@ -162,7 +254,7 @@ const AdminList = () => {
       getAdmins()
        
     } else if (metodo.toUpperCase() === "PUT") {
-      
+      const url = `http://localhost/API-EVA/userController/putUser`;
       const response= await axios.put(`${url}/${id}`, parametros)
       console.log(parametros);
       const responseData=response.data;
@@ -178,8 +270,11 @@ const AdminList = () => {
   };
 
   const deleteCargo = (admin) => {
+    const url= `http://localhost/API-EVA/userController/patchUser`;
     const id = admin.id;
-    const name = admin.firstname; 
+    const name = admin.firstname;
+    const parametros={
+    "estado":0} 
     function show_alert(icono, mensaje) {
       Swal.fire({
         title: mensaje,
@@ -216,15 +311,15 @@ const AdminList = () => {
   }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${url}/${id}`, config);
-          alert("success", "Admin eliminado exitosamente");
+          await axios.patch(`${url}/${id}`,parametros);
+          console.log("El usuario se ha desactivado",admin.firstname);
           // getAdmins();
         } catch (error) {
           alert("error", "Error al eliminar el admin");
           console.error(error);
         }
       } 
-      // getAdmins();
+      getAdmins();
     });
   };
 
@@ -239,25 +334,7 @@ const AdminList = () => {
     { value: "31", label: "Vanessa", logo: "796.png" },
   ]);
 
-  // const toggleOption = (id) => {
-  //   const index = selectedOptions.indexOf(id);
-  //   if (index === -1) {
-  //     setSelectedOptions([...selectedOptions, id]);
-  //   } else {
-  //     const updatedOptions = [...selectedOptions];
-  //     updatedOptions.splice(index, 1);
-  //     setSelectedOptions(updatedOptions);
-  //   }
-  // };
 
-  // const handleSelectAll = () => {
-  //   if (selectedOptions.length === clientes.length) {
-  //     setSelectedOptions([]);
-  //   } else {
-  //     const allOptionsIds = clientes.map((cliente) => cliente.id);
-  //     setSelectedOptions(allOptionsIds);
-  //   }
-  // };
   return (
     <div className="App">
       <div id="body">
@@ -277,6 +354,7 @@ const AdminList = () => {
                 modalId2={"modalAdmin"}
                 onUpdate={(payload) => openModal(2, payload)}
                 onView={(payload) =>openModalCont(payload)}
+                onActive={(payload)=>active(payload)}
               />
             )}
           </div>
@@ -404,7 +482,6 @@ const AdminList = () => {
                       className="input-new"
                       defaultValue={defaultOption}
                       options={[ 
-                        { value:"vanessa", label: "vanessa" },
                         { value:1, label: "Administrador" },
                         { value:2, label: "Cliente" },
                       ]}
@@ -414,7 +491,23 @@ const AdminList = () => {
                     <span className="labelName">Tipo:</span>
                   </label>
                 </div>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <Select
+                      className="input-new"
+                      defaultValue={defaultOptionState}
+                      options={[ 
+                        { value:0, label: "Inactivo" },
+                        { value:1, label: "Activo" },
+                      ]}
+                      name="estado"
+                      onChange={(selectedOption) => estado.handleChange(selectedOption.value)}
+                    />
+                    <span className="labelName">Estado:</span>
+                  </label>
+                </div>
               </div>
+                
             </div>
             <div className="modal-footer">
               <button

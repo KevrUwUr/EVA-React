@@ -8,6 +8,7 @@ const TableAdmin = ({
   onRemove,
   onUpdate,
   onView,
+  onActive,
   modalId,
   modalId2
 }) => {
@@ -86,10 +87,12 @@ const TableAdmin = ({
                 <tr key={idx}>
                   {header.map((key, i) => (
                     <td key={i}>
-                      {key === "id" ? idx + 1 + indexOfFirstRecord : item[key]}
-                    </td>
+                      {key === "estado" ? (item.estado === 1 ? "Activo" : "Inactivo"): item[key]}
+                    
+                  </td>
                   ))}
-                  <td>
+                  {item.estado===1?(
+                    <td>
                     <div className="row">
                       <div className="col">
                         <button
@@ -104,7 +107,7 @@ const TableAdmin = ({
                           className="btn btn-rect"
                           onClick={() => onRemove(item)}
                         >
-                          <i className="fa-solid fa-trash"></i>
+                          <i className="fa-solid fa-power-off"></i>
                         </button>
                         <button
                           className="btn btn-rect"
@@ -116,7 +119,28 @@ const TableAdmin = ({
                         </button>
                       </div>
                     </div>
-                  </td>
+                  </td>):( <td>
+                    <div className="row">
+                      <div className="col">
+                        <button
+                          className="btn btn-rect"
+                          onClick={() => onActive(item)}
+                        >
+                         <i class="fa-solid fa-power-off"></i>
+                        </button>
+                      
+                        <button
+                          className="btn btn-rect"
+                          data-bs-toggle="modal"
+                          data-bs-target={`#${modalId2}`}
+                          onClick={() => onView(item)}
+                        >
+                          <i className="fa-solid fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>)}
+                  
                 </tr>
               ) : null
             ))}
