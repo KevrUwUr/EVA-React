@@ -7,6 +7,7 @@ const TableDetalle = ({
   onCreate,
   onRemove,
   onUpdate,
+  onActive,
   onView,
   modalId,
   modalId2
@@ -64,7 +65,7 @@ const TableDetalle = ({
             data-bs-target={`#${modalId}`}
             onClick={() => onCreate(item)}
           >
-            <i className="fa fa-plus"></i> Agregar Nuevo Usuario
+            <i className="fa fa-plus"></i> Nuevo cliente
           </button>
         </div>
       </div>
@@ -75,6 +76,7 @@ const TableDetalle = ({
               <th key={i} className="col text-center">
                 {capitalize(item)}
               </th>
+              
             ))}
             <th className="col text-center">Acciones</th>
           </tr>
@@ -82,14 +84,32 @@ const TableDetalle = ({
         <tbody>
           {currentRecords.map((item, idx) => (
             <tr key={idx}>
-              {Object.keys(item).map((itemkey, i) => (
+              {header.map((itemkey, i) => (
                 <td key={i}>
-                  {itemkey === "id"
-                    ? idx + 1 + indexOfFirstRecord
-                    : item[itemkey]}
+                  {itemkey==="estado"? (item.estado===1? "Activo":"Inactivo"): (itemkey==="logo"? null:item[itemkey])}
                 </td>
               ))}
-              <td>
+              {item.estado!=1?(<td>
+                    <div className="row">
+                      <div className="col">
+                        <button
+                          className="btn btn-rect"
+                          onClick={() => onActive(item)}
+                        >
+                         <i className="fa-solid fa-power-off"></i>
+                        </button>
+                      
+                        <button
+                          className="btn btn-rect"
+                          data-bs-toggle="modal"
+                          data-bs-target={`#${modalId2}`}
+                          onClick={() => onView(item)}
+                        >
+                          <i className="fa-solid fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>):(<td>
                 <button
                   className="btn btn-rect"
                   data-bs-toggle="modal"
@@ -101,7 +121,7 @@ const TableDetalle = ({
                 <button className="btn btn-rect" 
                 onClick={() => onRemove(item)}
                 >
-                  <i className="fa-solid fa-trash"></i>
+                  <i className="fa-solid fa-power-off"></i>
                 </button>
                 <button
                   className="btn btn-rect"
@@ -111,7 +131,8 @@ const TableDetalle = ({
                 >
                   <i className="fa-solid fa-search"></i>
                 </button>
-              </td>
+              </td>)}
+              
             </tr>
           ))}
         </tbody>

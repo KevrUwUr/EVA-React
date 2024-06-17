@@ -13,7 +13,7 @@ import AdminList from "./pages/admin/admin_list";
 import SurveyList from "./pages/admin/survey_list";
 import View_survey from "./pages/admin/survey/view_survey";
 import Client_list from "./pages/admin/client_list";
-
+import UserList from "./pages/client/userList";
 function App() {
   return (
     <BrowserRouter>
@@ -25,7 +25,7 @@ function App() {
         <Route path="/admin_list" element={<AdminList />} />
         <Route path="/survey_list" element={<SurveyList />} />
         <Route path="/client_list" element={<Client_list />} />
-        
+        <Route path="/user_list" element={<UserList />} />
         {/* Pruebas de barras */}
         <Route path="/pruebaAside" element={<SidebarLT1 />} />
         <Route path="/pruebaAside2" element={<SidebarLT2 />} />

@@ -66,7 +66,7 @@ const TableAdmin = ({
               data-bs-target={`#${modalId}`}
               onClick={onCreate}
             >
-              <i className="fa fa-plus"></i> Agregar Nuevo Usuario
+              <i className="fa fa-plus"></i> Nuevo Usuario
             </button>
           </div>
         </div>
@@ -83,11 +83,12 @@ const TableAdmin = ({
           </thead>
           <tbody>
             {currentRecords.map((item, idx) => (
-              item.type === 1 ? (
+             
                 <tr key={idx}>
                   {header.map((key, i) => (
                     <td key={i}>
-                      {key === "estado" ? (item.estado === 1 ? "Activo" : "Inactivo"): item[key]}
+                      {key === "estado" ? (item.estado === 1 ? "Activo" : "Inactivo"):(
+                        key==="type"? (item.type===1? "SuperAdmin":(item.type===2? "Administrador":(item.type===3? "Editor":"Visualizador"))): item[key]) }
                     
                   </td>
                   ))}
@@ -126,7 +127,7 @@ const TableAdmin = ({
                           className="btn btn-rect"
                           onClick={() => onActive(item)}
                         >
-                         <i class="fa-solid fa-power-off"></i>
+                         <i className="fa-solid fa-power-off"></i>
                         </button>
                       
                         <button
@@ -142,7 +143,7 @@ const TableAdmin = ({
                   </td>)}
                   
                 </tr>
-              ) : null
+             
             ))}
           </tbody>
         </table>

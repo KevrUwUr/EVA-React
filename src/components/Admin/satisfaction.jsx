@@ -86,54 +86,7 @@ const Satisfaction = () => {
                   </div>
                 </div>
                 <div className="row  text-center">
-                  <div className="col-lg  ">
-                    <div className="card card6">
-                      <div className="card-body d-grid">
-                        <div className="row">
-                          <div className="col-10 card-title">
-                            <span className="">
-                              Administrador de área de experiencia
-                            </span>
-                          </div>
-                          <div className="col-2">
-                            <div className="dropdown">
-                              <button className="dropbtn">
-                                <i className="fa-solid fa-ellipsis-vertical"></i>
-                              </button>
-                              <div className="dropdown-content">
-                                <a href="#">Link 1</a>
-                                <a href="#">Link 2</a>
-                                <a href="#">Link 3</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-12">
-                            <h3 className="card-text">Usuarios</h3>
-                          </div>
-                        </div>
-                        <div className="row d-flex align-items-start justify-content-start mb-2">
-                          <div className="col card-second-text  ">
-                            <span className="">Administrador</span>
-                          </div>
-                        </div>
-                        <div className="row button-container">
-                          <div
-                            className="col-10 "
-                            onClick="window.location.href='./index.php?page=user_list&access=3'"
-                          >
-                            <button className="card-btn check">Lista</button>
-                          </div>
-                          <div className="col-2">
-                            <button className="btn-plus">
-                              <i className="fa-solid fa-plus"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  
 
                   <div className="col-lg">
                     <div className="card card4">
