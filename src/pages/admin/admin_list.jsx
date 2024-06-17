@@ -1,4 +1,5 @@
-import { useState, useEffect, React } from "react";
+import React,{ useState, useEffect} from "react";
+import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "../../assets/css/newUser.css";
@@ -12,48 +13,59 @@ import useInput from "../../components/hooks/useInput";
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
 
+
+
+
   const selectedKeys = ["firstname", "lastname","type", "estado"];
-  const defaultOption = { value: 1, label: "Administrador" };
+ 
+  
   const [accessToken, setAccessToken] = useState("");
+  const [admins, setAdmins] = useState([]);
+  const [clients, setClients] = useState([]);
+
   const [operation, setOperation] = useState([1]);
   const [title, setTitle] = useState();
   const [idToEdit, setidToEdit] = useState(null);
-  const [admins, setAdmins] = useState([]);
-  const [clients, setClients] = useState([]);
+  const [formattedDate,setFormattedDate]=useState('')
+  const [loading, setLoading] = useState(false);
+
+
   const [userclients,setUserClients]=useState([]);
   const [selectedClients,setSelectedClients]=useState([])
-  const [clientesDelUsuario, setClientesDelUsuario]=useState([])
-  const userxClients= useInput({defaultValue: "", validate: ""})
+
+ 
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; 
+    const day = today.getDate();
+    const formattedDater = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+    setFormattedDate(formattedDater);
+    getAdmins();
+    getClients();
+  }, []); 
+
   const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const firstName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const middleName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const email = useInput({
-    defaultValue: "",
-    validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/,
-  });
-  const password = useInput({
-    defaultValue: "",
-    validate:
-      /^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,
-  });
+  const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/,});
+  const password = useInput({defaultValue: "",validate:/^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,});
   const type = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
   const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
-
   const language = useInput({ defaultValue: "", validate: /^(es|en|it|pt)$/ });
-  const registration_date = useInput({
-    defaultValue: "",
-    validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
-  });
-  const last_visit_date = useInput({
-    defaultValue: "",
-    validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
-  });
+  const registration_date = useInput({defaultValue: "",validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,});
+  const last_visit_date = useInput({defaultValue: "",validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,});
 
-  useEffect(() => {
-    getAdmins();
-    getClients();
-    // Se establecen los admins una vez que el componente se monta
-  }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
+
+  const config = {
+    headers: {
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      "Cache-Control": "no-cache",
+    },
+  };
+
+
+ //REQUEST//
   const getAdmins = async () => {
     try {
       const response = await axios.get(
@@ -65,13 +77,14 @@ const AdminList = () => {
     }
   };
   
-
   const getClients = async () => {
     try {
       const response = await axios.get(
         `http://localhost/API-EVA/ClientController/Clients`
       );
-      setClients(response.data);
+      setClients(response.data.map((client)=> (
+        {"value":client.id, "label":client.client}
+      )));
  
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,83 +97,117 @@ const AdminList = () => {
       const response = await axios.get(
         `http://localhost/API-EVA/UserController/ClientsxUser/${id}`
       );
-      setUserClients(response.data);
-      console.log(response.data)
-      
+      setUserClients(response.data.map((client)=>(
+        {"value":client.id, "label":client.client}
+      )));
+      console.log(userclients)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const config = {
-    headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      "Cache-Control": "no-cache",
-    },
-  };
+  const sendData = async (metodo, parametros, clientes, id) => {
+    try {
+      if (metodo.toUpperCase() === "POST") {
+        const duplicados = admins.find((u) => u.email === parametros.email);
 
-  const openModal = (op, admin) => {
-    setOperation(op);
-    console.log(op)
-    if (op == 1) {
-      const clientes = Object.freeze(clients.map((client) => (
-        {"value": client.id, "label":client.client }))
-       );
-      setTitle("Registrar administrador");
-      lastName.handleChange("");
-      firstName.handleChange("");
-      middleName.handleChange("");
-      email.handleChange("");
-      password.handleChange("");
-      type.handleChange("");
-      language.handleChange("es");
-      estado.handleChange(1);
-      registration_date.handleChange(new Date());
-      last_visit_date.handleChange(new Date());
-      userxClients.handleChange(clientes)
-    } else if (op == 2) {
-     /*  getUserClients(admin.id)
-      const selectedClients=Object.freeze(Userclients.map((client)=>(
-        {"value":client.id,"label":client.client
+        if (duplicados) {
+          alert("Este administrador ya existe");
+          return;
         }
-      )))
-      const clientes = Object.freeze(clients.map((client) => (
-        {"value": client.id, "label":client.client }))
-       ); */
+        const handleCreateAdmin=async()=>{
+          setLoading(true);
+          try{
+            const response = await axios.post(`http://localhost/API-EVA/userController/postUser`,parametros);
+            const responseData=response.data;
+            console.log('Respuesta solicitud Post:', responseData)
+            const id= responseData.id;
+            clientes.map((client)=>(
+              {"idUser":id, "idClient":client.value}
+            ))
+            const secondResponse= await axios.post("http://localhost/API-EVA/userClientController/postUserClient/",clientes)
+            const secondResponseData=secondResponse.data;
+            console.log(secondResponseData.data)
+            alert("Usuario creado exitosamente");
+            document.getElementById("btnCerrar").click();
+            getAdmins();
+          }catch(error){
+            console.error(error);
+          }finally{
+            setLoading(false)
+          }
+        }
+        
+        handleCreateAdmin();
       
-      setTitle("Editar Usuario");
-      lastName.handleChange(admin?.lastname || "");
-      firstName.handleChange(admin?.firstname || "");
-      middleName.handleChange(admin?.middlename || "");
-      email.handleChange(admin?.email || "");
-      password.handleChange(admin?.password || "");
-      type.handleChange(admin?.type || "");
-      estado.handleChange(admin?.estado || "");
-      language.handleChange(admin?.language || "en");
-      registration_date.handleChange(admin?.registration_date || new Date());
-      last_visit_date.handleChange(admin?.last_visit_date || new Date());
-      setidToEdit(admin?.id);
+        
+      } else if (metodo.toUpperCase() === "PUT") {
+        const url = `http://localhost/API-EVA/userController/putUser`;
+        const response = await axios.put(`${url}/${id}`, parametros);
+        console.log(parametros);
+        const responseData = response.data;
+        console.log("Respuesta solicitud Put;", responseData);
+        document.getElementById("btnCerrar").click();
+        getAdmins();
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
-  const openModalCont = async (admin) => {
-    await getUserClients(admin.id)
-    console.log("clientes del usuario ",userclients.client)
-    setClientesDelUsuario(userclients)
-    setTitle("Información");
-    lastName.handleChange(admin?.lastname || "");
-    firstName.handleChange(admin?.firstname || "");
-    middleName.handleChange(admin?.middlename || "");
-    email.handleChange(admin?.email || "");
-    password.handleChange(admin?.password || "");
-    type.handleChange(admin?.type || "");
-    estado.handleChange(admin?.estado || "");
-    language.handleChange(admin?.language || "en");
-    registration_date.handleChange(admin?.registration_date || "");
-    last_visit_date.handleChange(admin?.last_visit_date || "Nunca");
-    setidToEdit(admin?.id);
+
+  const deactivateUser = (admin) => {
+    const url = `http://localhost/API-EVA/userController/patchUser`;
+    const id = admin.id;
+    const name = admin.firstname;
+    const parametros = {
+      estado: 0,
+    };
+    
+    const smallAlertDelete = Swal.mixin({
+      toast: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+      customClass: {
+        container: "small-alert-container",
+        title: "small-alert-title",
+        content: "medium-alert-content",
+        actions: "small-alert-actions",
+        confirmButton: "small-alert-confirm-button2",
+        cancelButton: "small-alert-cancel-button",
+      },
+      buttonsStyling: true, // Para aplicar estilos personalizados
+      width: "400px", // Ajusta el ancho de la alerta
+      padding: "1em", // Reduce el padding para que sea menos invasiva
+      display: "flex",
+      backdrop: false,
+      position: "center",
+    });
+
+    smallAlertDelete
+      .fire({
+        text: `El registro de ${name} se eliminará de forma permanente.`,
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.patch(`${url}/${id}`, parametros);
+            console.log("El usuario se ha desactivado", admin.firstname);
+            // getAdmins();
+          } catch (error) {
+            alert("error", "Error al eliminar el admin");
+            console.error(error);
+          }
+        }
+        getAdmins();
+      });
   };
 
-  const active = (admin) => {
+  const activeUser = (admin) => {
     const url = `http://localhost/API-EVA/userController/patchUser`;
     const id = admin.id;
     const name = admin.firstname;
@@ -230,6 +277,61 @@ const AdminList = () => {
         getAdmins();
       });
   };
+
+//REQUEST//
+
+//MODALS//
+
+  const openModal = (op, admin) => {
+    setOperation(op);
+    console.log(op)
+    if (op == 1) {
+      setTitle("Registrar administrador");
+      lastName.handleChange("");
+      firstName.handleChange("");
+      middleName.handleChange("");
+      email.handleChange("");
+      password.handleChange("");
+      type.handleChange("");
+      language.handleChange("es");
+      estado.handleChange(1);
+      registration_date.handleChange(formattedDate);
+      last_visit_date.handleChange(formattedDate);
+      /* userxClients.handleChange(clientes) */
+    } 
+    else if (op == 2) {
+      getUserClients(admin.id)
+      console.log(admin.type)
+      setTitle("Editar Usuario");
+      lastName.handleChange(admin?.lastname || "");
+      firstName.handleChange(admin?.firstname || "");
+      middleName.handleChange(admin?.middlename || "");
+      email.handleChange(admin?.email || "");
+      password.handleChange(admin?.password || "");
+      type.handleChange(admin?.type || "");
+      estado.handleChange(admin?.estado || "");
+      language.handleChange(admin?.language || "en");
+      setidToEdit(admin?.id);
+    }
+  };
+
+  const openModalCont = async (admin) => {
+    await getUserClients(admin.id)
+    setTitle("Información");
+    lastName.handleChange(admin?.lastname || "");
+    firstName.handleChange(admin?.firstname || "");
+    middleName.handleChange(admin?.middlename || "");
+    email.handleChange(admin?.email || "");
+    password.handleChange(admin?.password || "");
+    type.handleChange(admin?.type || "");
+    estado.handleChange(admin?.estado || "");
+    language.handleChange(admin?.language || "en");
+    registration_date.handleChange(admin?.registration_date || "");
+    last_visit_date.handleChange(admin?.last_visit_date || "Nunca");
+    setidToEdit(admin?.id);
+  };
+
+ 
   const validar = (id) => {
     var parametros;
     var metodo;
@@ -257,7 +359,7 @@ const AdminList = () => {
           password: password.input,
           type: type.input,
           language: "es",
-          registration_date: "0000-00-00",
+          registration_date: formattedDate,
           last_visit_date: "0000-00-00 00:00:00",
 
         };
@@ -280,106 +382,31 @@ const AdminList = () => {
     }
   };
 
-  const sendData = async (metodo, parametros, id) => {
-    try {
-      if (metodo.toUpperCase() === "POST") {
-        const duplicados = admins.find((u) => u.email === parametros.email);
-
-        if (duplicados) {
-          alert("warning", "Este administrador ya existe");
-          return;
-        }
-        const response = await axios.post(
-          `http://localhost/API-EVA/userController/postUser`,
-          parametros
-        );
-        console.log(parametros);
-        const responseData = response.data;
-        console.log("Respuesta solicitud Pst;", responseData);
-        document.getElementById("btnCerrar").click();
-        alert("success", "Administrador creado");
-        getAdmins();
-      } else if (metodo.toUpperCase() === "PUT") {
-        const url = `http://localhost/API-EVA/userController/putUser`;
-        const response = await axios.put(`${url}/${id}`, parametros);
-        console.log(parametros);
-        const responseData = response.data;
-        console.log("Respuesta solicitud Put;", responseData);
-        document.getElementById("btnCerrar").click();
-        getAdmins();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const deleteCargo = (admin) => {
-    const url = `http://localhost/API-EVA/userController/patchUser`;
-    const id = admin.id;
-    const name = admin.firstname;
-    const parametros = {
-      estado: 0,
-    };
-    
-    const smallAlertDelete = Swal.mixin({
-      toast: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-      customClass: {
-        container: "small-alert-container",
-        title: "small-alert-title",
-        content: "medium-alert-content",
-        actions: "small-alert-actions",
-        confirmButton: "small-alert-confirm-button2",
-        cancelButton: "small-alert-cancel-button",
-      },
-      buttonsStyling: true, // Para aplicar estilos personalizados
-      width: "400px", // Ajusta el ancho de la alerta
-      padding: "1em", // Reduce el padding para que sea menos invasiva
-      display: "flex",
-      backdrop: false,
-      position: "center",
-    });
-
-    smallAlertDelete
-      .fire({
-        text: `El registro de ${name} se eliminará de forma permanente.`,
-        showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
-      })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await axios.patch(`${url}/${id}`, parametros);
-            console.log("El usuario se ha desactivado", admin.firstname);
-            // getAdmins();
-          } catch (error) {
-            alert("error", "Error al eliminar el admin");
-            console.error(error);
-          }
-        }
-        getAdmins();
-      });
-  };
-
-  //? Select
+  //? Select //
   const animatedComponents = makeAnimated();
 
+
  
-  const defaultOptionClients=Object.freeze(clients.map((client) => (
-    {"value": client.id, "label":client.client }))
-   );
   const handleClientChange=(selectedOption)=>{
-    setSelectedClients(selectedOption)
+    setUserClients(selectedOption)
     console.log(selectedOption)
   }
+
+  const loadOptions=(searchValue, callback)=>{
+    setTimeout(()=>{
+      const filteredOptions= clients.filter((option)=>
+        option.label.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      console.log("loadOptions",searchValue, filteredOptions)
+      callback(filteredOptions)
+    },1000)
+  }
+  //? Select //
 
   return (
     <div className="App">
       <div id="body">
+        {loading && <p>Cargando...</p>}
         <HeaderLT1 />
         <section
           style={{ alignItems: "stretch", flexWrap: "nowrap", padding: 0 }}
@@ -391,12 +418,12 @@ const AdminList = () => {
                 header={selectedKeys}
                 data={admins}
                 onCreate={() => openModal(1)}
-                onRemove={(item) => deleteCargo(item)}
+                onRemove={(item) => deactivateUser(item)}
                 modalId={"modalAdmin"}
-                modalId2={"modalAdmin2"}
+                modalId2={"modalViewAdmin"}
                 onUpdate={(payload) => openModal(2, payload)}
                 onView={(payload) => openModalCont(payload)}
-                onActive={(payload) => active(payload)}
+                onActive={(payload) => activeUser(payload)}
               />
             )}
           </div>
@@ -461,12 +488,14 @@ const AdminList = () => {
                 </div>
                 <div className="col mb-3">
                   <label id="labelAnimation">
-                    <Select
+                    <AsyncSelect
                       className="input-new"
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      options={defaultOptionClients}
+                      defaultOptions
+                      defaultValue={userclients}
+                      loadOptions={loadOptions}
                       onChange={handleClientChange}
                     />
                     <span className="labelName">Clientes:</span>
@@ -518,37 +547,18 @@ const AdminList = () => {
                 </div>
                 <div className="col mb-3">
                   <label id="labelAnimation">
-                    <Select
-                      className="input-new"
-                      defaultValue={defaultOption}
-                      options={[
-                        { value: 1, label: "Administrador" },
-                        { value: 2, label: "Cliente" },
-                      ]}
-                      name="type"
-                      onChange={(selectedOption) =>
-                        type.handleChange(selectedOption.value)
-                      }
-                    />
+                    <select className="input-new" name="type" onChange={(e) => type.handleChange(e.target.value)} value={type.input} >
+                      <option value="1">Super Administrador</option>
+                      <option value="2">Administrador</option>
+                      <option value="3">Editor</option>
+                      <option value="4">Visualizador</option>
+                    </select>
                     <span className="labelName">Tipo:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
-                  {/* <label id="labelAnimation">
-                    <Select
-                      className="input-new"
-                      defaultValue={defaultOptionState}
-                      options={[
-                        { value: 0, label: "Inactivo" },
-                        { value: 1, label: "Activo" },
-                      ]}
-                      name="estado"
-                      onChange={(selectedOption) =>
-                        estado.handleChange(selectedOption.value)
-                      }
-                    />
-                    <span className="labelName">Estado:</span>
-                  </label> */}
+                 
+
                 </div>
               </div>
             </div>
@@ -558,6 +568,7 @@ const AdminList = () => {
                 id="btnCerrar"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={() => setSelectedClients()}
               >
                 Cerrar
               </button>
@@ -573,7 +584,7 @@ const AdminList = () => {
       </div>
 
 
-      <div id="modalAdmin2" className="modal fade" aria-hidden="true">
+      <div id="modalViewAdmin" className="modal fade" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-md">
           <div className="modal-content">
             <div
@@ -595,51 +606,52 @@ const AdminList = () => {
                    <label  className="fw-semibold ">Nombre</label>
                   <input type="text" className="form-control mt-1"   value={`${firstName.input} ${middleName.input} ${lastName.input}`} readOnly />
                 </div>
-               
                 <div  className="m-1 p-1">
                 <span  className="fw-semibold "> Estado</span>
-                  <input type="text" className="form-control mt-1" value={`${estado.input === 1 ? "Activo" : "Inactivo"}`} readOnly />
+                  <p className="form-control mt-1">{`${estado.input === 1 ? "Activo" : "Inactivo"}`} </p>
                 </div>
-                <div className="m-1 p-1">
-                <span  className="fw-semibold ">Rol</span>
-                  <input type="text" className="form-control mt-1" value={` ${type.input === 1
-                      ? "Super Administrador"
-                      : type.input === 2
-                      ? "Administrador"
-                      : type.input == 3
-                      ? "Editor"
-                      : "Visualizador"}`} readOnly />
-                </div>
-                
                 <div className="m-1 p-1">
                 <span  className="fw-semibold ">Fecha de registro</span>
-                  <input type="text" className="form-control mt-1" value={`${registration_date.input}`} readOnly />
+                  <p  className="form-control mt-1" > {registration_date.input}</p>
                 </div>
-                
-              </div>
-              <div className="col  m-2  ">
-              <div className="m-1 p-1">
-                <span className="fw-semibold ">Correo electronico</span>
-                  <input type="text" className="form-control mt-1" value={`${email.input}`} readOnly />
-               </div>
-               <div className="m-1 p-1">
-                <span  className="fw-semibold ">Clientes</span>
-                  <input type="text" className="form-control mt-1" value={`${email.input}`} readOnly />
-               </div>
-               <div  className="m-1 p-1">
+                <div  className="m-1 p-1">
                 <span  className="fw-semibold ">Lenguaje</span>
-                  <input type="text" className="form-control mt-1" value={`${language.input == "es"
+                  <p  className="form-control mt-1" > {`${language.input == "es"
                       ? "Español"
                       : language.input == "en"
                       ? "Inglés"
                       : language.input == "it"
                       ? "Italiano"
-                      : "Portugués"}`} readOnly />
+                      : "Portugués"}`}</p>
+               </div>
+              </div>
+              <div className="col  m-2  ">
+              <div className="m-1 p-1">
+                <span className="fw-semibold ">Correo electronico</span>
+                  <input type="text"  className="form-control mt-1" value={email.input}/> 
                </div>
                <div className="m-1 p-1">
+                <span  className="fw-semibold ">Rol</span>
+                  <p type="text" className="form-control mt-1"  > {` ${type.input === 1? "Super Administrador": type.input === 2? "Administrador": type.input == 3? "Editor": "Visualizador"}`} </p>
+                </div>
+                <div className="m-1 p-1">
                 <span className="fw-semibold ">Última visita</span>
-                  <input type="text" className="form-control mt-1" value={`${last_visit_date.input}`} readOnly />
+                  <p className="form-control mt-1">{last_visit_date.input} </p>
                </div>
+               <div className="m-1 p-1">
+                <span className="fw-semibold ">Clientes</span>
+                
+                  <ul className="form-control mt-1">
+                    
+                      {userclients.length>0?(userclients.map((client)=>(
+                   <li key={client.value}>
+                    {client.label}
+                   </li>))) : ( <li>No se presentan clientes</li>)}
+                   </ul>
+                 
+               </div>
+               
+               
                
                 
               </div>

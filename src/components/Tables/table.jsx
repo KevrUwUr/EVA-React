@@ -63,7 +63,7 @@ const TableDetalle = ({
             className="btn btn-block btn-sm btn-default btn-flat fw-bold acces-tabla m-2"
             data-bs-toggle="modal"
             data-bs-target={`#${modalId}`}
-            onClick={() => onCreate(item)}
+            onClick={onCreate}
           >
             <i className="fa fa-plus"></i> Nuevo cliente
           </button>

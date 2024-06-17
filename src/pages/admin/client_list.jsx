@@ -5,11 +5,15 @@ import HeaderLT1 from "../../components/header/headerLT1";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import TableDetalle from "../../components/Tables/table";
 import useInput from "../../components/hooks/useInput";
+import "../../assets/css/newUser.css";
 
 export default function Client_list() {
   const [accessToken, setAccessToken] = useState("");
+  const [logoFile, setLogoFile] = useState(null);
   const [operation, setOperation] = useState([1]);
   const [idToEdit, setidToEdit] = useState(null);
+  const [logoEdit,setLogoToEdit]=useState("")
+  const [title, setTitle] = useState();
   const selectedKeys = ["id", "client", "estado"];
   const [data, setData] = useState([]);
   const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
@@ -33,11 +37,24 @@ export default function Client_list() {
     }
   };
   const openModalCont = (clientData) => {
-    console.log("Client Data", clientData);
-    client.handleChange(clientData?.client || "");
     client.handleChange(clientData?.client || "");
     estado.handleChange(clientData?.estado || "");
     logo.handleChange(clientData?.logo || "");
+  };
+  const openModal = (op, clientData) => {
+    setOperation(op);
+      if (op == 1) {
+      setTitle("Añadir Cliente");
+      client.handleChange("");
+      logo.handleChange("");
+    } else if (op == 2) {
+      setTitle("Editar Cliente");
+      client.handleChange(clientData?.client || "");
+      setLogoToEdit(clientData?.logo || "")
+      logo.handleChange("");
+     
+      setidToEdit(clientData?.id);
+    }
   };
   const smallAlertDelete = Swal.mixin({
     toast: true,
@@ -141,6 +158,18 @@ export default function Client_list() {
         fetchData();
       });
    };
+
+   const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    // Verificar que el archivo seleccionado sea JPEG o PNG
+    if (selectedFile && (selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/png')) {
+      setLogoFile(selectedFile);
+    } else {
+      // Mostrar un mensaje de error o realizar alguna acción en caso de no ser un archivo JPEG o PNG
+      console.log('Por favor selecciona un archivo JPEG o PNG.');
+    }
+  };
+
   return (
     <div className="App">
       <div id="body">
@@ -154,11 +183,11 @@ export default function Client_list() {
               <TableDetalle
                 header={selectedKeys}
                 data={data}
-                // onCreate={() => openModal(1)}
+                onCreate={() => openModal(1)}
                 onRemove={(item) => deactivation(item)}
-                // modalId={"modalAdmin"}
+                modalId={"modalCreateClient"}
                 modalId2={"modalViewClient"}
-                // onUpdate={(payload) => openModal(2, payload)}
+                onUpdate={(payload) => openModal(2, payload)}
                 onView={(payload) => openModalCont(payload)}
                 onActive={(payload)=> activation(payload)}
               />
@@ -174,7 +203,7 @@ export default function Client_list() {
               className="modal-header mb-0 pb-0 text-center"
               style={{ borderBottom: "none" }}
             >
-              <label className="fw-bold fs-5"></label>
+              <label className="fw-bold fs-5">cliente</label>
               <button
                 type="button"
                 className="btn-close"
@@ -221,6 +250,68 @@ export default function Client_list() {
           </div>
         </div>
       </div>
+
+
+     { <div id="modalCreateClient" className="modal fade" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-md">
+          <div className="modal-content">
+            <div
+              className="modal-header mb-0 pb-0 text-center"
+              style={{ borderBottom: "none" }}
+            >
+              <label className="fw-bold fs-5">{title}</label>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="close"
+              ></button>
+            </div>
+
+            <div className="modal-body">
+              <div className="row text-center"></div>
+              <div className="row">
+                <div className="col m-2">
+                  <div className="col m-2 text-center">
+                  <img src={`clientes/${logoEdit}`} alt="Logo" />
+                  </div>
+                  <div className="col m-2 text-center">
+                  
+                  <input type="file" className="input-new"   accept=".jpg, .jpeg, .png"  name="logo" onChange={handleFileChange}
+/>
+
+                
+                  </div>
+                </div>
+                <div className="col  m-2 ">
+                  <label id="labelAnimation" className="text-center">
+
+                      <input type="text" placeholder=" " className="input-new" name="client" value={client.input} onChange={(e)=>client.handleChange(e.target.value)}/>
+                      <span className="labelName">Nombre del cliente</span>
+               
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                id="btnCerrar"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cerrar
+              </button>
+              <button
+                onClick={() => validar(idToEdit)}
+                className="btn-primary btn"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>}
     </div>
   );
 }
