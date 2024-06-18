@@ -86,10 +86,10 @@ const TableDetalle = ({
             <tr key={idx}>
               {header.map((itemkey, i) => (
                 <td key={i}>
-                  {itemkey==="estado"? (item.estado===1? "Activo":"Inactivo"): (itemkey==="logo"? null:item[itemkey])}
+                  {itemkey==="state"? (item.state===1? "Activo":"Inactivo"): (itemkey==="logo"? null:item[itemkey])}
                 </td>
               ))}
-              {item.estado!=1?(<td>
+              {item.state!=1?(<td>
                     <div className="row">
                       <div className="col">
                         <button

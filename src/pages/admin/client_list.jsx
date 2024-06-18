@@ -1,20 +1,20 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import HeaderLT1 from "../../components/header/headerLT1";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import TableDetalle from "../../components/Tables/table";
 import useInput from "../../components/hooks/useInput";
+import { UserContext } from "../../context/UserContext";
 import "../../assets/css/newUser.css";
 
 export default function Client_list() {
-  const [accessToken, setAccessToken] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [operation, setOperation] = useState([1]);
   const [idToEdit, setidToEdit] = useState(null);
   const [logoEdit,setLogoToEdit]=useState("")
   const [title, setTitle] = useState();
-  const selectedKeys = ["id", "client", "estado"];
+  const selectedKeys = ["id", "client", "state"];
   const [data, setData] = useState([]);
   const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const idClient = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
@@ -27,9 +27,16 @@ export default function Client_list() {
    
     fetchData();
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
+  const { accessToken } = useContext(UserContext);
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
+  };
+
   const fetchData = async () => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       console.log(response.data);
       setData(response.data);
     } catch (error) {
@@ -94,7 +101,7 @@ export default function Client_list() {
     const name=clientData.client
     console.log(name)
     const parametros={
-      estado:1,
+      state:1,
     };
     smallAlertDelete
       .fire({
@@ -106,7 +113,7 @@ export default function Client_list() {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.patch(`${url}/${id}`, parametros);
+            await axios.patch(`${url}/${id}`, parametros, config);
             
             Toast.fire({
               icon: "success",
@@ -129,7 +136,7 @@ export default function Client_list() {
     const id = clientData.id;
     const name = clientData.client;
     const parametros = {
-      estado: 0,
+      state: 0,
     };
     smallAlertDelete
       .fire({
@@ -141,7 +148,7 @@ export default function Client_list() {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.patch(`${url}/${id}`, parametros);
+            await axios.patch(`${url}/${id}`,parametros,config);
             Toast.fire({
               icon: "success",
               title: `El cliente ${clientData.client} se ha desactivado exitosamente`,

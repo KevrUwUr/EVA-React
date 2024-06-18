@@ -1,14 +1,15 @@
 import "../../assets/css/header_aside.css";
+import {UserContext} from '../../context/UserContext'
+import { useNavigate } from 'react-router-dom';
 const SidebarLT1 = () => {
-  const data = {
-    id: "1",
-    primerNombre: "Juan",
-    segundoNombre: "Carlos",
-    primerApellido: "García",
-    email: "juan.garcia@example.com",
-    password: "",
-    language: "en",
-  };
+  const nav = useNavigate();
+  const logout=()=>{
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('accessToken');
+    nav("/")
+  }
+
   return (
     <div
       className="col-1 col-md-1 col-lg-1 d-lg-block d-none h-100 rounded-end-4 collapse navbar-collapse ps-2 align-content-center"
@@ -57,10 +58,9 @@ const SidebarLT1 = () => {
                 </button>
               </li>
               <li>
-                <a className="dropdown-item">
-                  {/* [//!arreglar LogOut]  */}
+                <button className="dropdown-item" onClick={() => logout()}>
                   Cerrar sesión
-                </a>
+                </button>
               </li>
             </ul>
           </li>

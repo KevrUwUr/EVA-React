@@ -30,13 +30,13 @@ const TableAdmin = ({
     return text.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  const filteredData = data.filter((item) =>
+  const filteredData = Array.isArray(data) ? data.filter((item) =>
     Object.values(item).some(
       (val) =>
         typeof val === "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  );
+  ) : [];
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -52,12 +52,12 @@ const TableAdmin = ({
       <div className="table-container table-responsive" id="table">
         <div className="row d-flex mb-3">
           <div className="col-6 col-sm-6 col-md-6 col-lg-6">
-            <input
-              className="w-50 inp-search"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
+          <input
+  className="w-50 inp-search"
+  placeholder="Buscar"
+  value={searchTerm}
+  onChange={handleSearch}
+/>
           </div>
           <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
             <button
@@ -87,12 +87,12 @@ const TableAdmin = ({
                 <tr key={idx}>
                   {header.map((key, i) => (
                     <td key={i}>
-                      {key === "estado" ? (item.estado === 1 ? "Activo" : "Inactivo"):(
+                      {key === "state" ? (item.state === 1 ? "Activo" : "Inactivo"):(
                         key==="type"? (item.type===1? "SuperAdmin":(item.type===2? "Administrador":(item.type===3? "Editor":"Visualizador"))): item[key]) }
                     
                   </td>
                   ))}
-                  {item.estado===1?(
+                  {item.state===1?(
                     <td>
                     <div className="row">
                       <div className="col">

@@ -1,11 +1,62 @@
-import { useState } from "react";
+import { useState,useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import {UserContext} from '../../context/UserContext'
 import "../../assets/css/login.css";
 import LogoEVA from "../../assets/img/logo EVA2.0.png";
 
+import axios from 'axios'
 const LogIn = () => {
+
+  const nav = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error,Seterror]=useState('');
+  const { userId, setUserId, userType, setUserType, accessToken, setAccessToken, name, setName } = useContext(UserContext);
 
+  const log= async(event)=>{
+    event.preventDefault();
+    try{
+      const parameters={
+        "email":username,
+        "password":password
+      }
+      console.log(parameters)
+      const response= await axios.post(`http://localhost/API-EVA/LoginController/Auth`,parameters)
+      const responseData=response.data
+      console.log(responseData)
+      if(responseData.status===true){
+        console.log(responseData.userLogin.accessToken)
+        setUserId(responseData.userLogin.id)
+        setUserType(responseData.userLogin.type)
+        setAccessToken(responseData.userLogin.accessToken)
+        if(responseData.userLogin.type===1){
+          nav("/index")
+        }else if(responseData.userLogin.type===2){
+          nav("/index")
+        } else if(responseData.userLogin.type===3){
+          nav("/index")
+        } 
+        else{
+          nav("/admin_list")
+        }
+      }else{
+        Seterror("")
+      }
+      
+
+    }catch(error){
+      console.error(error)
+      if (error.response && error.response.status ===404){
+        Seterror('Usuario no encontrado');
+      }else if (error.response && error.response.status===401){
+        Seterror('Usuario o contraseña incorrecto')
+      }
+      
+      else{
+        Seterror('Error en el servidor, por favor intentalo de nuevo mas tarde');
+      }
+  }}
+  
   return (
     <div className="App">
       <div id="login-body" className="bodyLogin">
@@ -14,7 +65,7 @@ const LogIn = () => {
         </div>
         <div className="login-container container col-sm-12">
           <h2 className="text-start tittle-session">Iniciar Sesión</h2>
-          <div id="login-form">
+          <form id="login-form" onSubmit={log}>
             <div className="input-container">
               <input
                 type="text"
@@ -43,17 +94,18 @@ const LogIn = () => {
               <label> Contraseña</label>
               <p>● ● ● ● ● ● ● ● ● ●</p>
             </div>
-            <a href="./index">
+           
+            {error && <p className='text-danger text-center'>{error}</p>}
+            
               <button
                 className="btn access-button"
-                key="titulo"
                 id="bot"
-                href="./Admin/index.jsx"
+                type="submit"
               >
                 Ingresar
               </button>
-            </a>
-          </div>
+           
+          </form>
         </div>
       </div>
     </div>

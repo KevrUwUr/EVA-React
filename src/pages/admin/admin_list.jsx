@@ -1,4 +1,4 @@
-import React,{ useState, useEffect} from "react";
+import React,{ useState, useEffect, useContext} from "react";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -9,17 +9,11 @@ import axios from "axios";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import HeaderLT1 from "../../components/header/headerLT1";
 import useInput from "../../components/hooks/useInput";
-
+import { UserContext } from "../../context/UserContext";
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
-
-
-
-
-  const selectedKeys = ["firstname", "lastname","type", "estado"];
- 
+  const selectedKeys = ["firstname", "lastname","type", "state"];
   
-  const [accessToken, setAccessToken] = useState("");
   const [admins, setAdmins] = useState([]);
   const [clients, setClients] = useState([]);
 
@@ -35,20 +29,29 @@ const AdminList = () => {
 
  
   useEffect(() => {
+    
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1; 
     const day = today.getDate();
     const formattedDater = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
     setFormattedDate(formattedDater);
+    
+    
     getAdmins();
+    
     getClients();
   }, []); 
-
+  const { accessToken } = useContext(UserContext);
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
+  };
   const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const firstName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const middleName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/,});
+  const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/, });
   const password = useInput({defaultValue: "",validate:/^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,});
   const type = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
   const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
@@ -57,21 +60,17 @@ const AdminList = () => {
   const last_visit_date = useInput({defaultValue: "",validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,});
 
 
-  const config = {
-    headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      "Cache-Control": "no-cache",
-    },
-  };
+  
 
 
  //REQUEST//
   const getAdmins = async () => {
+    console.log(accessToken)
     try {
       const response = await axios.get(
-        `http://localhost/API-EVA/userController/Users`
-      );
+        `http://localhost/API-EVA/userController/Users`,{headers: {Authorization: `Bearer ${accessToken}`}});
       setAdmins(response.data);
+      console.log("Datos ",admins)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -80,8 +79,7 @@ const AdminList = () => {
   const getClients = async () => {
     try {
       const response = await axios.get(
-        `http://localhost/API-EVA/ClientController/Clients`
-      );
+        `http://localhost/API-EVA/ClientController/Clients`,config);
       setClients(response.data.map((client)=> (
         {"value":client.id, "label":client.client}
       )));
@@ -94,9 +92,7 @@ const AdminList = () => {
   const getUserClients = async (id) => {
     console.log(id)
     try {
-      const response = await axios.get(
-        `http://localhost/API-EVA/UserController/ClientsxUser/${id}`
-      );
+      const response = await axios.get(`http://localhost/API-EVA/UserController/ClientsxUser/${id}`,config);
       setUserClients(response.data.map((client)=>(
         {"value":client.id, "label":client.client}
       )));
@@ -110,7 +106,6 @@ const AdminList = () => {
     try {
       if (metodo.toUpperCase() === "POST") {
         const duplicados = admins.find((u) => u.email === parametros.email);
-
         if (duplicados) {
           alert("Este administrador ya existe");
           return;
@@ -118,14 +113,14 @@ const AdminList = () => {
         const handleCreateAdmin=async()=>{
           setLoading(true);
           try{
-            const response = await axios.post(`http://localhost/API-EVA/userController/postUser`,parametros);
+            const response = await axios.post(`http://localhost/API-EVA/userController/postUser`,parametros,config);
             const responseData=response.data;
             console.log('Respuesta solicitud Post:', responseData)
             const id= responseData.id;
             clientes.map((client)=>(
               {"idUser":id, "idClient":client.value}
             ))
-            const secondResponse= await axios.post("http://localhost/API-EVA/userClientController/postUserClient/",clientes)
+            const secondResponse= await axios.post("http://localhost/API-EVA/userClientController/postUserClient/",clientes,config)
             const secondResponseData=secondResponse.data;
             console.log(secondResponseData.data)
             alert("Usuario creado exitosamente");
@@ -137,10 +132,7 @@ const AdminList = () => {
             setLoading(false)
           }
         }
-        
         handleCreateAdmin();
-      
-        
       } else if (metodo.toUpperCase() === "PUT") {
         const url = `http://localhost/API-EVA/userController/putUser`;
         const response = await axios.put(`${url}/${id}`, parametros);
@@ -160,7 +152,7 @@ const AdminList = () => {
     const id = admin.id;
     const name = admin.firstname;
     const parametros = {
-      estado: 0,
+      state: 0,
     };
     
     const smallAlertDelete = Swal.mixin({
@@ -195,7 +187,7 @@ const AdminList = () => {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.patch(`${url}/${id}`, parametros);
+            await axios.patch(`${url}/${id}`,parametros,config);
             console.log("El usuario se ha desactivado", admin.firstname);
             // getAdmins();
           } catch (error) {
@@ -213,7 +205,7 @@ const AdminList = () => {
     const name = admin.firstname;
     console.log("hola");
     const parametros = {
-      estado: 1,
+      state: 1,
     };
     const smallAlertDelete = Swal.mixin({
       toast: true,
@@ -247,7 +239,7 @@ const AdminList = () => {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.patch(`${url}/${id}`, parametros);
+            await axios.patch(`${url}/${id}`, parametros,{headers: {Authorization: `Bearer ${accessToken}`}});
             const Toast = Swal.mixin({
               toast: true,
               position: "top-end",

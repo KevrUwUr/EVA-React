@@ -13,8 +13,10 @@ import AdminList from "./pages/admin/admin_list";
 import SurveyList from "./pages/admin/survey_list";
 import View_survey from "./pages/admin/survey/view_survey";
 import Client_list from "./pages/admin/client_list";
+import { UserProvider } from "./context/UserContext";
 function App() {
   return (
+    <UserProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LogIn />} />
@@ -35,6 +37,7 @@ function App() {
         <Route path="/view_survey" element={<View_survey/>} />
       </Routes>
     </BrowserRouter>
+    </UserProvider>
   );
 }
 
