@@ -45,6 +45,8 @@ section {
   max-height: 50%;
 }
 
+
+
 #div_ul {
   min-width: 50px;
   max-width: 100px;
@@ -56,7 +58,9 @@ ul {
   list-style-type: none;
   padding-left: 0;
 }
-
+.ul-colapse{
+  margin-top: 70px;
+}
 #iconoDegradado {
   font-size: 25px;
   cursor: pointer;

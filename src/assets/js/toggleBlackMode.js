@@ -1,4 +1,4 @@
-export const toggleBlackMode = () => {
+export const toggleBlackMode = (theme) => {
   var body = document.getElementsByTagName("body")[0];
   var nav = document.getElementsByTagName("nav")[0];
   var logo = document.getElementById("logo");
@@ -8,7 +8,6 @@ export const toggleBlackMode = () => {
   var vr = document.getElementsByClassName("vr")[0];
   var titulo = document.querySelectorAll(".tituloCardGroup");
   var fecha = document.querySelectorAll(".fechaCardGroup");
-
   var cards = document.querySelectorAll(".cardElement");
   var lista = document.querySelectorAll(".fa-list");
   var grid = document.querySelectorAll(".fa-border-all");
@@ -22,10 +21,9 @@ export const toggleBlackMode = () => {
   var clipboard = document.querySelectorAll(".fa-clipboard");
   var btnAdd = document.querySelectorAll(".acces-tabla");
   var cardEnduser = document.querySelectorAll(".card-enduser");
-  // Realizar operaciones solo con las variables definidas
+
   if (body) {
-    if (body.id === "body-Claro") {
-      // Cambiar al modo oscuro
+    if (theme === "oscuro") {
       body.id = "body-Oscuro";
       if (nav) nav.id = "nav-Oscuro";
       if (logo) logo.src = "./assets/dist/img/logo EVA Black.webp";
@@ -53,8 +51,10 @@ export const toggleBlackMode = () => {
         table.classList.add("bg-dark");
       }
       if (cardEnduser) {
-        table.classList.remove("bg-light");
-        table.classList.add("bg-dark");
+        cardEnduser.forEach(function (cardEnd) {
+          cardEnd.classList.remove("bg-light");
+          cardEnd.classList.add("bg-dark");
+        });
       }
 
       if (grid) {
@@ -141,8 +141,7 @@ export const toggleBlackMode = () => {
           btnAdd.classList.add("text-light");
         });
       }
-    } else if (body.id === "body-Oscuro") {
-      // Cambiar al modo claro
+    } else if (theme === "claro") {
       body.id = "body-Claro";
       if (nav) nav.id = "nav-Claro";
       if (logo) logo.src = "./assets/dist/img/logo EVA.webp";
@@ -169,17 +168,24 @@ export const toggleBlackMode = () => {
         table.classList.remove("bg-dark");
         table.classList.add("bg-light");
       }
+      if (cardEnduser) {
+        cardEnduser.forEach(function (cardEnd) {
+          cardEnd.classList.remove("bg-dark");
+          cardEnd.classList.add("bg-light");
+        });
+      }
 
-      // Realizar operaciones solo con las variables definidas
       if (grid) {
         grid.forEach(function (grid) {
           grid.classList.remove("text-light");
+          grid.classList.add("text-dark");
         });
       }
 
       if (lista) {
         lista.forEach(function (lista) {
           lista.classList.remove("text-light");
+          lista.classList.add("text-dark");
         });
       }
 
@@ -197,17 +203,17 @@ export const toggleBlackMode = () => {
         });
       }
 
-      if (cardsGroup) {
-        cardsGroup.forEach(function (cardsGroups) {
-          cardsGroups.classList.remove("bg-dark");
-          cardsGroups.classList.add("bg-light");
-        });
-      }
-
       if (cards) {
         cards.forEach(function (card) {
           card.classList.remove("text-light");
           card.classList.add("text-dark");
+        });
+      }
+
+      if (cardsGroup) {
+        cardsGroup.forEach(function (cardsGroups) {
+          cardsGroups.classList.remove("bg-dark");
+          cardsGroups.classList.add("bg-light");
         });
       }
 
@@ -254,4 +260,4 @@ export const toggleBlackMode = () => {
       }
     }
   }
-}
+};

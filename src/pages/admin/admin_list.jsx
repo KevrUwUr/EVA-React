@@ -54,7 +54,7 @@ const AdminList = () => {
   const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/, });
   const password = useInput({defaultValue: "",validate:/^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,});
   const type = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
-  const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
+  const state = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
   const language = useInput({ defaultValue: "", validate: /^(es|en|it|pt)$/ });
   const registration_date = useInput({defaultValue: "",validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,});
   const last_visit_date = useInput({defaultValue: "",validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,});
@@ -102,40 +102,52 @@ const AdminList = () => {
     }
   };
 
-  const sendData = async (metodo, parametros, clientes, id) => {
+  const sendData = async (metodo, parametros, clientes) => {
     try {
       if (metodo.toUpperCase() === "POST") {
         const duplicados = admins.find((u) => u.email === parametros.email);
         if (duplicados) {
-          alert("Este administrador ya existe");
-          return;
+            alert("Este administrador ya existe");
+            return;
         }
-        const handleCreateAdmin=async()=>{
-          setLoading(true);
-          try{
-            const response = await axios.post(`http://localhost/API-EVA/userController/postUser`,parametros,config);
-            const responseData=response.data;
-            console.log('Respuesta solicitud Post:', responseData)
-            const id= responseData.id;
-            clientes.map((client)=>(
-              {"idUser":id, "idClient":client.value}
-            ))
-            const secondResponse= await axios.post("http://localhost/API-EVA/userClientController/postUserClient/",clientes,config)
-            const secondResponseData=secondResponse.data;
-            console.log(secondResponseData.data)
-            alert("Usuario creado exitosamente");
-            document.getElementById("btnCerrar").click();
-            getAdmins();
-          }catch(error){
-            console.error(error);
-          }finally{
-            setLoading(false)
-          }
+    
+        const handleCreateAdmin = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.post('http://localhost/API-EVA/userController/postUser', parametros, config);
+                const responseData = response.data;
+                console.log('Respuesta solicitud Post:', responseData);
+    
+                const id = responseData.id;
+                if (!id) {
+                    throw new Error('No se recibió un ID válido del usuario creado');
+                }
+    
+                const clientes2 = Array.isArray(clientes) ? clientes.map((client) => (
+                    { "idUser": id, "idClient": client.value }
+                )) : [];
+    
+                console.log(clientes2);
+    
+                const secondResponse = await axios.post('http://localhost/API-EVA/userClientController/postUserClient/', clientes2, config);
+                const secondResponseData = secondResponse.data;
+                console.log(secondResponseData.data);
+    
+                alert("Usuario creado exitosamente");
+                document.getElementById("btnCerrar").click();
+                getAdmins();
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         }
+    
         handleCreateAdmin();
+    
       } else if (metodo.toUpperCase() === "PUT") {
         const url = `http://localhost/API-EVA/userController/putUser`;
-        const response = await axios.put(`${url}/${id}`, parametros);
+        const response = await axios.put(`${url}/${idToEdit}`,parametros,config);
         console.log(parametros);
         const responseData = response.data;
         console.log("Respuesta solicitud Put;", responseData);
@@ -284,9 +296,9 @@ const AdminList = () => {
       middleName.handleChange("");
       email.handleChange("");
       password.handleChange("");
-      type.handleChange("");
+      type.handleChange(0);
       language.handleChange("es");
-      estado.handleChange(1);
+      state.handleChange(1);
       registration_date.handleChange(formattedDate);
       last_visit_date.handleChange(formattedDate);
       /* userxClients.handleChange(clientes) */
@@ -301,7 +313,7 @@ const AdminList = () => {
       email.handleChange(admin?.email || "");
       password.handleChange(admin?.password || "");
       type.handleChange(admin?.type || "");
-      estado.handleChange(admin?.estado || "");
+      state.handleChange(admin?.state || "");
       language.handleChange(admin?.language || "en");
       setidToEdit(admin?.id);
     }
@@ -316,7 +328,7 @@ const AdminList = () => {
     email.handleChange(admin?.email || "");
     password.handleChange(admin?.password || "");
     type.handleChange(admin?.type || "");
-    estado.handleChange(admin?.estado || "");
+    state.handleChange(admin?.state || "");
     language.handleChange(admin?.language || "en");
     registration_date.handleChange(admin?.registration_date || "");
     last_visit_date.handleChange(admin?.last_visit_date || "Nunca");
@@ -369,6 +381,7 @@ const AdminList = () => {
           last_visit_date: "0000-00-00 00:00:00",
         };
         metodo = "put";
+
       }
       sendData(metodo, parametros, id);
     }
@@ -539,7 +552,8 @@ const AdminList = () => {
                 </div>
                 <div className="col mb-3">
                   <label id="labelAnimation">
-                    <select className="input-new" name="type" onChange={(e) => type.handleChange(e.target.value)} value={type.input} >
+                    <select className="input-new text-center" name="type" onChange={(e) => type.handleChange(e.target.value)} value={type.input}>
+                     {/*  <option value="0" disabled selected>Seleccione un rol</option> */}
                       <option value="1">Super Administrador</option>
                       <option value="2">Administrador</option>
                       <option value="3">Editor</option>
@@ -599,8 +613,8 @@ const AdminList = () => {
                   <input type="text" className="form-control mt-1"   value={`${firstName.input} ${middleName.input} ${lastName.input}`} readOnly />
                 </div>
                 <div  className="m-1 p-1">
-                <span  className="fw-semibold "> Estado</span>
-                  <p className="form-control mt-1">{`${estado.input === 1 ? "Activo" : "Inactivo"}`} </p>
+                <span  className="fw-semibold "> state</span>
+                  <p className="form-control mt-1">{`${state.input === 1 ? "Activo" : "Inactivo"}`} </p>
                 </div>
                 <div className="m-1 p-1">
                 <span  className="fw-semibold ">Fecha de registro</span>

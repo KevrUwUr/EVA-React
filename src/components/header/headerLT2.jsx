@@ -1,7 +1,15 @@
 import Logo from "../../assets/img/logo EVA.webp";
+import "../../assets/css/header_aside.css"
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
+import { useNavigate } from "react-router-dom";
 const HeaderLT2 = () => {
-  
+  const nav = useNavigate();
+  const logout=()=>{
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('accessToken');
+    nav("/")
+  }
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
@@ -44,11 +52,11 @@ const HeaderLT2 = () => {
               style={{ border: "none" }}
             >
               <div id="div_ul" className="d-lg-none mt-3">
-                <ul className="p-2">
+                <ul className="p-2 mt-4">
                   <li className="nav-item">
                     <a
                       className="nav-link tooltip-container"
-                      href="./index.php"
+                      href="/index"
                     >
                       <i id="iconoDegradado" className="fa-solid fa-house"></i>
                     </a>
@@ -77,14 +85,15 @@ const HeaderLT2 = () => {
                         </button>
                       </li>
                       <li>
-                        <a
-                          className="dropdown-item"
-                          href="ajax.php?action=logout"
+                      <button
+                          className=" btn btn-primary dropdown-item"
+                          onClick={()=>logout()}
                         >
                           Cerrar sesión
-                        </a>
-                      </li>{" "}
-                      [//! Cerrar sesion]
+                        </button>
+                         
+                      </li>
+                 
                     </ul>
                   </li>
                 </ul>

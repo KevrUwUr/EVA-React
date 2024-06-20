@@ -12,8 +12,9 @@ const useInput = ({ defaultValue, validate = null }) => {
         setError("");
       }
     }
-    console.log(value)
+
     setInput(value);
+    console.log(value)
   };
 
   return {

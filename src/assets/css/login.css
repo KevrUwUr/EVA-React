@@ -128,7 +128,6 @@ cuadrar barra index */
   
 @media (max-width: 575.98px) {
   body {
-    margin:0;
     padding:0;
     background-image: url("../img/fondo\ slide\ 1.png");
     background-size: 200vh;

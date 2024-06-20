@@ -242,9 +242,7 @@ section .container {
 }
 /* ------------------- Estilos de modo lista   ------------------- */
 @media (max-width: 575.98px) {
-  .container {
-    margin-left: 0;
-  }
+ 
 
   .outstanding-card,
   .outstanding-card-black {

@@ -1,16 +1,48 @@
 import Logo from "../../assets/img/logo EVA.webp";
+import axios from 'axios'
+import { useContext,useState,useEffect} from "react";
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
-
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
+import "../../assets/css/header_aside.css"
 const HeaderLT1 = () => {
-  const data = {
-    id: "1",
-    primerNombre: "Juan",
-    segundoNombre: "Carlos",
-    primerApellido: "García",
-    email: "juan.garcia@example.com",
-    password: "",
-    language: "en",
+ 
+useEffect(()=>{
+  checkinfo()
+},[])
+
+
+  const nav = useNavigate();
+  const [userInfo,SetUserInfo]=useState([])
+
+
+  const logout=()=>{
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('accessToken');
+    nav("/")
+  }
+
+  const { accessToken,userId } = useContext(UserContext);
+  
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
   };
+ 
+  const checkinfo= async() =>{
+    try{
+    console.log(userId)
+    const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
+    SetUserInfo(response.data)
+    console.log(userInfo)
+  } catch(error){
+    console.error(error)
+  }
+  }
+ 
+
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
@@ -35,7 +67,7 @@ const HeaderLT1 = () => {
               <i
                 id="icono"
                 className="fa-regular fa-moon me-2 luna"
-                onClick={toggleBlackMode}
+                onClick={()=>toggleBlackMode()}
               ></i>
               {/* [//?Poner modo oscuro] */}
               <i id="icono" className="fa-regular fa-bell me-2"></i>
@@ -43,8 +75,7 @@ const HeaderLT1 = () => {
               <i id="iconoDegradado" className="fa-solid fa-circle me-2"></i>
               <span className="ps-2 align-items-center">
                 <p id="nombreUsuario" className="fw-bold m-0">
-                  {/* [//?Nombre de usuario] */}
-                  Nombre de usuario
+                 {`${userInfo.firstname} ${userInfo.middlename} ${userInfo.lastname}`}
                 </p>
               </span>
             </div>
@@ -54,11 +85,11 @@ const HeaderLT1 = () => {
               style={{ border: "none" }}
             >
               <div id="div_ul" className="d-lg-none mt-3">
-                <ul className="p-2">
+                <ul className="p-2 ul-colapse">
                   <li className="nav-item">
                     <a
                       className="nav-link tooltip-container"
-                      href="./index.php"
+                      href="/index"
                     >
                       <i id="iconoDegradado" className="fa-solid fa-house"></i>
                     </a>
@@ -96,16 +127,12 @@ const HeaderLT1 = () => {
                       aria-labelledby="dropdownMenuButton"
                     >
                       <li>
-                        <button
-                          className=" btn btn-primary dropdown-item"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modalManageUser"
-                        >
-                          Gestionar cuentas
+                        <button className="dropdown-item">
+                          Gestionar cuenta
                         </button>
                       </li>
                       <li>
-                        <a className="dropdown-item">Cerrar sesión</a>
+                        <button className="dropdown-item" onClick={()=>logout()}>Cerrar sesión</button>
                       </li>
                       {/* [//! Cerrar sesión] */}
                     </ul>
