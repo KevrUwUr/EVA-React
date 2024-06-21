@@ -38,9 +38,9 @@ const Quality = () => {
   return (
     <div className="App">
       <div id="body" className="body-Claro">
-        {userType===1 || userType===2?   <HeaderLT1/>:   <HeaderLT2/> }
+        {userType==="2" || userType==="2"?   <HeaderLT1/>:   <HeaderLT2/> }
         <section>
-          {userType===1 || userType===2?  <SidebarLT1/>:  <SidebarLT2/> }
+          {userType==="1" || userType==="2"?  <SidebarLT1/>:  <SidebarLT2/> }
           <div className="container cards-EVA">
             <div className="row">
               {/* <!-- OPCION  MODO GRID  --> */}
