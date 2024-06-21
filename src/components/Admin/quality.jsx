@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect,useContext } from "react";
 import "../../assets/css/calidad.css";
-import {
-  toggleGridMode,
-  toggleListMode,
-} from "../../assets/js/toggleListGridMode";
+import { toggleGridMode,toggleListMode} from "../../assets/js/toggleListGridMode";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
+import SidebarLT2 from "../aside/sidebarLT2";
+import HeaderLT2 from "../header/headerLT2";
+import { UserContext } from "../../context/UserContext";
 const Quality = () => {
+
   useEffect(() => {
     document
       .getElementById("grid-button-mode")
@@ -25,7 +26,8 @@ const Quality = () => {
     };
   }, []);
 
-  const formatDate = (date) => {
+   const {userType} = useContext(UserContext)
+    const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses empiezan desde 0
     const year = String(date.getFullYear()); // Últimos dos dígitos del año
@@ -36,9 +38,9 @@ const Quality = () => {
   return (
     <div className="App">
       <div id="body" className="body-Claro">
-        <HeaderLT1 />
+        {userType===1 || userType===2?   <HeaderLT1/>:   <HeaderLT2/> }
         <section>
-          <SidebarLT1 />
+          {userType===1 || userType===2?  <SidebarLT1/>:  <SidebarLT2/> }
           <div className="container cards-EVA">
             <div className="row">
               {/* <!-- OPCION  MODO GRID  --> */}

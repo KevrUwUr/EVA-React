@@ -2,7 +2,16 @@ import Logo from "../../assets/img/logo EVA.webp";
 import "../../assets/css/header_aside.css"
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 import { useNavigate } from "react-router-dom";
+import { useState,useContext,useEffect} from "react";
+import { UserContext } from "../../context/UserContext";
+import axios from 'axios'
 const HeaderLT2 = () => {
+
+ 
+  useEffect(()=>{
+    checkinfo()
+  },[])
+  const [userInfo,SetUserInfo]=useState([])
   const nav = useNavigate();
   const logout=()=>{
     localStorage.removeItem('userId');
@@ -10,6 +19,25 @@ const HeaderLT2 = () => {
     localStorage.removeItem('accessToken');
     nav("/")
   }
+  const { accessToken,userId } = useContext(UserContext);
+  
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
+  };
+ 
+  const checkinfo= async() =>{
+    try{
+    console.log(userId)
+    const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
+    SetUserInfo(response.data)
+    console.log(userInfo)
+  } catch(error){
+    console.error(error)
+  }
+  }
+
   return (
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
@@ -42,8 +70,7 @@ const HeaderLT2 = () => {
               <i id="iconoDegradado" className="fa-solid fa-circle me-2"></i>
               <span className="ps-2 align-items-center">
                 <p id="nombreUsuario" className="fw-bold m-0"></p>
-                {/* [//?Nombre de usuario] */}
-                Nombre de usuario
+                {`${userInfo.firstname} ${userInfo.middlename} ${userInfo.lastname}`}
               </span>
             </div>
             <div

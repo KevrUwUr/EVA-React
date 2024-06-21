@@ -65,12 +65,10 @@ const AdminList = () => {
 
  //REQUEST//
   const getAdmins = async () => {
-    console.log(accessToken)
     try {
       const response = await axios.get(
         `http://localhost/API-EVA/userController/Users`,{headers: {Authorization: `Bearer ${accessToken}`}});
       setAdmins(response.data);
-      console.log("Datos ",admins)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -90,17 +88,18 @@ const AdminList = () => {
   };
   
   const getUserClients = async (id) => {
-    console.log(id)
     try {
       const response = await axios.get(`http://localhost/API-EVA/UserController/ClientsxUser/${id}`,config);
       setUserClients(response.data.map((client)=>(
         {"value":client.id, "label":client.client}
       )));
-      console.log(userclients)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+
+  const sendClients= async (parametros, id)=>{}
 
   const sendData = async (metodo, parametros, clientes) => {
     try {
@@ -117,25 +116,37 @@ const AdminList = () => {
                 const response = await axios.post('http://localhost/API-EVA/userController/postUser', parametros, config);
                 const responseData = response.data;
                 console.log('Respuesta solicitud Post:', responseData);
-    
-                const id = responseData.id;
-                if (!id) {
-                    throw new Error('No se recibió un ID válido del usuario creado');
+                if (responseData.status){
+                  try{
+                    const id = responseData.id;
+                    const urlclients= 'http://localhost/API-EVA/userClientController/postUserClient/'                    
+                    const clientes2 = userclients.map(obj => ({
+                    idUser: id,
+                    idClient: obj.value
+                    }));
+                    console.log(clientes2);
+                    const secondResponse = await axios.post(urlclients, clientes2, config);
+                    const secondResponseData=secondResponse.data
+                    console.log('respuesta> ',secondResponse.data)
+                    let allStatus=true
+                    for (let i= 0; i<secondResponseData.length;i++){
+                      if(!secondResponseData[i].status){
+                        allStatus=false;
+                        break
+                      }
+                    }
+                    if (allStatus){
+                      alert("Usuario creado exitosamente");
+                      document.getElementById("btnCerrar").click();
+                      getAdmins();
+                    }else{
+                      alert("El usuario se ha registrado, consulte los clientes anexados.")
+                    }
+                   setUserClients([])
+                  }catch(error){
+                      console.error(error)
+                    }
                 }
-    
-                const clientes2 = Array.isArray(clientes) ? clientes.map((client) => (
-                    { "idUser": id, "idClient": client.value }
-                )) : [];
-    
-                console.log(clientes2);
-    
-                const secondResponse = await axios.post('http://localhost/API-EVA/userClientController/postUserClient/', clientes2, config);
-                const secondResponseData = secondResponse.data;
-                console.log(secondResponseData.data);
-    
-                alert("Usuario creado exitosamente");
-                document.getElementById("btnCerrar").click();
-                getAdmins();
             } catch (error) {
                 console.error(error);
             } finally {
@@ -148,9 +159,7 @@ const AdminList = () => {
       } else if (metodo.toUpperCase() === "PUT") {
         const url = `http://localhost/API-EVA/userController/putUser`;
         const response = await axios.put(`${url}/${idToEdit}`,parametros,config);
-        console.log(parametros);
         const responseData = response.data;
-        console.log("Respuesta solicitud Put;", responseData);
         document.getElementById("btnCerrar").click();
         getAdmins();
       }
@@ -200,7 +209,6 @@ const AdminList = () => {
         if (result.isConfirmed) {
           try {
             await axios.patch(`${url}/${id}`,parametros,config);
-            console.log("El usuario se ha desactivado", admin.firstname);
             // getAdmins();
           } catch (error) {
             alert("error", "Error al eliminar el admin");
@@ -215,7 +223,6 @@ const AdminList = () => {
     const url = `http://localhost/API-EVA/userController/patchUser`;
     const id = admin.id;
     const name = admin.firstname;
-    console.log("hola");
     const parametros = {
       state: 1,
     };
@@ -268,7 +275,6 @@ const AdminList = () => {
               title: `El usuario ${admin.firstname} se ha activado exitosamente`,
             });
 
-            console.log("El usuario se ha activado con exito", admin.firstname);
             // getAdmins();
           } catch (error) {
             Toast.fire({
@@ -288,7 +294,6 @@ const AdminList = () => {
 
   const openModal = (op, admin) => {
     setOperation(op);
-    console.log(op)
     if (op == 1) {
       setTitle("Registrar administrador");
       lastName.handleChange("");
@@ -305,7 +310,6 @@ const AdminList = () => {
     } 
     else if (op == 2) {
       getUserClients(admin.id)
-      console.log(admin.type)
       setTitle("Editar Usuario");
       lastName.handleChange(admin?.lastname || "");
       firstName.handleChange(admin?.firstname || "");
@@ -347,12 +351,7 @@ const AdminList = () => {
       password.input.trim() === "" ||
       type.input === ""
     ) {
-      console.log(firstName.input);
-      console.log(lastName.input);
-      console.log(middleName.input);
-      console.log(email.input);
-      console.log(password.input);
-      console.log(type.input);
+      alert("Campos mal diligenciados")
     } else {
       if (operation === 1) {
         parametros = {
@@ -402,7 +401,6 @@ const AdminList = () => {
       const filteredOptions= clients.filter((option)=>
         option.label.toLowerCase().includes(searchValue.toLowerCase())
       );
-      console.log("loadOptions",searchValue, filteredOptions)
       callback(filteredOptions)
     },1000)
   }
@@ -651,7 +649,7 @@ const AdminList = () => {
                     
                       {userclients.length>0?(userclients.map((client)=>(
                    <li key={client.value}>
-                    {client.label}
+                    {client.label},
                    </li>))) : ( <li>No se presentan clientes</li>)}
                    </ul>
                  

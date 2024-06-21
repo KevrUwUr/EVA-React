@@ -1,13 +1,17 @@
-import { useEffect } from "react";
+import { useEffect,useState,useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import "../../assets/css/experiencia.css";
-import {
-  toggleGridMode,
-  toggleListMode,
-} from "../../assets/js/toggleListGridMode";
+import { toggleGridMode, toggleListMode} from "../../assets/js/toggleListGridMode";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
+import SidebarLT2 from "../aside/sidebarLT2";
+import HeaderLT2 from "../header/headerLT2";
+
 
 const Satisfaction = () => {
+
+  const { userType } = useContext(UserContext);
+
   useEffect(() => {
     document
       .getElementById("grid-button-mode")
@@ -37,9 +41,11 @@ const Satisfaction = () => {
   return (
     <div className="App">
       <div id="body">
-        <HeaderLT1 />
+        {userType===1 || userType===2? <HeaderLT1 /> :  <HeaderLT2 />}
+        
         <section>
-          <SidebarLT1 />
+        {userType===1 || userType===2? <SidebarLT1/>:  <SidebarLT2/>}
+          
 
           <div className="container cards-EVA">
             <div className="row">

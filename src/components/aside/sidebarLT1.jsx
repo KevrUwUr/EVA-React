@@ -109,13 +109,13 @@ const SidebarLT1 = () => {
       <div id="div_ul" className="h-75 pe-0 ps-2 align-content-center">
         <ul className="pt-3 rounded-end-4">
           <li className="nav-item">
-            <a className="nav-link tooltip-container" href="./index">
+            <a className="nav-link tooltip-container" href="/admin">
               <i id="iconoDegradado" className="fa-solid fa-house"></i>
             </a>
           </li>
           <br />
           <li className="nav-item">
-            <a className="nav-link tooltip-container" href="./admin_list">
+            <a className="nav-link tooltip-container" href="/admin_list">
               <i id="iconoDegradado" className="fa-solid fa-user"></i>
             </a>
           </li>

@@ -59,7 +59,6 @@ export default function Client_list() {
       client.handleChange(clientData?.client || "");
       setLogoToEdit(clientData?.logo || "")
       logo.handleChange("");
-     
       setidToEdit(clientData?.id);
     }
   };

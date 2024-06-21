@@ -1,6 +1,8 @@
 import { useState, useEffect,useContext } from "react";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
 import HeaderLT1 from "../../components/header/headerLT1";
+import SidebarLT2 from "../../components/aside/sidebarLT2";
+import HeaderLT2 from "../../components/header/headerLT2";
 import useInput from "../../components/hooks/useInput";
 import TableSurvey from "../../components/Tables/tableSurvey";
 import { UserContext } from "../../context/UserContext";
@@ -28,7 +30,7 @@ const SurveyList = () => {
     getSurveys()
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
 
-  const { accessToken } = useContext(UserContext);
+  const { accessToken, userType } = useContext(UserContext);
   const config = {
     headers: {
       "Authorization": `Bearer ${accessToken}`,
@@ -58,11 +60,11 @@ const SurveyList = () => {
   return (
     <div className="App">
       <div id="body">
-        <HeaderLT1 />
+      {userType===1 || userType===2? <HeaderLT1 /> :  <HeaderLT2 />}
         <section
           style={{ alignItems: "stretch", flexWrap: "nowrap", padding: 0 }}
         >
-          <SidebarLT1 />
+          {userType===1 || userType===2? <SidebarLT1/>:  <SidebarLT2/>}
           <div className="container mt-0">
             {survey.length > 0 && (
               <TableSurvey

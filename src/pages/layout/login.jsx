@@ -20,25 +20,28 @@ const LogIn = () => {
         "email":username,
         "password":password
       }
-      console.log(parameters)
       const response= await axios.post(`http://localhost/API-EVA/LoginController/Auth`,parameters)
       const responseData=response.data
-      console.log(responseData)
+   
       if(responseData.status===true){
-        console.log(responseData.userLogin.accessToken)
-        setUserId(responseData.userLogin.id)
-        setUserType(responseData.userLogin.type)
-        setAccessToken(responseData.userLogin.accessToken)
-        if(responseData.userLogin.type===1){
-          nav("/index")
-        }else if(responseData.userLogin.type===2){
-          nav("/index")
-        } else if(responseData.userLogin.type===3){
-          nav("/index")
-        } 
-        else{
-          nav("/admin_list")
+        if(responseData.userLogin.state===1){
+          setUserId(responseData.userLogin.id)
+          setUserType(responseData.userLogin.type)
+          setAccessToken(responseData.userLogin.accessToken)
+          if(responseData.userLogin.type===1 || responseData.userLogin.type===2 ){
+            nav("/admin")
+          } else if(responseData.userLogin.type===3){
+            nav("/editor")
+          } else if(responseData.userLogin.type===4){
+            nav("/index=Quality")
+          }
+          else{
+            nav("/inactive")
+          }
+        }else{
+          nav("/auth/inactive")
         }
+       
       }else{
         Seterror("")
       }
