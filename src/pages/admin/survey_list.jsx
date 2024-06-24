@@ -10,8 +10,6 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import {smallAlertDelete,Toast} from "../../assets/js/alertConfig";
 import Select from "react-select";
-import DatePicker from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css';
 const SurveyList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
   const url = "http://localhost/API-EVA/surveyController/surveys";
