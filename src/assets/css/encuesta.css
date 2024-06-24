@@ -3,6 +3,13 @@
   src: url("../font/Rogthem.otf");
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator{
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 2px;
+  opacity: 0.9;
+  filter: invert(0.9);
+}
 
 #personalized-svg {
   position: fixed;

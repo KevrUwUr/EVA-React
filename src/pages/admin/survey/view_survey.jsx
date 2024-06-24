@@ -1,9 +1,10 @@
 import React from 'react'
 import HeaderLT1 from '../../../components/header/headerLT1'
-/* import axios from "axios" */
-import { useEffect,useState } from 'react'
+import axios from "axios"
+import { useEffect,useState,useContext } from 'react'
 import SidebarLT1 from '../../../components/aside/sidebarLT1'
 import useInput from '../../../components/hooks/useInput'
+import { UserContext } from '../../../context/UserContext'
 export default function View_survey() {
   const [data,setData]=useState([])
   const [operation, setOperation] = useState([1]);
@@ -19,7 +20,10 @@ export default function View_survey() {
   const survey_id = useInput({defaultValue: "",validate: /^[0-9]*$/});
   const conditional_answer=useInput({defaultValue: "", validatE: /^[A-Za-z ]*$/});
   
+
+
   useEffect(() => {
+
     const questions = [    
       {
         "id": "19",
@@ -97,6 +101,18 @@ export default function View_survey() {
 
     setData(questions);
   }, []);
+
+
+
+  const { accessToken, userType } = useContext(UserContext);
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
+  };
+  const getSurveys=()=>{
+    
+  }
   const openModal = (op, idsurvey) => {
     setOperation(op);
     if (op === 1) {
@@ -169,13 +185,20 @@ export default function View_survey() {
                         <div className="callout callout info">
                           <div className="row">
                             <div className="col-md-12">
-                              <span className="dropleft float-right">
-                                {/* //!Aqui va el dropdown */}
-                              </span>
-
+                           
                             </div>
                           </div>
-                          <h5 className='mt-2'>{question.question}</h5>
+                          <div className="d-flex justify-content-between"> <h5 className='mt-2'>{question.question}</h5><div class="dropdown">
+                          <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fa-solid fa-ellipsis-vertical">
+                            </i>
+                          </a>
+                            <ul class="dropdown-menu">
+                              <li><button class="dropdown-item">Editar</button></li>
+                              <li><button class="dropdown-item">Eliminar</button></li>
+                            </ul>
+                          </div> </div>
+                         
                           {question.type=='range_onetofive'?(
                             <div class="input-group justify-content-center">
                             <div class="me-2">
@@ -386,21 +409,7 @@ export default function View_survey() {
                 /> */}
               </div>
 
-              <div className="form-group m-2">
-                <label htmlFor="lastname" className="form-label">
-                  Porcentaje
-                </label>
-                <input
-                  type="text"
-                  name="lastname"
-                  id="lastname"
-                  className="form-control text-center"
-                  placeholder="opcional **"
-                  required
-                  value={percentage.input}
-                  onChange={(e) => percentage.handleChange(e.target.value)}
-                />
-              </div>
+              
               <div className="modal-footer">
                 <button className="btn bg-gradient-guardar mr-2" id="btn-send-survey" type="submit">
                   Guardar

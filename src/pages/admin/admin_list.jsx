@@ -10,6 +10,7 @@ import SidebarLT1 from "../../components/aside/sidebarLT1";
 import HeaderLT1 from "../../components/header/headerLT1";
 import useInput from "../../components/hooks/useInput";
 import { UserContext } from "../../context/UserContext";
+import { Toast,smallAlertDelete } from "../../assets/js/alertConfig";
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
   const selectedKeys = ["firstname", "lastname","type", "state"];
@@ -176,28 +177,6 @@ const AdminList = () => {
       state: 0,
     };
     
-    const smallAlertDelete = Swal.mixin({
-      toast: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-      customClass: {
-        container: "small-alert-container",
-        title: "small-alert-title",
-        content: "medium-alert-content",
-        actions: "small-alert-actions",
-        confirmButton: "small-alert-confirm-button2",
-        cancelButton: "small-alert-cancel-button",
-      },
-      buttonsStyling: true, // Para aplicar estilos personalizados
-      width: "400px", // Ajusta el ancho de la alerta
-      padding: "1em", // Reduce el padding para que sea menos invasiva
-      display: "flex",
-      backdrop: false,
-      position: "center",
-    });
-
     smallAlertDelete
       .fire({
         text: `El registro de ${name} se eliminará de forma permanente.`,
@@ -226,27 +205,7 @@ const AdminList = () => {
     const parametros = {
       state: 1,
     };
-    const smallAlertDelete = Swal.mixin({
-      toast: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-      customClass: {
-        container: "small-alert-container",
-        title: "small-alert-title",
-        content: "medium-alert-content",
-        actions: "small-alert-actions",
-        confirmButton: "small-alert-confirm-button2",
-        cancelButton: "small-alert-cancel-button",
-      },
-      buttonsStyling: true, // Para aplicar estilos personalizados
-      width: "400px", // Ajusta el ancho de la alerta
-      padding: "1em", // Reduce el padding para que sea menos invasiva
-      display: "flex",
-      backdrop: false,
-      position: "center",
-    });
+   
 
     smallAlertDelete
       .fire({
@@ -259,17 +218,6 @@ const AdminList = () => {
         if (result.isConfirmed) {
           try {
             await axios.patch(`${url}/${id}`, parametros,{headers: {Authorization: `Bearer ${accessToken}`}});
-            const Toast = Swal.mixin({
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-              },
-            });
             Toast.fire({
               icon: "success",
               title: `El usuario ${admin.firstname} se ha activado exitosamente`,

@@ -29,10 +29,8 @@ const HeaderLT2 = () => {
  
   const checkinfo= async() =>{
     try{
-    console.log(userId)
     const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
     SetUserInfo(response.data)
-    console.log(userInfo)
   } catch(error){
     console.error(error)
   }

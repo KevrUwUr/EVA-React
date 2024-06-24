@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import "./App.css";
 /* catch data */
 import { UserProvider } from "./context/UserContext";
@@ -52,7 +52,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LogIn />} />
         
-        <Route path="/survey_list" element={<SurveyList />} />
+        
         <Route path="/client_list" element={<Client_list />} />
         {/* Pruebas de barras */}
        
@@ -79,7 +79,7 @@ function App() {
 
         {/* Pruebas de encuestas */}
         <Route path="/public_survey" element={<Public_survey />} />
-       
+        <Route path="/survey_list" element={<SurveyList />} />
         <Route path="/public_survey" element={<Public_survey />} />
         <Route path="/view_survey" element={<View_survey/>} />
       </Routes>

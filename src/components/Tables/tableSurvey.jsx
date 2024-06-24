@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect,useContext } from "react";
+import { UserContext } from "../../context/UserContext";
+import axios from 'axios'
 import "../../assets/css/tabla.css";
 
 const TableSurvey = ({
@@ -10,10 +12,36 @@ const TableSurvey = ({
   onView,
   modalId,
   modalId2,
+  onActive
 }) => {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
+  const [userClients,setUserClients]=useState([])
+  const {userId,accessToken}=useContext(UserContext)
+
+
+  useEffect(()=>{
+    getUserClients(userId)
+    filteredData
+  },[])
+
+
+  const getUserClients = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost/API-EVA/UserController/ClientsxUser/${id}`,config);
+      setUserClients(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+    }
+  };
+
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -30,13 +58,14 @@ const TableSurvey = ({
   };
 
   const filteredData = data.filter((item) =>
+    userClients.some(client => client.id === item.idClient) &&
     Object.values(item).some(
       (val) =>
         typeof val === "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-
+  
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredData.slice(
@@ -45,6 +74,8 @@ const TableSurvey = ({
   );
 
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+
+
 
   return (
     <div className="table-container">
@@ -62,9 +93,9 @@ const TableSurvey = ({
             className="btn btn-block btn-sm btn-default btn-flat fw-bold acces-tabla m-2"
             data-bs-toggle="modal"
             data-bs-target={`#${modalId}`}
-            onClick={() => onCreate(item)}
+            onClick={() => onCreate()}
           >
-            <i className="fa fa-plus"></i> Agregar Nuevo Usuario
+            <i className="fa fa-plus"></i> Encuesta
           </button>
         </div>
       </div>
@@ -76,21 +107,19 @@ const TableSurvey = ({
                 {capitalize(item)}
               </th>
             ))}
-            <th className="col text-center">Acciones</th>
+            <th className="col text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentRecords.map((item, idx) => (
             <tr key={idx}>
-              {Object.keys(item).map((itemkey, i) => (
+              {header.map((col, i) => (
                 <td key={i}>
-                  {itemkey === "id"
-                    ? idx + 1 + indexOfFirstRecord
-                    : item[itemkey]}
+                  {col==="state"?(item.state===1? "Activo":"Inactivo"):(item[col.toLowerCase()] || item[col])}
                 </td>
               ))}
-              <td>
-                <button
+             
+                {item.state===1?( <td>  <button
                   className="btn btn-rect"
                   data-bs-toggle="modal"
                   data-bs-target={`#${modalId}`}
@@ -99,14 +128,14 @@ const TableSurvey = ({
                   <i className="fa-solid fa-edit"></i>
                 </button>
                 <button className="btn btn-rect" onClick={() => onRemove(item)}>
-                  <i className="fa-solid fa-trash"></i>
+                  <i className="fa-solid fa-power-off"></i>
                 </button>
-                <a  href={`./view_survey`}>
-                <button
-                  className="btn btn-rect"
-                >
-                  <i className="fa-solid fa-circle-question"></i>
-                </button>
+                <a href={`./view_survey`}>
+                  <button
+                    className="btn btn-rect"
+                  >
+                    <i className="fa-solid fa-circle-question"></i>
+                  </button>
                 </a>
                 <button
                   className="btn btn-rect"
@@ -116,8 +145,29 @@ const TableSurvey = ({
                 >
                   <i className="fa-solid fa-envelopes-bulk"></i>
                 </button>
-                
-              </td>
+              </td>):( <td>
+                    <div className="row">
+                      <div className="col">
+                        <button
+                          className="btn btn-rect"
+                          onClick={() => onActive(item)}
+                        >
+                         <i className="fa-solid fa-power-off"></i>
+                        </button>
+                      
+                        <button
+                          className="btn btn-rect"
+                          data-bs-toggle="modal"
+                          data-bs-target={`#${modalId2}`}
+                          onClick={() => onView(item)}
+                        >
+                          <i className="fa-solid fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>)}
+                  
+               
             </tr>
           ))}
         </tbody>
@@ -181,5 +231,4 @@ const TableSurvey = ({
     </div>
   );
 };
-
 export default TableSurvey;
