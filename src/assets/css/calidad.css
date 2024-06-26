@@ -198,7 +198,7 @@ section .container {
   list-style-type: none;
 }
 .list-item {
-  background-image: url("../assets/img/fondo slide 2.png");
+  background-image: url("../img/fondo slide 2.png");
   height: 12vh;
   border-radius: 25px;
 }

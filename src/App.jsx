@@ -39,13 +39,7 @@ import SurveyList from "./pages/admin/survey_list";
 import View_survey from "./pages/admin/survey/view_survey";
 /* ---------------------------------------------------------*/
 
-
-
-
-
-
-
-function App() {
+export const  App=() =>{
   return (
     <UserProvider>
     <BrowserRouter>
@@ -88,4 +82,4 @@ function App() {
   );
 }
 
-export default App;
+

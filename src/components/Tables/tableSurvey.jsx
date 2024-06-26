@@ -72,11 +72,7 @@ const TableSurvey = ({
     indexOfFirstRecord,
     indexOfLastRecord
   );
-
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
-
-
-
   return (
     <div className="table-container">
       <div className="row d-flex mb-3">

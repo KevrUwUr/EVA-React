@@ -1,10 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { UserProvider } from './context/UserContext.jsx'
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <UserProvider>
-    <App />
-  </UserProvider>,
-)
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App tab='LogIn'/>);

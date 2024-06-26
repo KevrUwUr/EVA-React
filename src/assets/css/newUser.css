@@ -58,6 +58,9 @@
     border: none;
 }
 
+.logoModal{
+    max-width: 100%;
+}
 
 @media (max-width: 575.98px) {
     #labelAnimation{

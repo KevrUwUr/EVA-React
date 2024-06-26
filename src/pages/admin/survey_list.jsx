@@ -269,11 +269,11 @@ const SurveyList = () => {
 return (
     <div className="App">
       <div id="body">
-      {userType===1 || userType===2? <HeaderLT1 /> :  <HeaderLT2 />}
+      {userType==="1" || userType==="2"? <HeaderLT1 /> :  <HeaderLT2 />}
         <section
           style={{ alignItems: "stretch", flexWrap: "nowrap", padding: 0 }}
         >
-          {userType===1 || userType===2? <SidebarLT1/>:  <SidebarLT2/>}
+          {userType==="1" || userType==="2"? <SidebarLT1/>:  <SidebarLT2/>}
           <div className="container mt-0">
             {survey.length > 0 && (
               <TableSurvey
@@ -291,7 +291,6 @@ return (
           </div>
         </section>
       </div>
-
      <div id="modalSurvey" className="modal fade" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">

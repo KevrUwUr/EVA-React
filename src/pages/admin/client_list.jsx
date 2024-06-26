@@ -7,7 +7,7 @@ import TableDetalle from "../../components/Tables/table";
 import useInput from "../../components/hooks/useInput";
 import { UserContext } from "../../context/UserContext";
 import "../../assets/css/newUser.css";
-
+import {Toast,smallAlertDelete} from '../../assets/js/alertConfig'
 export default function Client_list() {
   const [logoFile, setLogoFile] = useState(null);
   const [operation, setOperation] = useState([1]);
@@ -19,6 +19,8 @@ export default function Client_list() {
   const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const idClient = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
   const url = "http://localhost/API-EVA/clientController/Clients";
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [titleToSend, setTitleTosend] = useState('');
 
   const client = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const logo = useInput({ defaultValue: "", validate: "" });
@@ -48,12 +50,15 @@ export default function Client_list() {
     estado.handleChange(clientData?.estado || "");
     logo.handleChange(clientData?.logo || "");
   };
+
+
   const openModal = (op, clientData) => {
     setOperation(op);
       if (op == 1) {
       setTitle("Añadir Cliente");
       client.handleChange("");
       logo.handleChange("");
+
     } else if (op == 2) {
       setTitle("Editar Cliente");
       client.handleChange(clientData?.client || "");
@@ -62,38 +67,7 @@ export default function Client_list() {
       setidToEdit(clientData?.id);
     }
   };
-  const smallAlertDelete = Swal.mixin({
-    toast: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-    customClass: {
-      container: "small-alert-container",
-      title: "small-alert-title",
-      content: "medium-alert-content",
-      actions: "small-alert-actions",
-      confirmButton: "small-alert-confirm-button2",
-      cancelButton: "small-alert-cancel-button",
-    },
-    buttonsStyling: true, // Para aplicar estilos personalizados
-    width: "400px", // Ajusta el ancho de la alerta
-    padding: "1em", // Reduce el padding para que sea menos invasiva
-    display: "flex",
-    backdrop: false,
-    position: "center",
-  });
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+ 
   const activation=(clientData)=> { 
     const url=`http://localhost/API-EVA/clientController/patchClient/`
     const id =clientData.id
@@ -169,12 +143,67 @@ export default function Client_list() {
     const selectedFile = e.target.files[0];
     // Verificar que el archivo seleccionado sea JPEG o PNG
     if (selectedFile && (selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/png')) {
-      setLogoFile(selectedFile);
+      setSelectedFile(selectedFile);
     } else {
       // Mostrar un mensaje de error o realizar alguna acción en caso de no ser un archivo JPEG o PNG
       console.log('Por favor selecciona un archivo JPEG o PNG.');
     }
   };
+  const handleTitleChange = (event) => {
+    setTitleTosend(event.target.value);
+  };
+
+
+
+  const validar = async (id) => {
+     const urlpost=`http://localhost/API-EVA/clientController/postClient`
+     const formData = new FormData();
+      formData.append('logo', selectedFile);
+      formData.append('cliente', client.input);
+      console.log(id)
+    if (id===null){
+    try{
+      const response = await axios.post(`${urlpost}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "Authorization": `Bearer ${accessToken}`
+        },
+      });
+      console.log('Respuesta del servidor:', response.data);
+      if (response.data.status){
+        alert("Cliente creado con exito")
+        fetchData();
+      }
+    }
+    
+     catch (error) {
+      console.error('Error subiendo el archivo:', error);
+    }
+  
+  }else{
+    const urlput="http://localhost/API-EVA/clientController/putClient"
+    try{
+      const response = await axios.post(`${urlput}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "Authorization": `Bearer ${accessToken}`
+        },
+      });
+      if (!response.data.status){
+        alert("NO se realizo la edición del usuario")
+      }
+      console.log(response.data)
+      fetchData();
+    }catch(error){
+      console.error(error)
+    }
+  }
+  };
+
+
+
+
+
 
   return (
     <div className="App">
@@ -237,7 +266,7 @@ export default function Client_list() {
               <div className="row">
                 <div className="col m-2">
                   <div className="col m-2 text-center">
-                    <img src={`clientes/${logo.input}`} alt="Logo" />
+                    <img src={`clientes/${logo.input}`} alt="Logo" className="logoModal" />
                   </div>
                 </div>
                 <div className="col  m-2 ">
@@ -279,7 +308,7 @@ export default function Client_list() {
               <div className="row">
                 <div className="col m-2">
                   <div className="col m-2 text-center">
-                  <img src={`clientes/${logoEdit}`} alt="Logo" />
+                  <img src={`clientes/${logoEdit}`} alt="Logo" className="logoModal"/>
                   </div>
                   <div className="col m-2 text-center">
                   
