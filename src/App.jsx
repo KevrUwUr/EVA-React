@@ -3,7 +3,8 @@ import "./App.css";
 /* catch data */
 import { UserProvider } from "./context/UserContext";
 /* -------------------------------------------- */
-
+import ProtectedRoute from "./utils/ProtectedRoute";
+/* --------------------------------------------*/
 /* Layout imports */
 import LogIn from "./pages/layout/login";
 import Inactive from "./pages/layout/inactive";
@@ -37,6 +38,7 @@ import IndexQuality from "./pages/quality/indexQuality";
 import Public_survey from "./pages/admin/survey/public_survey";
 import SurveyList from "./pages/admin/survey_list";
 import View_survey from "./pages/admin/survey/view_survey";
+
 /* ---------------------------------------------------------*/
 
 export const  App=() =>{
@@ -45,37 +47,44 @@ export const  App=() =>{
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LogIn />} />
-        
-        
-        <Route path="/client_list" element={<Client_list />} />
         {/* Pruebas de barras */}
-       
-
         {/*error views*/}
         <Route path="/auth/inactive" element={<Inactive />} />
-
-
+        <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1]} />}>
+          <Route path="/client_list" element={<Client_list />} />
+        </Route>
         {/*superAdmin sites*/}
-        <Route path="/admin_list" element={<AdminList />} />
-        <Route path="/quality" element={<Quality />} />
+        <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1,2]} />}>
+          <Route path="/admin_list" element={<AdminList />} />
+          <Route path="/admin" element={<Index/>}/>
+
+        </Route>
+
+        <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1,2,3]} />}>
         <Route path="/satisfaction" element={<Satisfaction />} />
-        <Route path="/admin" element={<Index/>} />
+        <Route path="/survey_list" element={<SurveyList />} />
+        <Route path="/editor" element={<IndexEditor/>} />
+         <Route path="/public_survey" element={<Public_survey />} />
+         <Route path="/view_survey" element={<View_survey/>} />
+        </Route>
+        <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1,2,4]} />}>
+        
+        <Route path="/quality" element={<Quality />} />
+        <Route path="/index=Quality" element={<IndexQuality/>} />
+        </Route>
+        
+       
+           {/*quality sites*/}
+       {/* Pruebas de encuestas */}
+      
+       
+       
+
         {/*admin sites*/}
 
       
         {/*editor sites*/}
-        <Route path="/editor" element={<IndexEditor/>} />
-
-
-        {/*quality sites*/}
-        <Route path="/index=Quality" element={<IndexQuality/>} />
-
-
-        {/* Pruebas de encuestas */}
-        <Route path="/public_survey" element={<Public_survey />} />
-        <Route path="/survey_list" element={<SurveyList />} />
-        <Route path="/public_survey" element={<Public_survey />} />
-        <Route path="/view_survey" element={<View_survey/>} />
+       
       </Routes>
     </BrowserRouter>
     </UserProvider>

@@ -171,7 +171,10 @@ export default function Client_list() {
       });
       console.log('Respuesta del servidor:', response.data);
       if (response.data.status){
-        alert("Cliente creado con exito")
+        Toast.fire({
+          icon: "success",
+          title: `El cliente ${client.input} se ha creado exitosamente`,
+        });
         fetchData();
       }
     }
@@ -192,7 +195,10 @@ export default function Client_list() {
       if (!response.data.status){
         alert("NO se realizo la edición del usuario")
       }
-      console.log(response.data)
+      Toast.fire({
+        icon: "success",
+        title: `El cliente ${clientData.client} se ha editado exitosamente`,
+      });
       fetchData();
     }catch(error){
       console.error(error)
@@ -312,7 +318,7 @@ export default function Client_list() {
                   </div>
                   <div className="col m-2 text-center">
                   
-                  <input type="file" className="input-new"   accept=".jpg, .jpeg, .png"  name="logo" onChange={handleFileChange}
+                  <input type="file" className="btn btn-primary"   accept=".jpg, .jpeg, .png"  name="logo" onChange={handleFileChange}
 />
 
                 

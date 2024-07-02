@@ -25,6 +25,24 @@ export const smallAlertDelete = Swal.mixin({
 });
 
 
+export const loadingAlert = Swal.mixin({
+  toast: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+  customClass: {
+    container: "small-alert-container",
+    title: "small-alert-title",
+    content: "medium-alert-content",
+    actions: "small-alert-actions",
+  },
+  width: "400px", // Ajusta el ancho de la alerta
+  padding: "1em", // Reduce el padding para que sea menos invasiva
+  display: "flex",
+  backdrop: false,
+  position: "center",
+});
 
 
 export const Toast = Swal.mixin({

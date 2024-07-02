@@ -25,6 +25,7 @@ const LogIn = () => {
    
       if(responseData.status===true){
         if(responseData.userLogin.state===1){
+          console.log(responseData)
           setUserId(responseData.userLogin.id)
           setUserType(responseData.userLogin.type)
           setAccessToken(responseData.userLogin.accessToken)

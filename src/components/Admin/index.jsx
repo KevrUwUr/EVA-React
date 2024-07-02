@@ -1,7 +1,9 @@
 import "../../assets/css/index.css";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
+import { useTranslation } from 'react-i18next';
 const Index = () => {
+  const { t } = useTranslation();
   return (
     <div className="App">
      <div id="body">
