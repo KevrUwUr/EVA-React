@@ -91,7 +91,7 @@ const SidebarLT1 = () => {
             language: language.input,
             last_visit_date: "",
           };
-          password.input.length>8? parameters['password']=password.input: null;
+          password.input.length>8? parameters['password']=password.input: console.log(password.input);
           const response= await axios.put(`${urlp}${userId}`,parameters,config)
           if(response.data.status){
             //hacer un timeout alert 3s y si le da aceptar antes que se reloguee instantaneamente

@@ -1,0 +1,10 @@
+{
+    "quality": {
+      "title": "Quality",
+      "description": "Agents / Users / Monitoring forms / Reports"
+    },
+    "satisfaction": {
+      "title": "Customer Experience",
+      "description": "Surveys / Charts / Reports"
+    }
+  }

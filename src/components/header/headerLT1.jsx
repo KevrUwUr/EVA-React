@@ -4,16 +4,45 @@ import { useContext,useState,useEffect} from "react";
 import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { Modal,ModalBody,ModalHeader,Button,ModalFooter} from "reactstrap";
+import useInput from "../../components/hooks/useInput";
 import "../../assets/css/header_aside.css"
 const HeaderLT1 = () => {
  
 useEffect(()=>{
   checkinfo()
 },[])
+const [userLanguage,setUserLanguaje]=useState({language:''})
+const [userInfo, setUserInfo] = useState({
+  firstname: '',
+  middlename: '',
+  lastname: '',
+  email: '',
+  password: '',
+  language: ''
+});
+const [modal, setModal] = useState(false);
 
+  const openModal = () =>{
+    getInfo()
+    setModal(true)
+  }
+  const closeModal=()=> {
+    setModal(false)
+  }
+const lastName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+const firstName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+const middleName = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/, });
+const language = useInput({ defaultValue: "", validate: /^(es|en|it|pt)$/ });
+const password = useInput({defaultValue: "",validate:/^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,});
 
-  const nav = useNavigate();
-  const [userInfo,SetUserInfo]=useState([])
+const nav = useNavigate();
+const now = new Date();
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+const seconds = String(now.getSeconds()).padStart(2, '0');
+
 
 
   const logout=()=>{
@@ -35,16 +64,74 @@ useEffect(()=>{
     try{
     console.log(userId)
     const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
-    SetUserInfo(response.data)
+    setUserInfo(response.data)
     console.log(userInfo)
   } catch(error){
     console.error(error)
   }
   }
- 
+  const url="http://localhost/API-EVA/userController/userbyId/"
+  const urlp="http://localhost/API-EVA/userController/putUser/"
+  const getInfo = async () => {
+    try {
+      console.log(userId);
+      const response = await axios.get(`${url}${userId}`, config);
+      setUserInfo(response.data);
+      console.log(hours,":",minutes,":",seconds)
+      firstName.handleChange(userInfo.firstname || "");
+      middleName.handleChange(userInfo.middlename || "");
+      lastName.handleChange(userInfo.lastname || "");
+      email.handleChange(userInfo.email || "");
+      password.handleChange(userInfo.password || "");
+      language.handleChange(userInfo.language || "en");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserLanguaje((prevUserInfo) => ({
+      ...prevUserInfo,
+      [name]: value
+    }));
+  };
 
+  const updateInfo=async(event)=>{
+    event.preventDefault();
+    var parameters
+    console.log(userInfo)
+    if (
+      lastName.input.trim() === "" ||
+      firstName.input.trim() === "" ||
+      email.input.trim() === "" ||
+      userLanguage==""
+    ) {
+      alert("Informacion no diligenciada")
+    } else {
+        try{
+          parameters = {
+            firstname: firstName.input,
+            middlename: middleName.input,
+            lastname: lastName.input,
+            email: email.input,
+            language: userLanguage.language,
+            last_visit_date: "",
+          };
+          password.input.length>8? parameters['password']=password.input: null;
+          const response= await axios.put(`${urlp}${userId}`,parameters,config)
+          if(response.data.status){
+            //hacer un timeout alert 3s y si le da aceptar antes que se reloguee instantaneamente
+            window.location.reload()
+          }
+          
+        }catch(error){
+          console.error(error)
+        }
+    }
+  }
   return (
-    <header className="sticky-top">
+    <header className="sticky-top" >
       <nav className="navbar navbar-expand-lg m-2 mb-3" id="nav-Claro">
         <div className="container-fluid">
           <div className="row w-100">
@@ -59,7 +146,7 @@ useEffect(()=>{
               >
                 <i id="icono" className="fa-solid fa-bars"></i>
               </button>
-              <a className="" href="./index">
+              <a className="" href="/admin">
                 <img id="logo" src={Logo} alt="" />
               </a>
             </div>
@@ -127,7 +214,7 @@ useEffect(()=>{
                       aria-labelledby="dropdownMenuButton"
                     >
                       <li>
-                        <button className="dropdown-item">
+                        <button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#userModalInfo2"  onClick={()=> openModal()}> 
                           Gestionar cuenta
                         </button>
                       </li>
@@ -144,7 +231,154 @@ useEffect(()=>{
         </div>
       </nav>
       {/* <ManageUser data={fakeData}/> */}
+      <Modal isOpen={modal} toggle={openModal} centered>
+        <ModalHeader toggle={openModal}>Gestionar cuenta</ModalHeader>
+        <ModalBody>
+        
+              <div id="msg"></div>
 
+              <div className="form-group m-2">
+                <label htmlFor="firstname" className="form-label">Primer nombre</label>
+                <input
+                  type="text"
+                  name="firstname"
+                  id="firstname"
+                  className="form-control"
+                  placeholder=" "
+                  value={firstName.input}
+                  onChange={(e) => firstName.handleChange(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group m-2">
+                <label htmlFor="middlename" className="form-label">Segundo nombre</label>
+                <input
+                  type="text"
+                  name="middlename"
+                  id="middlename"
+                  className="form-control"
+                  placeholder=" "
+                  value={middleName.input}
+                  onChange={(e) => middleName.handleChange(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group m-2">
+                <label htmlFor="lastname" className="form-label">Apellidos</label>
+                <input
+                  type="text"
+                  name="lastname"
+                  id="lastname"
+                  className="form-control"
+                  placeholder=" "
+                  value={lastName.input}
+                      onChange={(e) => lastName.handleChange(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group m-2">
+                <label htmlFor="email" className="form-label">Correo</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="form-control"
+                  placeholder=" "
+                  value={email.input}
+                      onChange={(e) => email.handleChange(e.target.value)}
+                  required
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group m-2">
+                <label htmlFor="password" className="form-label">Contraseña</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  className="form-control"
+                  placeholder=" "
+                  onChange={(e) => password.handleChange(e.target.value)}
+                />
+                <small>
+                  <i>Deje esto en blanco si no desea cambiar la contraseña.</i>
+                </small>
+              </div>
+
+              <div className="form-group m-2">
+                <label htmlFor="cpass" className="form-label">Confirmar Contraseña</label>
+                <input
+                  type="password"
+                  name="cpass"
+                  id="cpass"
+                  className="form-control"
+                  placeholder=" "
+                />
+                <small id="pass_match" data-status=""></small>
+              </div>
+
+              <p className="lang m-2" key="titulo26">Idioma</p>
+              <div className="btn-group flex-wrap m-2" role="group" aria-label="Basic radio toggle button group">
+                <input
+                  type="radio"
+                  className="btn-check translate"
+                  id="es"
+                  value="es"
+                  name="language"
+                  autoComplete="off"
+                  checked={language.input === "es"}
+                  onChange={(e) => language.handleChange(e.target.value)}
+                />
+                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">Español</label>
+
+                <input
+                  type="radio"
+                  className="btn-check translate"
+                  id="en"
+                  value="en"
+                  name="language"
+                  autoComplete="off"
+                  checked={language.input === "en"}
+                  onChange={(e) => language.handleChange(e.target.value)}
+                />
+                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">Inglés</label>
+
+                <input
+                  type="radio"
+                  className="btn-check translate"
+                  id="it"
+                  value="it"
+                  name="language"
+                  autoComplete="off"
+                  checked={language.input === "it"}
+                  onChange={(e) => language.handleChange(e.target.value)}
+                />
+                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">Italiano</label>
+
+                <input
+                  type="radio"
+                  className="btn-check translate"
+                  id="pt"
+                  value="pt"
+                  name="language"
+                  autoComplete="off"
+                  checked={language.input === "pt"}
+                  onChange={(e) => language.handleChange(e.target.value)}
+                />
+                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">Portugués</label>
+              </div>
+
+       
+       
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={closeModal}>Cerrar</Button>
+          <Button color="primary" onClick={updateInfo}>Guardar cambios</Button>
+        </ModalFooter>
+      </Modal>
     </header>
   );
 };

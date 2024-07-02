@@ -1,0 +1,10 @@
+{
+    "quality": {
+      "title": "Qualità",
+      "description": "Agenti / Utenti / Moduli di monitoraggio / Report"
+    },
+    "satisfaction": {
+      "title": "Esperienza del cliente",
+      "description": "Sondaggi / Grafici / Report"
+    }
+  }
