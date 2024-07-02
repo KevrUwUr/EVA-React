@@ -232,7 +232,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
       </nav>
       {/* <ManageUser data={fakeData}/> */}
       <Modal isOpen={modal} toggle={openModal} centered>
-        <ModalHeader toggle={openModal}>Gestionar cuenta</ModalHeader>
+        <ModalHeader toggle={closeModal}>Gestionar cuenta</ModalHeader>
         <ModalBody>
         
               <div id="msg"></div>

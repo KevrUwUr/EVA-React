@@ -6,5 +6,28 @@
     "satisfaction": {
       "title": "Experiencia de cliente",
       "description": "Encuestas / Gráficas / Reportes"
+    },
+    "sidebarlt":{
+      "First name": "Primer nombre",
+      "Middle name": "Segundo nombre",
+      "Last name": "Apellidos",
+      "Email": "Correo",
+      "Password": "Contraseña",
+      "Leave this blank if you don't want to change the password.": "Deje esto en blanco si no desea cambiar la contraseña.",
+      "Confirm Password": "Confirmar Contraseña",
+      "Language": "Idioma",
+      "Spanish": "Español",
+      "English": "Inglés",
+      "Italian": "Italiano",
+      "Portuguese": "Portugués",
+      "Manage account": "Gestionar cuenta",
+      "Logout": "Cerrar sesión",
+      "Save": "Guardar",
+      "Cancel": "Cancelar"
+    },
+    "headerlt":{
+      
     }
+  
+    
   }
