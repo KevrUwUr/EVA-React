@@ -100,7 +100,6 @@ const AdminList = () => {
   };
 
 
-  const sendClients= async (parametros, id)=>{}
 
   const sendData = async (metodo, parametros, clientes) => {
     try {

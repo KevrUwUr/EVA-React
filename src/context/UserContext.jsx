@@ -6,7 +6,7 @@ const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId') || '');
   const [userType, setUserType] = useState(() => localStorage.getItem('userType') || '');
   const [accessToken, setAccessToken] = useState(() => localStorage.getItem('accessToken') || '');
-
+  const [languageUser,setLanguageUser]=useState(()=> localStorage.getItem('languageUser')|| '')
   useEffect(() => {
     const tabCount = sessionStorage.getItem('tabCount');
     sessionStorage.setItem('tabCount', tabCount ? parseInt(tabCount) + 1 : 1);
@@ -22,6 +22,11 @@ const UserProvider = ({ children }) => {
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
     }
+    
+    if (languageUser) {
+      localStorage.setItem('languageUser', languageUser);
+    }
+   
    
 
     const handleBeforeUnload = () => {
@@ -34,6 +39,7 @@ const UserProvider = ({ children }) => {
           localStorage.removeItem('userId');
           localStorage.removeItem('userType');
           localStorage.removeItem('accessToken');
+          localStorage.removeItem('languageUser');
           
         }
       }
@@ -44,10 +50,10 @@ const UserProvider = ({ children }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [userId,userType,accessToken]);
+  }, [userId,userType,accessToken,languageUser]);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId, userType, setUserType, accessToken, setAccessToken }}>
+    <UserContext.Provider value={{ userId, setUserId, userType, setUserType, accessToken, setAccessToken,languageUser,setLanguageUser}}>
       {children}
     </UserContext.Provider>
   );

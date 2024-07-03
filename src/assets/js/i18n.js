@@ -4,8 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 
 const loadUserLanguage = async () => {
-  // Aquí deberías implementar la lógica para obtener el idioma del usuario desde la base de datos
-  // Puede ser una llamada a una API o utilizando el contexto de usuario si estás usando Context API
+  
 
   // Por ejemplo, asumiendo que tienes una función para obtener el idioma del usuario
   const userLanguage = await getUserLanguageFromDatabase(); // Esta función debería devolver 'en', 'es', 'it', 'pr', etc.

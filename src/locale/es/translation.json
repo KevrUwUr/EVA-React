@@ -1,33 +1,77 @@
 {
-    "quality": {
-      "title": "Calidad",
-      "description": "Agentes / Usuarios / Formularios de monitoreo / Reportes"
-    },
-    "satisfaction": {
-      "title": "Experiencia de cliente",
-      "description": "Encuestas / Gráficas / Reportes"
-    },
-    "sidebarlt":{
-      "First name": "Primer nombre",
-      "Middle name": "Segundo nombre",
-      "Last name": "Apellidos",
-      "Email": "Correo",
-      "Password": "Contraseña",
-      "Leave this blank if you don't want to change the password.": "Deje esto en blanco si no desea cambiar la contraseña.",
-      "Confirm Password": "Confirmar Contraseña",
-      "Language": "Idioma",
-      "Spanish": "Español",
-      "English": "Inglés",
-      "Italian": "Italiano",
-      "Portuguese": "Portugués",
-      "Manage account": "Gestionar cuenta",
-      "Logout": "Cerrar sesión",
-      "Save": "Guardar",
-      "Cancel": "Cancelar"
-    },
-    "headerlt":{
-      
-    }
-  
-    
+  "quality": {
+    "title": "Quality",
+    "description": "Agents / Users / Monitoring forms / Reports"
+  },
+  "satisfaction": {
+    "title": "Customer Experience",
+    "description": "Surveys / Charts / Reports"
+  },
+  "sidebarlt": {
+    "First name": "First name",
+    "Middle name": "Middle name",
+    "Last name": "Last name",
+    "Email": "Email",
+    "Password": "Password",
+    "Leave this blank if you don't want to change the password.": "Leave this blank if you don't want to change the password.",
+    "Confirm Password": "Confirm Password",
+    "Language": "Language",
+    "Spanish": "Spanish",
+    "English": "English",
+    "Italian": "Italian",
+    "Portuguese": "Portuguese",
+    "Manage account": "Manage account",
+    "Logout": "Logout",
+    "Save": "Save",
+    "Cancel": "Cancel"
+  },
+  "headerlt": {
+    "First name": "First name",
+    "Middle name": "Middle name",
+    "Last name": "Last name",
+    "Email": "Email",
+    "Password": "Password",
+    "Leave this blank if you don't want to change the password.": "Leave this blank if you don't want to change the password.",
+    "Confirm Password": "Confirm Password",
+    "Language": "Language",
+    "Spanish": "Spanish",
+    "English": "English",
+    "Italian": "Italian",
+    "Portuguese": "Portuguese",
+    "Manage account": "Manage account",
+    "Logout": "Logout",
+    "Save changes": "Save changes",
+    "Close": "Close"
+  },
+  "qualitySite": {
+    "Quality system": "Quality system",
+    "Agents": "Agents",
+    "Monitoring forms": "Monitoring forms",
+    "Users": "Users",
+    "Agents list": "Agents list",
+    "Create form": "Create form",
+    "Company agents": "Company agents",
+    "Create and/or edit form": "Create and/or edit form",
+    "Monitoring forms to the agent": "Monitoring forms to the agent",
+    "Generate report": "Generate report",
+    "View reports": "View reports",
+    "Monitoring forms report to the agent": "Monitoring forms report to the agent",
+    "Quality form ABC bank": "Quality form ABC bank",
+    "Rate the quality of customer service being provided by the agent": "Rate the quality of customer service being provided by the agent"
+  },
+  "satisfactionSite": {
+    "Survey system": "Survey system",
+    "Grid mode": "Grid mode",
+    "List mode": "List mode",
+    "Surveys section": "Surveys section",
+    "Card sections": "Card sections",
+    "User surveys": "User surveys",
+    "Total Surveys": "Total Surveys",
+    "Create and/or edit survey": "Create and/or edit survey",
+    "Survey report": "Survey report",
+    "Generate report": "Generate report",
+    "Send survey": "Send survey",
+    "Title": "Title",
+    "Rate the quality of customer service being provided by the agent": "Rate the quality of customer service being provided by the agent"
   }
+}

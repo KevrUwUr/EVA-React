@@ -5,10 +5,11 @@ import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { Modal,ModalBody,ModalHeader,Button,ModalFooter} from "reactstrap";
+
 import useInput from "../../components/hooks/useInput";
 import "../../assets/css/header_aside.css"
 const HeaderLT1 = () => {
- 
+
 useEffect(()=>{
   checkinfo()
 },[])
@@ -42,17 +43,13 @@ const now = new Date();
 const hours = String(now.getHours()).padStart(2, '0');
 const minutes = String(now.getMinutes()).padStart(2, '0');
 const seconds = String(now.getSeconds()).padStart(2, '0');
-
-
-
   const logout=()=>{
     localStorage.removeItem('userId');
     localStorage.removeItem('userType');
     localStorage.removeItem('accessToken');
     nav("/")
   }
-
-  const { accessToken,userId } = useContext(UserContext);
+  const { accessToken,userId,languageUser,setLanguageUser  } = useContext(UserContext);
   
   const config = {
     headers: {
@@ -65,6 +62,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
     console.log(userId)
     const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
     setUserInfo(response.data)
+    setLanguageUser(response.data.language)
     console.log(userInfo)
   } catch(error){
     console.error(error)
