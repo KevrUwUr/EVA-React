@@ -2,18 +2,18 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
-const loadUserLanguage = async () => {
-  
-
-  // Por ejemplo, asumiendo que tienes una función para obtener el idioma del usuario
-  const userLanguage = await getUserLanguageFromDatabase(); // Esta función debería devolver 'en', 'es', 'it', 'pr', etc.
-
+const getUserLanguageFromContext = async () => {
+  const userContext = useContext(UserContext);
+  const userLanguage = userContext.language;
   return userLanguage;
 };
 
+
 const initializeI18n = async () => {
-  const userLanguage = await loadUserLanguage();
+  const userLanguage = await getUserLanguageFromContext();
 
   i18n
     .use(Backend)
@@ -22,7 +22,7 @@ const initializeI18n = async () => {
     .init({
       debug: true,
       fallbackLng: 'en',
-      lng: userLanguage, // Establece el idioma según lo obtenido de la base de datos
+      lng: userLanguage, 
       backend: {
         loadPath: '/locale/{{lng}}/translation.json',
       },

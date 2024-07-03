@@ -19,7 +19,7 @@ const HeaderLT2 = () => {
     localStorage.removeItem('accessToken');
     nav("/")
   }
-  const { accessToken,userId } = useContext(UserContext);
+  const { accessToken,userId,setLanguageUser  } = useContext(UserContext);
   
   const config = {
     headers: {
@@ -31,6 +31,7 @@ const HeaderLT2 = () => {
     try{
     const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
     SetUserInfo(response.data)
+    setLanguageUser(response.data.language)
   } catch(error){
     console.error(error)
   }
