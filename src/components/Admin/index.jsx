@@ -3,11 +3,17 @@ import { useTranslation } from "react-i18next";
 import "../../assets/css/index.css";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
-
+import i18n from "../../assets/js/i18n.jsx";
+import { useEffect,useContext,useState} from "react";
+import { UserContext } from "../../context/UserContext";
 const Index = () => {
   const { t } = useTranslation();
+  const userContext = useContext(UserContext);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+ 
   return (
+
     <div >
       <HeaderLT1/>
       <div id="body">

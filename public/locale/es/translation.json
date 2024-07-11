@@ -44,20 +44,21 @@
     "Close": "Close"
   },
   "qualitySite": {
-    "Quality system": "Quality system",
+    "Quality_system": "Sistema de calidad",
     "Agents": "Agents",
-    "Monitoring forms": "Monitoring forms",
+    "Monitoring_forms": "Monitoring forms",
     "Users": "Users",
-    "Agents list": "Agents list",
-    "Create form": "Create form",
-    "Company agents": "Company agents",
-    "Create and/or edit form": "Create and/or edit form",
-    "Monitoring forms to the agent": "Monitoring forms to the agent",
-    "Generate report": "Generate report",
-    "View reports": "View reports",
-    "Monitoring forms report to the agent": "Monitoring forms report to the agent",
-    "Quality form ABC bank": "Quality form ABC bank",
-    "Rate the quality of customer service being provided by the agent": "Rate the quality of customer service being provided by the agent"
+    "Agents_list": "Agents list",
+    "Create_form": "Create form",
+    "Company_agents": "Company agents",
+    "Create_and/or_edit_form": "Create and/or edit form",
+    "Monitoring_forms_to_the_agent": "Monitoring forms to the agent",
+    "Generate_report": "Generate report",
+    "View_reports": "View reports",
+    "Monitoring_forms_report_to_the_agent": "Monitoring forms report to the agent",
+    "Quality_form_ABC_bank": "Quality form ABC bank",
+    "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Rate the quality of customer service being provided by the agent",
+    "Form_report":"Form Report"
   },
   "satisfactionSite": {
     "Survey system": "Survey system",

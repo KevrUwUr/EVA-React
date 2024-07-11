@@ -1,37 +1,308 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-http-backend';
-import { useContext } from 'react';
-import { UserContext } from '../../context/UserContext';
-
-const getUserLanguageFromContext = async () => {
-  const userContext = useContext(UserContext);
-  const userLanguage = userContext.language;
-  return userLanguage;
-};
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import Backend from "i18next-http-backend";
 
 
-const initializeI18n = async () => {
-  const userLanguage = await getUserLanguageFromContext();
-
-  i18n
-    .use(Backend)
-    .use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
+  i18n.use(initReactI18next).init({
+     
       debug: true,
-      fallbackLng: 'en',
-      lng: userLanguage, 
-      backend: {
-        loadPath: '/locale/{{lng}}/translation.json',
+      fallbackLng: "es",
+      resources : {
+        "es": {
+          translation: {
+            quality: {
+              "title": "Calidad",
+              "description": "Agentes / Usuarios / Formularios de monitoreo / Informes",
+            },
+            satisfaction: {
+              "title": "Experiencia del cliente",
+              "description": "Encuestas / Gráficos / Informes",
+            },
+            sidebarlt: {
+              "First_name": "Primer nombre",
+              "Middle_name": "Segundo nombre",
+              "Last_name": "Apellidos",
+              "Email": "Correo",
+              "Password": "Contraseña",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deje esto en blanco si no desea cambiar la contraseña.",
+              "Confirm_Password": "Confirmar Contraseña",
+              "Language": "Idioma",
+              "Spanish": "Español",
+              "English": "Inglés",
+              "Italian": "Italiano",
+              "Portuguese": "Portugués",
+              "Manage_account": "Gestionar cuenta",
+              "Logout": "Cerrar sesión",
+              "Save": "Guardar",
+              "Cancel": "Cancelar",
+            },
+            headerlt: {
+              "First_name": "Primer nombre",
+              "Middle_name": "Segundo nombre",
+              "Last_name": "Apellidos",
+              "Email": "Correo",
+              "Password": "Contraseña",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deje esto en blanco si no desea cambiar la contraseña.",
+              "Confirm_Password": "Confirmar Contraseña",
+              "Language": "Idioma",
+              "Spanish": "Español",
+              "English": "Inglés",
+              "Italian": "Italiano",
+              "Portuguese": "Portugués",
+              "Manage_account": "Gestionar cuenta",
+              "Logout": "Cerrar sesión",
+              "Save_changes": "Guardar cambios",
+              "Close": "Cerrar",
+            },
+            qualitySite: {
+              "Quality_system": "Sistema de calidad",
+              "Agents": "Agentes",
+              "Monitoring_forms": "Formularios de monitoreo",
+              "Users": "Usuarios",
+              "Agents_list": "Lista de agentes",
+              "Create_form": "Crear formulario",
+              "Company_agents": "Agentes de la empresa",
+              "Create_and_or_edit_form": "Crear y/o editar formulario",
+              "Monitoring_forms_to_the_agent": "Formularios de monitoreo para el agente",
+              "Generate_report": "Generar informe",
+              "View_reports": "Ver informes",
+              "Monitoring_forms_report_to_the_agent": "Informe de formularios de monitoreo para el agente",
+              "Quality_form_ABC_bank": "Formulario de calidad banco ABC",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Evalúe la calidad del servicio al cliente proporcionado por el agente",
+              "Form_report": "Informe de formulario",
+            },
+            satisfactionSite: {
+              "Survey_system": "Sistema de encuestas",
+              "Grid_mode": "Modo cuadrícula",
+              "List_mode": "Modo lista",
+              "Surveys_section": "Sección de encuestas",
+              "Card_sections": "Sección de tarjetas",
+              "User_surveys": "Encuestas de usuario",
+              "Total_Surveys": "Total de encuestas",
+              "Create_and_or_edit_survey": "Crear y/o editar encuesta",
+              "Survey_report": "Informe de encuesta",
+              "Generate_report": "Generar informe",
+              "Send_survey": "Enviar encuesta",
+              "Title": "Título",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Evalúe la calidad del servicio al cliente proporcionado por el agente",
+            },
+          },
+        },
+        "en": {
+          translation: {
+            quality: {
+              "title": "Quality",
+              "description": "Agents / Users / Monitoring forms / Reports",
+            },
+            qualitySite: {
+              "Quality_system": "Quality system",
+              "Agents": "Agents",
+              "Monitoring_forms": "Monitoring forms",
+              "Users": "Users",
+              "Agents_list": "Agents list",
+              "Create_form": "Create form",
+              "Company_agents": "Company agents",
+              "Create_and_or_edit_form": "Create and/or edit form",
+              "Monitoring_forms_to_the_agent": "Monitoring forms to the agent",
+              "Generate_report": "Generate report",
+              "View_reports": "View reports",
+              "Monitoring_forms_report_to_the_agent": "Monitoring forms report to the agent",
+              "Quality_form_ABC_bank": "Quality form ABC bank",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Rate the quality of customer service being provided by the agent",
+              "Form_report": "Form report",
+            },
+            satisfaction: {
+              "title": "Customer Experience",
+              "description": "Surveys / Charts / Reports",
+            },
+            sidebarlt: {
+              "Primer_nombre": "First name",
+              "Segundo_nombre": "Middle name",
+              "Apellidos": "Last name",
+              "Correo": "Email",
+              "Contraseña": "Password",
+              "Deje_esto_en_blanco_si_no_desea_cambiar_la_contraseña.": "Leave this blank if you don't want to change the password.",
+              "Confirmar_Contraseña": "Confirm Password",
+              "Idioma": "Language",
+              "Español": "Spanish",
+              "Inglés": "English",
+              "Italiano": "Italian",
+              "Portugués": "Portuguese",
+              "Gestionar_cuenta": "Manage account",
+              "Cerrar_sesión": "Logout",
+              "Guardar": "Save",
+              "Cancelar": "Cancel",
+            },
+          },
+        },
+        it: {
+          translation: {
+            quality: {
+              "title": "Qualità",
+              "description": "Agenti / Utenti / Moduli di monitoraggio / Report",
+            },
+            satisfaction: {
+              "title": "Esperienza del cliente",
+              "description": "Sondaggi / Grafici / Report",
+            },
+            sidebarlt: {
+              "First_name": "Nome",
+              "Middle_name": "Secondo nome",
+              "Last_name": "Cognome",
+              "Email": "Email",
+              "Password": "Password",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Lascia vuoto se non vuoi cambiare la password.",
+              "Confirm_Password": "Conferma password",
+              "Language": "Lingua",
+              "Spanish": "Spagnolo",
+              "English": "Inglese",
+              "Italian": "Italiano",
+              "Portuguese": "Portoghese",
+              "Manage_account": "Gestisci account",
+              "Logout": "Esci",
+              "Save": "Salva",
+              "Cancel": "Annulla",
+            },
+            headerlt: {
+              "First_name": "Nome",
+              "Middle_name": "Secondo nome",
+              "Last_name": "Cognome",
+              "Email": "Email",
+              "Password": "Password",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Lascia vuoto se non vuoi cambiare la password.",
+              "Confirm_Password": "Conferma password",
+              "Language": "Lingua",
+              "Spanish": "Spagnolo",
+              "English": "Inglese",
+              "Italian": "Italiano",
+              "Portuguese": "Portoghese",
+              "Manage_account": "Gestisci account",
+              "Logout": "Esci",
+              "Save_changes": "Salva modifiche",
+              "Close": "Chiudi",
+            },
+            qualitySite: {
+              "Quality_system": "Sistema di qualità",
+              "Agents": "Agenti",
+              "Monitoring_forms": "Moduli di monitoraggio",
+              "Users": "Utenti",
+              "Agents_list": "Elenco agenti",
+              "Create_form": "Crea modulo",
+              "Company_agents": "Agenti aziendali",
+              "Create_and_or_edit_form": "Crea e/o modifica modulo",
+              "Monitoring_forms_to_the_agent": "Moduli di monitoraggio per l'agente",
+              "Generate_report": "Genera report",
+              "View_reports": "Visualizza report",
+              "Monitoring_forms_report_to_the_agent": "Report dei moduli di monitoraggio per l'agente",
+              "Quality_form_ABC_bank": "Modulo di qualità banca ABC",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Valuta la qualità del servizio clienti fornito dall'agente",
+            },
+            satisfactionSite: {
+              "Survey_system": "Sistema di sondaggi",
+              "Grid_mode": "Modalità griglia",
+              "List_mode": "Modalità lista",
+              "Surveys_section": "Sezione sondaggi",
+              "Card_sections": "Sezione carte",
+              "User_surveys": "Sondaggi utente",
+              "Total_Surveys": "Sondaggi totali",
+              "Create_and_or_edit_survey": "Crea e/o modifica sondaggio",
+              "Survey_report": "Report sondaggio",
+              "Generate_report": "Genera report",
+              "Send_survey": "Invia sondaggio",
+              "Title": "Titolo",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Valuta la qualità del servizio clienti fornito dall'agente",
+            },
+          },
+        },
+        "pt": {
+          translation: {
+            quality: {
+              "title": "Qualidade",
+              "description": "Agentes / Usuários / Formulários de monitoramento / Relatórios",
+            },
+            satisfaction: {
+              "title": "Experiência do cliente",
+              "description": "Pesquisas / Gráficos / Relatórios",
+            },
+            sidebarlt: {
+              "First_name": "Primeiro nome",
+              "Middle_name": "Nome do meio",
+              "Last_name": "Sobrenome",
+              "Email": "Email",
+              "Password": "Senha",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deixe em branco se não deseja alterar a senha.",
+              "Confirm_Password": "Confirmar senha",
+              "Language": "Idioma",
+              "Spanish": "Espanhol",
+              "English": "Inglês",
+              "Italian": "Italiano",
+              "Portuguese": "Português",
+              "Manage_account": "Gerenciar conta",
+              "Logout": "Sair",
+              "Save": "Salvar",
+              "Cancel": "Cancelar",
+            },
+            headerlt: {
+              "First_name": "Primeiro nome",
+              "Middle_name": "Nome do meio",
+              "Last_name": "Sobrenome",
+              "Email": "Email",
+              "Password": "Senha",
+              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deixe em branco se não deseja alterar a senha.",
+              "Confirm_Password": "Confirmar senha",
+              "Language": "Idioma",
+              "Spanish": "Espanhol",
+              "English": "Inglês",
+              "Italian": "Italiano",
+              "Portuguese": "Português",
+              "Manage_account": "Gerenciar conta",
+              "Logout": "Sair",
+              "Save_changes": "Salvar alterações",
+              "Close": "Fechar",
+            },
+            qualitySite: {
+              "Quality_system": "Sistema de qualidade",
+              "Agents": "Agentes",
+              "Monitoring_forms": "Formulários de monitoramento",
+              "Users": "Usuários",
+              "Agents_list": "Lista de agentes",
+              "Create_form": "Criar formulário",
+              "Company_agents": "Agentes da empresa",
+              "Create_and_or_edit_form": "Criar e/ou editar formulário",
+              "Monitoring_forms_to_the_agent": "Formulários de monitoramento para o agente",
+              "Generate_report": "Gerar relatório",
+              "View_reports": "Visualizar relatórios",
+              "Monitoring_forms_report_to_the_agent": "Relatório de formulários de monitoramento para o agente",
+              "Quality_form_ABC_bank": "Formulário de qualidade banco ABC",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a qualidade do atendimento ao cliente fornecido pelo agente",
+            },
+            satisfactionSite: {
+              "Survey_system": "Sistema de pesquisas",
+              "Grid_mode": "Modo grade",
+              "List_mode": "Modo lista",
+              "Surveys_section": "Seção de pesquisas",
+              "Card_sections": "Seção de cartões",
+              "User_surveys": "Pesquisas de usuário",
+              "Total_Surveys": "Total de pesquisas",
+              "Create_and_or_edit_survey": "Criar e/ou editar pesquisa",
+              "Survey_report": "Relatório de pesquisa",
+              "Generate_report": "Gerar relatório",
+              "Send_survey": "Enviar pesquisa",
+              "Title": "Título",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a qualidade do atendimento ao cliente fornecido pelo agente",
+            },
+          },
+        },
       },
+      
+              // Establece el idioma según lo obtenido del contexto del usuario
+      /* backend: {
+        loadPath: `/locale/${userLanguage}/translation.json`,
+      }, */
       interpolation: {
         escapeValue: false,
       },
     });
-};
 
-initializeI18n();
 
 export default i18n;

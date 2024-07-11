@@ -1,14 +1,23 @@
-import { useEffect,useContext } from "react";
+import { useEffect,useContext,useState } from "react";
 import "../../assets/css/calidad.css";
 import { toggleGridMode,toggleListMode} from "../../assets/js/toggleListGridMode";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
 import SidebarLT2 from "../aside/sidebarLT2";
 import HeaderLT2 from "../header/headerLT2";
+import i18n from "../../assets/js/i18n";
+import { useTranslation } from "react-i18next";
+
+
 import { UserContext } from "../../context/UserContext";
 const Quality = () => {
+  const {userType,languageUser} = useContext(UserContext)
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { t,i18n } = useTranslation();
 
+  
   useEffect(() => {
+    i18n.changeLanguage(languageUser)
     document
       .getElementById("grid-button-mode")
       .addEventListener("click", toggleGridMode);
@@ -26,7 +35,8 @@ const Quality = () => {
     };
   }, []);
 
-   const {userType} = useContext(UserContext)
+ 
+
     const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses empiezan desde 0
@@ -53,7 +63,7 @@ const Quality = () => {
                   <div className="row d-flex ">
                     <div className="col-8">
                       <h3 className="text-start p-2 fw-bolder m-2 w-100 tituloCardGroup">
-                        Sistema de calidad
+                      {t("qualitySite.Quality_system")}
                       </h3>
                     </div>
                     <div className="col-4">
@@ -84,10 +94,10 @@ const Quality = () => {
 
                   <div className=" row ">
                     <div className=" col-2 text-center">
-                      <h6 className="cardElement">Agentes</h6>
+                      <h6 className="cardElement">   {t("qualitySite.Agents")}</h6>
                     </div>
                     <div className="col-8 ms-3 col-lg-4 text-center text-center">
-                      <h6 className="cardElement">Formularios de monitoreo</h6>
+                      <h6 className="cardElement">{t("qualitySite.Monitoring_forms")}</h6>
                     </div>
                   </div>
                 </div>
@@ -97,7 +107,7 @@ const Quality = () => {
                       <div className="card-body d-grid">
                         <div className="row">
                           <div className="col-10 card-title">
-                            <span className="">Agentes de la empresa</span>
+                            <span className="">{t("qualitySite.Company_agents")}</span>
                           </div>
                           <div className="col-2">
                             <div className="dropdown">
@@ -114,22 +124,21 @@ const Quality = () => {
                         </div>
                         <div className="row ">
                           <div className="col-12">
-                            <h3 className="card-text">Usuarios</h3>
+                            <h3 className="card-text">{t("qualitySite.Users")}</h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">Agentes</span>
+                            <span className="">{t("qualitySite.Company_agents")}</span>
                           </div>
                         </div>
                         <div className="row ">
                           <div
                             className="col-12 "
-                            onClick="window.location.href='./index.php?page=user_list&access=2'"
                           >
                             <a href="./admin_list">
                               <button className="card-btn">
-                                Lista de agentes
+                              {t("qualitySite.Agents_list")}
                               </button>
                             </a>
                           </div>
@@ -143,7 +152,7 @@ const Quality = () => {
                         <div className="row">
                           <div className="col-10 card-title">
                             <span className="">
-                              Formularios de monitoreo al agente
+                            {t("qualitySite.Monitoring_forms_to_the_agent")}
                             </span>
                           </div>
                           <div className="col-2">
@@ -162,24 +171,24 @@ const Quality = () => {
                         <div className="row">
                           <div className="col-12">
                             <h3 className="card-text">
-                              Formularios de monitoreo
+                            {t("qualitySite.Monitoring_forms")}
                             </h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
                             <span className="">
-                              Crear y/o editar formulario
+                            {t("qualitySite.Create_and_or_edit_form")}
                             </span>
                           </div>
                         </div>
                         <div
                           className="row button-container"
-                          onClick="window.location.href='./index.php?page=form_list'"
+                          
                         >
                           <div className="col-10">
                             <button className="card-btn check">
-                              Crear formulario
+                            {t("qualitySite.Create_form")}
                             </button>
                           </div>
                           <div className="col-2">
@@ -197,7 +206,7 @@ const Quality = () => {
                         <div className="row">
                           <div className="col-10 card-title">
                             <span className="">
-                              Reporte de formularios de monitoreo al agente
+                            {t("qualitySite.Monitoring_forms_report_to_the_agent")}
                             </span>
                           </div>
                           <div className="col-2">
@@ -215,21 +224,22 @@ const Quality = () => {
                         </div>
                         <div className="row">
                           <div className="col-12">
-                            <h3 className="card-text">Reporte de Formulario</h3>
+                            
+                            <h3 className="card-text"> {t("qualitySite.Form_report")} </h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">Generar informe</span>
+                            <span className="">{t("qualitySite.Generate_report")} </span>
                           </div>
                         </div>
                         <div
                           className="row button-container"
-                          onClick="window.location.href='./index.php?page=survey_widget'"
+                         
                         >
                           <div className="col-10 ">
                             <button className="card-btn check">
-                              Ver reportes
+                            {t("qualitySite.View_reports")}
                             </button>
                           </div>
                           <div className="col-2">
@@ -255,7 +265,7 @@ const Quality = () => {
                   <div className="row d-flex">
                     <div className="col-8">
                       <h3 className="text-start p-2 fw-bolder m-2 w-100 tituloCardGroup">
-                        Sistema de calidad
+                      {t("qualitySite.Quality_system")}
                       </h3>
                     </div>
                     <div className="col-4">
@@ -289,10 +299,10 @@ const Quality = () => {
 
                   <div className="row ">
                     <div className="col-2 text-center">
-                      <h6 className="cardElement">Agentes</h6>
+                      <h6 className="cardElement">{t("qualitySite.Agents")}</h6>
                     </div>
                     <div className="col-8 ms-3 col-lg-4 text-center text-center">
-                      <h6 className="cardElement">Formularios de monitoreo</h6>
+                      <h6 className="cardElement">{t("qualitySite.Monitoring_forms")}</h6>
                     </div>
                   </div>
                 </div>
@@ -302,19 +312,19 @@ const Quality = () => {
                       <ul className="list-item item-1 d-flex justify-content-between">
                         <div className="col-6 col-lg-4">
                           <h5 className="text-white fw-bolder">
-                            Agentes de la empresa
+                          {t("qualitySite.Company_agents")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-5 col-1 d-none d-lg-block">
-                          <span className="text-white">Agentes</span>
+                          <span className="text-white">{t("qualitySite.Agents")}</span>
                         </div>
                         <div
                           className="col col-lg-2"
-                          onClick="window.location.href='./index.php?page=user_list&access=2'"
+                        
                         >
                           <a href="./admin_list">
                             <button className="card-btn">
-                              Lista de agentes
+                            {t("qualitySite.Agents_list")}
                             </button>
                           </a>
                         </div>
@@ -334,21 +344,21 @@ const Quality = () => {
                       <ul className="list-item item-2 d-flex justify-content-between">
                         <div className="col col-lg-5">
                           <h5 className="text-white fw-bolder">
-                            Formularios de monitoreo al agente
+                          {t("qualitySite.Monitoring_forms_to_the_agent")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 col-1 d-none d-lg-block">
                           <span className="text-white d-none d-lg-block">
-                            Crear y/o editar formulario
+                          {t("qualitySite.Create_and_or_edit_form")}
                           </span>
                         </div>
                         <div
                           className="col-lg-3 col-7 d-flex justify-content-center"
                           id="content-new-form"
-                          onClick="window.location.href='./index.php?page=form_list'"
+                       
                         >
                           <button className="card-btn ">
-                            Crear Formulario
+                          {t("qualitySite.Create_form")}
                           </button>
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -370,19 +380,19 @@ const Quality = () => {
                       <ul className="list-item item-3 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                            Reporte de formularios de monitoreo al agente
+                          {t("qualitySite.Monitoring_forms_report_to_the_agent")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                            Generar informe
+                          {t("qualitySite.Generate_report")}
                           </span>
                         </div>
                         <div
                           className="col-lg-3  justify-content-center  col "
-                          onClick="window.location.href='./index.php?page=survey_widget'"
+                         
                         >
-                          <button className="card-btn ">Ver reportes</button>
+                          <button className="card-btn ">{t("qualitySite.View_reports")}</button>
 
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -410,19 +420,19 @@ const Quality = () => {
               <div className="col-12 col-lg-4 col-sm-12">
                 <div className="card outstanding-card extern">
                   <div className="card-body div-title">
-                    <h5 className="">Formularios de monitoreo</h5>
+                    <h5 className="">{t("qualitySite.Monitoring_forms")}</h5>
                     <div className="row">
                       <div className="col-12">
-                        <span className=" text-start fw-bold">
-                          Formulario de calidad banco ABC{" "}
-                          <i className=" fa-regular fa-clipboard"></i>
+                        <span className=" text-start fw-bold me-3">
+                        {t("qualitySite.Quality_form_ABC_bank")}   
+                         
                         </span>
+                        <i className=" fa-regular fa-clipboard"></i>
                       </div>
                     </div>
                     <div className="row">
                       <p className="text-start ">
-                        Califica la calidad de atención al cliente que se está
-                        presentando por parte del agente
+                      {t("qualitySite.Rate_the_quality_of_customer_service_being_provided_by_the_agent")}
                       </p>
                     </div>
                   </div>
