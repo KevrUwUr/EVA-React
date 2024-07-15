@@ -24,12 +24,12 @@ const LogIn = () => {
       const responseData=response.data
    
       if(responseData.status===true){
-        if(responseData.userLogin.state===1){
+        if(responseData.userLogin.state==1){
           console.log(responseData)
           setUserId(responseData.userLogin.id)
           setUserType(responseData.userLogin.type)
           setAccessToken(responseData.userLogin.accessToken)
-          if(responseData.userLogin.type===1 || responseData.userLogin.type===2 ){
+          if(responseData.userLogin.type==1 || responseData.userLogin.type==2 ){
             nav("/admin")
           } else if(responseData.userLogin.type===3){
             nav("/editor")

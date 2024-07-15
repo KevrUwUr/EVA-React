@@ -26,6 +26,7 @@ const SidebarLT1 = () => {
   const email = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/, });
   const language = useInput({ defaultValue: "", validate: /^(es|en|it|pt)$/ });
   const password = useInput({defaultValue: "",validate:/^(?=.[A-Z])(?=.[a-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,15}$/,});
+  const [cPassword, setcPassword] = useState("");
 
   const nav = useNavigate();
   const now = new Date();
@@ -37,7 +38,7 @@ const SidebarLT1 = () => {
    getInfo();
    i18n.changeLanguage(languageUser)
 
-  },[])
+  },[languageUser])
 
 
   const logout = () => {
@@ -75,40 +76,48 @@ const SidebarLT1 = () => {
   };
  
 
-  const updateInfo=async(event)=>{
+  const updateInfo = async (event) => {
     event.preventDefault();
-    var parameters
-    console.log(userInfo)
+    var parameters;
+  
     if (
       lastName.input.trim() === "" ||
       firstName.input.trim() === "" ||
-      email.input.trim() === "" ||
-      language.input.trim()===""
+      language.input.trim() === ""
     ) {
-      alert("Informacion no diligenciada")
+      alert("Información no diligenciada");
     } else {
-        try{
-          parameters = {
-            firstname: firstName.input,
-            middlename: middleName.input,
-            lastname: lastName.input,
-            email: email.input,
-            language: language.input,
-            last_visit_date: "",
-          };
-          password.input.length>8? parameters['password']=password.input: console.log(password.input);
-          const response= await axios.put(`${urlp}${userId}`,parameters,config)
-          if(response.data.status){
-            //hacer un timeout alert 3s y si le da aceptar antes que se reloguee instantaneamente
-            window.location.reload()
+      try {
+        parameters = {
+          firstname: firstName.input,
+          middlename: middleName.input,
+          lastname: lastName.input,
+          email: email.input,
+          language: language.input,
+          last_visit_date: ""
+        };
+  
+        // Asignar contraseña si está presente y cumple con las condiciones
+        if (password.input.length >= 8) {
+          if (password.input == cPassword) {
+            parameters['password'] = password.input;
+          } else {
+            alert("Las contraseñas no coinciden");
+            return;
           }
-          
-        }catch(error){
-          console.error(error)
         }
+  
+        const response = await axios.put(`${urlp}${userId}`, parameters, config);
+        if (response.data.status) {
+          window.location.reload();
+        }
+  
+      } catch (error) {
+        console.error(error);
+      }
     }
-    
-  }
+  };
+  
   return (
     <div className="col-1 col-md-1 col-lg-1 d-lg-block d-none h-100 rounded-end-4 collapse navbar-collapse ps-2 align-content-center" id="navbarNav" style={{position:"absolute"}}>
       <div id="div_ul" className="h-75 pe-0 ps-2 align-content-center">
@@ -166,7 +175,6 @@ const SidebarLT1 = () => {
                   placeholder=" "
                   value={firstName.input}
                   onChange={(e) => firstName.handleChange(e.target.value)}
-                  required
                 />
               </div>
 
@@ -193,7 +201,6 @@ const SidebarLT1 = () => {
                   placeholder=" "
                   value={lastName.input}
                       onChange={(e) => lastName.handleChange(e.target.value)}
-                  required
                 />
               </div>
 
@@ -207,7 +214,6 @@ const SidebarLT1 = () => {
                   placeholder=" "
                   value={email.input}
                       onChange={(e) => email.handleChange(e.target.value)}
-                  required
                   autoComplete="off"
                 />
               </div>
@@ -235,6 +241,7 @@ const SidebarLT1 = () => {
                   id="cpass"
                   className="form-control"
                   placeholder=" "
+                  onChange={(e) => setcPassword(e.target.value)}
                 />
                 <small id="pass_match" data-status=""></small>
               </div>
