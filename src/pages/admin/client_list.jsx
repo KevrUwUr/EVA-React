@@ -26,7 +26,7 @@ export default function Client_list() {
   const logo = useInput({ defaultValue: "", validate: "" });
   const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
   useEffect(() => {
-   
+    
     fetchData();
   }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
   const { accessToken } = useContext(UserContext);
@@ -152,9 +152,6 @@ export default function Client_list() {
   const handleTitleChange = (event) => {
     setTitleTosend(event.target.value);
   };
-
-
-
   const validar = async (id) => {
      const urlpost=`http://localhost/API-EVA/clientController/postClient`
      const formData = new FormData();
@@ -205,11 +202,6 @@ export default function Client_list() {
     }
   }
   };
-
-
-
-
-
 
   return (
     <div className="App">

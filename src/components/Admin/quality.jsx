@@ -18,6 +18,7 @@ const Quality = () => {
   
   useEffect(() => {
     i18n.changeLanguage(languageUser)
+    
     document
       .getElementById("grid-button-mode")
       .addEventListener("click", toggleGridMode);

@@ -1,10 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import Backend from "i18next-http-backend";
-
-
   i18n.use(initReactI18next).init({
-     
       debug: true,
       fallbackLng: "es",
       resources : {
@@ -54,6 +50,15 @@ import Backend from "i18next-http-backend";
               "Save_changes": "Guardar cambios",
               "Close": "Cerrar",
             },
+            /* clienTable contiene las palabras usadas en userTable */
+            clientTable:{
+              "newClient":"Nuevo cliente",
+              "Search":"Buscar",
+              "Actions":"Acciones",
+              "Show":"Mostrar",
+              "Registered":"Registros",
+              "newUser":"Nuevo usuario"
+            },
             qualitySite: {
               "Quality_system": "Sistema de calidad",
               "Agents": "Agentes",
@@ -83,9 +88,44 @@ import Backend from "i18next-http-backend";
               "Survey_report": "Informe de encuesta",
               "Generate_report": "Generar informe",
               "Send_survey": "Enviar encuesta",
-              "Title": "Título",
+              "GenerateGraphs":"Generar gráficos",
+              "GenerateGraphsAndSurveyReport": "Generar gráficos e informe de encuesta",
+              "Surveys":"Encuestas",
+              "SurveyReport":"Reporte de encuesta",
+              "CreateSurvey":"Crear encuesta",
+              "SendMailsurvey":"Envío de encuesta a correos",
+              "SendSurvey":"Enviar encuesta",
+              "SendMail":"Enviar correos",
+              "FinalUserSurveys": "Encuestas de usuario final",
               "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Evalúe la calidad del servicio al cliente proporcionado por el agente",
             },
+            UserModal:{
+              "RegisterUser":"Registrar Usuario",
+              "EditUser":"Editar usuario",
+              "UserData":"Datos de usuario",
+              "AdminData":"Datos administrativos",
+              "FirstName":"Primer nombre",
+              "MiddleName":"Segundo nombre",
+              "LastName":"Apellidos",
+              "Email":"E-mail",
+              "Password":"Contraseña",
+              "ConfirmPassword":"Confirmar contraseña",
+              "Type":"Tipo",
+              "SuperAdmin":"Super Administrador",
+              "Admin":"Administrador",
+              "Editor":"Editor",
+              "Viwer":"Visualizador",
+              "Close":"Cerrar",
+              "Save":"Guardar",
+            },
+            viewUserModal:{
+              "UserDetails":"Detalles del usuario",
+              "Name":"Nombre",
+            },
+            alertDeactivate:{
+
+            },
+            
           },
         },
         "en": {
@@ -115,24 +155,74 @@ import Backend from "i18next-http-backend";
               "title": "Customer Experience",
               "description": "Surveys / Charts / Reports",
             },
-            sidebarlt: {
-              "Primer_nombre": "First name",
-              "Segundo_nombre": "Middle name",
-              "Apellidos": "Last name",
-              "Correo": "Email",
-              "Contraseña": "Password",
-              "Deje_esto_en_blanco_si_no_desea_cambiar_la_contraseña.": "Leave this blank if you don't want to change the password.",
-              "Confirmar_Contraseña": "Confirm Password",
-              "Idioma": "Language",
-              "Español": "Spanish",
-              "Inglés": "English",
-              "Italiano": "Italian",
-              "Portugués": "Portuguese",
-              "Gestionar_cuenta": "Manage account",
-              "Cerrar_sesión": "Logout",
-              "Guardar": "Save",
-              "Cancelar": "Cancel",
+            clientTable: {
+            "newClient": "New client",
+            "Search": "Search",
+            "Actions": "Actions",
+            "Show": "Show",
+            "Registered": "Records",
+            "newUser":"New User"
+
             },
+            sidebarlt: {
+              "First_name": "First Name",
+              "Middle_name": "Middle Name",
+              "Last_name": "Last Name",
+              "Email": "Email",
+              "Password": "Password",
+              "Leave_this_blank_if_you_dont_want_to_change_the_password": "Leave this blank if you don't want to change the password.",
+              "Confirm_Password": "Confirm Password",
+              "Language": "Language",
+              "Spanish": "Spanish",
+              "English": "English",
+              "Italian": "Italian",
+              "Portuguese": "Portuguese",
+              "Manage_account": "Manage Account",
+              "Logout": "Logout",
+              "Save": "Save",
+              "Cancel": "Cancel"
+            },
+            headerlt: {
+                "First_name": "First Name",
+                "Middle_name": "Middle Name",
+                "Last_name": "Last Name",
+                "Email": "Email",
+                "Password": "Password",
+                "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Leave this blank if you don't want to change the password.",
+                "Confirm_Password": "Confirm Password",
+                "Language": "Language",
+                "Spanish": "Spanish",
+                "English": "English",
+                "Italian": "Italian",
+                "Portuguese": "Portuguese",
+                "Manage_account": "Manage Account",
+                "Logout": "Logout",
+                "Save_changes": "Save Changes",
+                "Close": "Close"
+            },
+           satisfactionSite: {
+            "Survey_system": "Survey System",
+            "Grid_mode": "Grid Mode",
+            "List_mode": "List Mode",
+            "Surveys_section": "Surveys Section",
+            "Card_sections": "Card Sections",
+            "User_surveys": "User Surveys",
+            "Total_Surveys": "Total Surveys",
+            "Create_and_or_edit_survey": "Create and/or Edit Survey",
+            "Survey_report": "Survey Report",
+            "Generate_report": "Generate Report",
+            "Send_survey": "Send Survey",
+            "Surveys": "Surveys",
+            "GenerateGraphs": "Generate Graphs",
+            "GenerateGraphsAndSurveyReport": "Generate Graphs and Survey Report",
+            "SurveyReport": "Survey Report",
+            "CreateSurvey": "Create Survey",
+            "SendMailsurvey": "Send Survey to Emails",
+            "SendSurvey": "Send Survey",
+            "SendMail": "Send Emails",
+            "FinalUserSurveys": "Final User Surveys",
+            "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Rate the Quality of Customer Service Being Provided by the Agent"
+           }
           },
         },
         it: {
@@ -181,6 +271,14 @@ import Backend from "i18next-http-backend";
               "Save_changes": "Salva modifiche",
               "Close": "Chiudi",
             },
+            clientTable: {
+              "newClient": "Nuovo cliente",
+              "Search": "Cerca",
+              "Actions": "Azioni",
+              "Show": "Mostra",
+              "Registered": "Record",
+              "newUser":"Nuovo utente"
+            },
             qualitySite: {
               "Quality_system": "Sistema di qualità",
               "Agents": "Agenti",
@@ -198,20 +296,28 @@ import Backend from "i18next-http-backend";
               "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Valuta la qualità del servizio clienti fornito dall'agente",
             },
             satisfactionSite: {
-              "Survey_system": "Sistema di sondaggi",
-              "Grid_mode": "Modalità griglia",
-              "List_mode": "Modalità lista",
-              "Surveys_section": "Sezione sondaggi",
-              "Card_sections": "Sezione carte",
-              "User_surveys": "Sondaggi utente",
-              "Total_Surveys": "Sondaggi totali",
-              "Create_and_or_edit_survey": "Crea e/o modifica sondaggio",
-              "Survey_report": "Report sondaggio",
-              "Generate_report": "Genera report",
-              "Send_survey": "Invia sondaggio",
-              "Title": "Titolo",
-              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Valuta la qualità del servizio clienti fornito dall'agente",
-            },
+              "Survey_system": "Sistema di Sondaggi",
+              "Grid_mode": "Modalità Griglia",
+              "List_mode": "Modalità Lista",
+              "Surveys_section": "Sezione Sondaggi",
+              "Card_sections": "Sezioni di Carte",
+              "User_surveys": "Sondaggi Utente",
+              "Total_Surveys": "Totale Sondaggi",
+              "Create_and_or_edit_survey": "Crea e/o Modifica Sondaggio",
+              "Survey_report": "Report del Sondaggio",
+              "Generate_report": "Genera Report",
+              "Send_survey": "Invia Sondaggio",
+              "Surveys": "Sondaggi",
+              "GenerateGraphs": "Genera Grafici",
+              "GenerateGraphsAndSurveyReport": "Genera Grafici e Report del Sondaggio",
+              "SurveyReport": "Report del Sondaggio",
+              "CreateSurvey": "Crea Sondaggio",
+              "SendMailsurvey": "Invia Sondaggio via Email",
+              "SendSurvey": "Invia Sondaggio",
+              "SendMail": "Invia Email",
+              "FinalUserSurveys": "Sondaggi Utente Finali",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Valuta la Qualità del Servizio Clienti Fornito dall'Agente"
+            }
           },
         },
         "pt": {
@@ -223,6 +329,14 @@ import Backend from "i18next-http-backend";
             satisfaction: {
               "title": "Experiência do cliente",
               "description": "Pesquisas / Gráficos / Relatórios",
+            },
+            clientTable: {
+              "newClient": "Novo cliente",
+              "Search": "Buscar",
+              "Actions": "Ações",
+              "Show": "Mostrar",
+              "Registered": "Registros",
+              "newUser":"Novo usuário"
             },
             sidebarlt: {
               "First_name": "Primeiro nome",
@@ -277,28 +391,32 @@ import Backend from "i18next-http-backend";
               "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a qualidade do atendimento ao cliente fornecido pelo agente",
             },
             satisfactionSite: {
-              "Survey_system": "Sistema de pesquisas",
-              "Grid_mode": "Modo grade",
-              "List_mode": "Modo lista",
-              "Surveys_section": "Seção de pesquisas",
-              "Card_sections": "Seção de cartões",
-              "User_surveys": "Pesquisas de usuário",
-              "Total_Surveys": "Total de pesquisas",
-              "Create_and_or_edit_survey": "Criar e/ou editar pesquisa",
-              "Survey_report": "Relatório de pesquisa",
-              "Generate_report": "Gerar relatório",
-              "Send_survey": "Enviar pesquisa",
-              "Title": "Título",
-              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a qualidade do atendimento ao cliente fornecido pelo agente",
-            },
+    "Survey_system": "Sistema de Pesquisa",
+    "Grid_mode": "Modo de Grade",
+    "List_mode": "Modo de Lista",
+    "Surveys_section": "Seção de Pesquisas",
+    "Card_sections": "Seções de Cartões",
+    "User_surveys": "Pesquisas de Usuário",
+    "Total_Surveys": "Total de Pesquisas",
+    "Create_and_or_edit_survey": "Criar e/ou Editar Pesquisa",
+    "Survey_report": "Relatório de Pesquisa",
+    "Generate_report": "Gerar Relatório",
+    "Send_survey": "Enviar Pesquisa",
+    "Surveys": "Pesquisas",
+    "GenerateGraphs": "Gerar Gráficos",
+    "GenerateGraphsAndSurveyReport": "Gerar Gráficos e Relatório de Pesquisa",
+    "SurveyReport": "Relatório de Pesquisa",
+    "CreateSurvey": "Criar Pesquisa",
+    "SendMailsurvey": "Enviar Pesquisa por E-mail",
+    "SendSurvey": "Enviar Pesquisa",
+    "SendMail": "Enviar E-mails",
+    "FinalUserSurveys": "Pesquisas de Usuário Final",
+    "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a Qualidade do Serviço ao Cliente Fornecido pelo Agente"
+  }
+
           },
         },
       },
-      
-              // Establece el idioma según lo obtenido del contexto del usuario
-      /* backend: {
-        loadPath: `/locale/${userLanguage}/translation.json`,
-      }, */
       interpolation: {
         escapeValue: false,
       },

@@ -242,7 +242,7 @@ const AdminList = () => {
   const openModal = (op, admin) => {
     setOperation(op);
     if (op == 1) {
-      setTitle("Registrar administrador");
+      setTitle("Registrar usuario");
       lastName.handleChange("");
       firstName.handleChange("");
       middleName.handleChange("");

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState,useContext, useEffect } from "react";
+import { UserContext } from "../../context/UserContext";
+import { useTranslation } from "react-i18next";
 import "../../assets/css/tabla.css";
 
 const TableDetalle = ({
@@ -12,6 +14,12 @@ const TableDetalle = ({
   modalId,
   modalId2
 }) => {
+  const { languageUser } = useContext(UserContext);
+  useEffect(()=>{
+    i18n.changeLanguage(languageUser)
+  })
+ 
+  const { t,i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
@@ -53,7 +61,7 @@ const TableDetalle = ({
         <div className="col-6 col-sm-6 col-md-6 col-lg-6">
           <input
             className="w-50 inp-search"
-            placeholder="Buscar"
+            placeholder={t("clientTable.Search")}
             value={searchTerm}
             onChange={handleSearch}
           />
@@ -65,7 +73,7 @@ const TableDetalle = ({
             data-bs-target={`#${modalId}`}
             onClick={onCreate}
           >
-            <i className="fa fa-plus"></i> Nuevo cliente
+            <i className="fa fa-plus"></i> {t("clientTable.newClient")}
           </button>
         </div>
       </div>
@@ -78,7 +86,7 @@ const TableDetalle = ({
               </th>
               
             ))}
-            <th className="col text-center">Acciones</th>
+            <th className="col text-center">{t("clientTable.Actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -140,7 +148,7 @@ const TableDetalle = ({
       <div className="row d-flex ps-5 pe-5 mt-3">
         <div className="col-6 col-sm-6 col-md-6 col-lg-6">
           <label>
-            Mostrar
+          {t("clientTable.Show")}
             <button
               className="dropdown-toggle inp-search"
               type="button"
@@ -162,7 +170,7 @@ const TableDetalle = ({
                 </li>
               ))}
             </ul>
-            registros
+            {t("clientTable.Registered")}
           </label>
         </div>
         <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">

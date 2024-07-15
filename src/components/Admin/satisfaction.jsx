@@ -6,13 +6,15 @@ import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
 import SidebarLT2 from "../aside/sidebarLT2";
 import HeaderLT2 from "../header/headerLT2";
+import { useTranslation } from "react-i18next";
 
 
 const Satisfaction = () => {
-
-  const { userType } = useContext(UserContext);
+  const { t,i18n } = useTranslation();
+  const { userType,languageUser } = useContext(UserContext);
 
   useEffect(() => {
+   i18n.changeLanguage(languageUser);
     document
       .getElementById("grid-button-mode")
       .addEventListener("click", toggleGridMode);
@@ -59,7 +61,7 @@ const Satisfaction = () => {
                   <div className="row d-flex ">
                     <div className="col-8">
                       <h2 className="text-start w-100 fw-bolder tituloCardGroup">
-                        Sistema de encuestas
+                        {t("satisfactionSite.Survey_system")}
                       </h2>
                     </div>
                     <div className="col-4">
@@ -87,7 +89,7 @@ const Satisfaction = () => {
 
                   <div className=" row ">
                     <div className=" col-lg-4 col-8 text-start">
-                      <h6 className="cardElement">Total Encuestas</h6>
+                      <h6 className="cardElement"> {t("satisfactionSite.Total_Surveys")}</h6>
                     </div>
                   </div>
                 </div>
@@ -99,7 +101,7 @@ const Satisfaction = () => {
                       <div className="card-body d-grid">
                         <div className="row">
                           <div className="col-10 card-title">
-                            <span className="">Encuestas de usuario final</span>
+                            <span className=""> {t("satisfactionSite.FinalUserSurveys")}</span>
                           </div>
                           <div className="col-2">
                             <div className="dropdown">
@@ -116,12 +118,12 @@ const Satisfaction = () => {
                         </div>
                         <div className="row">
                           <div className="col-12">
-                            <h3 className="card-text">Encuestas</h3>
+                            <h3 className="card-text">{t("satisfactionSite.Surveys")}</h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">Crear y/o editar encuesta</span>
+                            <span className="">{t("satisfactionSite.Create_and_or_edit_survey")}</span>
                           </div>
                         </div>
                         <div className="row button-container">
@@ -132,7 +134,7 @@ const Satisfaction = () => {
                           >
                             <a href="/survey_list">
                             <button className="card-btn check">
-                              Crear encuesta
+                            {t("satisfactionSite.CreateSurvey")}
                             </button>
                             </a>
                           </div>
@@ -151,7 +153,7 @@ const Satisfaction = () => {
                         <div className="row">
                           <div className="col-10 card-title">
                             <span className="">
-                              Generar gráficos e informe de encuesta
+                            {t("satisfactionSite.GenerateGraphsAndSurveyReport")}
                             </span>
                           </div>
                           <div className="col-2">
@@ -170,24 +172,24 @@ const Satisfaction = () => {
                         <div className="row">
                           <div className="col-12">
                             <h3 className="card-text w-100 m-0 p-0">
-                              Reporte de encuesta
+                            {t("satisfactionSite.SurveyReport")}
                             </h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">Generar informe</span>
+                            <span className="">{t("satisfactionSite.Generate_report")}</span>
                           </div>
                         </div>
                         <div className="row button-container">
                           <div className="col-10">
                             <button className="card-btn check">
-                              Generar gráficos
+                            {t("satisfactionSite.GenerateGraphs")}
                             </button>
                           </div>
                           <div className="col-2">
                             <button className="btn-plus">
-                              <i className="fa-solid fa-plus"></i>
+                              <i className="fa-solid fa-plus"> </i>
                             </button>
                           </div>
                         </div>
@@ -208,7 +210,7 @@ const Satisfaction = () => {
                   <div className="row d-flex">
                     <div className="col-8">
                       <h2 className="text-start  fw-bolder w-100 tituloCardGroup">
-                        Sistema de encuestas
+                      {t("satisfactionSite.Survey_system")}
                       </h2>
                     </div>
                     <div className="col-4">
@@ -239,7 +241,7 @@ const Satisfaction = () => {
 
                   <div className="row ">
                     <div className="col-12 col-lg-4 text-start">
-                      <h6 className="cardElement">Total Encuestas</h6>
+                      <h6 className="cardElement">  {t("satisfactionSite.Total_Surveys")}</h6>
                     </div>
                   </div>
                 </div>
@@ -249,16 +251,16 @@ const Satisfaction = () => {
                       <ul className="list-item item-4 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                            Encuestas de usuario final
+                          {t("satisfactionSite.FinalUserSurveys")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                            Crear y/o editar encuesta
+                          {t("satisfactionSite.Create_and_or_edit_survey")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">Crear encuesta</button>
+                          <button className="card-btn ">  {t("satisfactionSite.CreateSurvey")}</button>
 
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -280,16 +282,16 @@ const Satisfaction = () => {
                       <ul className="list-item item-5 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                            Generar gráficos e informe de encuesta
+                          {t("satisfactionSite.GenerateGraphsAndSurveyReport")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                            Generar informe
+                          {t("satisfactionSite.Generate_report")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">Generar informe</button>
+                          <button className="card-btn ">     {t("satisfactionSite.Generate_report")}</button>
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
                           </button>
@@ -310,16 +312,16 @@ const Satisfaction = () => {
                       <ul className="list-item item-6 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                            Envío de encuesta a correos
+                          {t("satisfactionSite.SendMailsurvey")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                            Enviar encuesta
+                          {t("satisfactionSite.SendSurvey")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">Enviar correos</button>
+                          <button className="card-btn ">     {t("satisfactionSite.SendMail")}</button>
 
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -346,19 +348,18 @@ const Satisfaction = () => {
               <div className="col-12 col-lg-4 col-sm-12">
                 <div className="card outstanding-card2 extern">
                   <div className="card-body div-title">
-                    <h5 className="">Encuestas</h5>
+                    <h5 className="">     {t("satisfactionSite.Surveys")}</h5>
                     <div className="row">
                       <div className="col-12">
                         <span className=" text-start fw-bold">
-                          Titulo{" "}
+                          Titulo encuesta mas demandada{" "}
                           <i className=" fa-regular fa-clipboard"></i>
                         </span>
                       </div>
                     </div>
                     <div className="row">
                       <p className="text-start ">
-                        Califica la calidad de atención al cliente que se está
-                        presentando por parte del agente
+                      {t("satisfactionSite.Rate_the_quality_of_customer_service_being_provided_by_the_agent")}
                       </p>
                     </div>
                   </div>

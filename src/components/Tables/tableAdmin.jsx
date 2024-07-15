@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState,useContext,useEffect} from "react";
 import "../../assets/css/tabla.css";
-
+import { UserContext } from "../../context/UserContext";
+import { useTranslation } from "react-i18next";
 const TableAdmin = ({
   header,
   data,
@@ -12,6 +13,12 @@ const TableAdmin = ({
   modalId,
   modalId2
 }) => {
+  const { languageUser } = useContext(UserContext);
+  useEffect(()=>{
+    i18n.changeLanguage(languageUser)
+  })
+ 
+  const { t,i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(25);
@@ -53,11 +60,11 @@ const TableAdmin = ({
         <div className="row d-flex mb-3">
           <div className="col-6 col-sm-6 col-md-6 col-lg-6">
           <input
-  className="w-50 inp-search"
-  placeholder="Buscar"
-  value={searchTerm}
-  onChange={handleSearch}
-/>
+          className="w-50 inp-search"
+          placeholder={t("clientTable.Search")}
+          value={searchTerm}
+          onChange={handleSearch}
+          />
           </div>
           <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
             <button
@@ -66,7 +73,7 @@ const TableAdmin = ({
               data-bs-target={`#${modalId}`}
               onClick={onCreate}
             >
-              <i className="fa fa-plus"></i> Nuevo Usuario
+              <i className="fa fa-plus"></i>{t("clientTable.newUser")}
             </button>
           </div>
         </div>
@@ -78,7 +85,7 @@ const TableAdmin = ({
                   {capitalize(item)}
                 </th>
               ))}
-              <th className="col text-center">Acciones</th>
+              <th className="col text-center">{t("clientTable.Actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +157,7 @@ const TableAdmin = ({
         <div className="row d-flex ps-5 pe-5 mt-3">
         <div className="col-6 col-sm-6 col-md-6 col-lg-6">
           <label>
-            Mostrar
+          {t("clientTable.Show")}
             <button
               className="dropdown-toggle inp-search"
               type="button"
@@ -172,7 +179,7 @@ const TableAdmin = ({
                 </li>
               ))}
             </ul>
-            registros
+            {t("clientTable.Registered")}
           </label>
         </div>
         <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
