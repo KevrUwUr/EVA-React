@@ -76,6 +76,7 @@ const ProtectedRoute = ({ redirectPath = '/',allowedUserTypes = []}) => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userType');
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('languageUser');
     return <Navigate to={redirectPath} replace />;
   }
   return <Outlet />;

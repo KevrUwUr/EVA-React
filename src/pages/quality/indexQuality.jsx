@@ -1,7 +1,16 @@
 import "../../assets/css/index.css";
 import SidebarLT2 from "../../components/aside/sidebarLT2";
 import HeaderLT2 from "../../components/header/headerLT2";
+import { useTranslation } from "react-i18next";
+import { useEffect,useContext,useState } from "react";
+import { UserContext } from "../../context/UserContext";
 const Index = () => {
+  const { t,i18n } = useTranslation();
+  const {languageUser} = useContext(UserContext)
+  useEffect(() => {
+    i18n.changeLanguage(languageUser)
+  }, []);
+
   return (
     <div className="App">
      <div id="body">
@@ -20,10 +29,8 @@ const Index = () => {
                         style={{ fontSize: "100px" }}
                       ></i>
                       <br />
-                      <h3>Calidad</h3>
-                      <p>
-                        Agentes / Usuarios / Formularios de monitoreo / Reportes
-                      </p>
+                      <h3>{t("quality.title")}</h3>
+                      <p>{t("quality.description")}</p>
                     </div>
                   </div>
                 </a>

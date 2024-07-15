@@ -3,8 +3,11 @@ import axios from 'axios';
 import { UserContext } from '../../context/UserContext';
 import '../../assets/css/ManageUser.css';
 
+
 const ManageUser = ({ closeModal }) => {
-  const { accessToken, userId } = useContext(UserContext);
+  const { accessToken, userId,languageUser } = useContext(UserContext);
+  const { t,i18n } = useTranslation();
+  
   const [userInfo, setUserInfo] = useState({
     id: '',
     firstname: '',
@@ -17,6 +20,7 @@ const ManageUser = ({ closeModal }) => {
 
   useEffect(() => {
     getInfo();
+    i18n.changeLanguage(languageUser)
   }, []);
 
   const config = {
@@ -54,7 +58,7 @@ const ManageUser = ({ closeModal }) => {
               <div id="msg"></div>
 
               <div className="form-group m-2">
-                <label htmlFor="firstname" className="form-label">Primer nombre</label>
+                <label htmlFor="firstname" className="form-label">{t(sidebar.First_name)}</label>
                 <input
                   type="text"
                   name="firstname"
@@ -68,7 +72,7 @@ const ManageUser = ({ closeModal }) => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="middlename" className="form-label">Segundo nombre</label>
+                <label htmlFor="middlename" className="form-label">{t(sidebar.Middle_name)}</label>
                 <input
                   type="text"
                   name="middlename"
@@ -81,7 +85,7 @@ const ManageUser = ({ closeModal }) => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="lastname" className="form-label">Apellidos</label>
+                <label htmlFor="lastname" className="form-label">{t(sidebar.Last_name)}</label>
                 <input
                   type="text"
                   name="lastname"
@@ -95,7 +99,7 @@ const ManageUser = ({ closeModal }) => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="email" className="form-label">Correo</label>
+                <label htmlFor="email" className="form-label">{t(sidebar.Email)}</label>
                 <input
                   type="email"
                   name="email"
@@ -110,7 +114,7 @@ const ManageUser = ({ closeModal }) => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="password" className="form-label">Contraseña</label>
+                <label htmlFor="password" className="form-label">{t(sidebar.Password)}</label>
                 <input
                   type="password"
                   name="password"
@@ -120,12 +124,12 @@ const ManageUser = ({ closeModal }) => {
                   onChange={handleChange}
                 />
                 <small>
-                  <i>Deje esto en blanco si no desea cambiar la contraseña.</i>
+                  <i>{t(sidebar.Leave_this_blank_if_you_dont_want_to_change_the_password)}</i>
                 </small>
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="cpass" className="form-label">Confirmar Contraseña</label>
+                <label htmlFor="cpass" className="form-label">{t(sidebar.Confirm_Password)}</label>
                 <input
                   type="password"
                   name="cpass"
@@ -136,7 +140,7 @@ const ManageUser = ({ closeModal }) => {
                 <small id="pass_match" data-status=""></small>
               </div>
 
-              <p className="lang m-2" key="titulo26">Idioma</p>
+              <p className="lang m-2" key="titulo26">{t(sidebar.Language)}</p>
               <div className="btn-group flex-wrap m-2" role="group" aria-label="Basic radio toggle button group">
                 <input
                   type="radio"
@@ -148,7 +152,7 @@ const ManageUser = ({ closeModal }) => {
                   checked={userInfo.language === "es"}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">Español</label>
+                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">{t(sidebar.Spanish)}</label>
 
                 <input
                   type="radio"
@@ -160,7 +164,7 @@ const ManageUser = ({ closeModal }) => {
                   checked={userInfo.language === "en"}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">Inglés</label>
+                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">{t(sidebar.English)}</label>
 
                 <input
                   type="radio"
@@ -172,7 +176,7 @@ const ManageUser = ({ closeModal }) => {
                   checked={userInfo.language === "it"}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">Italiano</label>
+                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">{t(sidebar.Italian)}</label>
 
                 <input
                   type="radio"
@@ -184,15 +188,15 @@ const ManageUser = ({ closeModal }) => {
                   checked={userInfo.language === "pt"}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">Portugués</label>
+                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">{t(sidebar.Portuguese)}</label>
               </div>
 
               <div className="modal-footer">
                 <button className="btn bg-gradient-guardar mr-2" id="btn-send-survey" type="submit">
-                  Guardar
+                {t(sidebar.Save)}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={closeModal}>
-                  Cancelar
+                {t(sidebar.Cancel)}
                 </button>
               </div>
             </form>

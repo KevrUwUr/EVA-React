@@ -1,7 +1,16 @@
 import "../../assets/css/index.css";
 import SidebarLT2 from "../../components/aside/sidebarLT2";
 import HeaderLT2 from "../../components/header/headerLT2";
+import { UserContext } from "../../context/UserContext";
+import { useEffect,useContext } from "react";
+
 const IndexEditor = () => {
+  const { t,i18n } = useTranslation();
+  const {languageUser} = useContext(UserContext)
+  useEffect(() => {
+    i18n.changeLanguage(languageUser)
+  }, []);
+
   return (
     <div className="App">
      <div id="body">
@@ -25,8 +34,9 @@ const IndexEditor = () => {
                         style={{ fontSize: "100px" }}
                       ></i>
                       <br />
-                      <h3>Experiencia de cliente</h3>
-                      <p>Encuestas / Graficas / Reportes</p>
+                  
+                        <h3>{t("satisfaction.title")}</h3>
+                        <p>{t("satisfaction.description")}</p>
                     </div>
                   </div>
                 </a>

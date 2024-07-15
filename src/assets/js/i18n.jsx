@@ -24,7 +24,7 @@ import Backend from "i18next-http-backend";
               "Last_name": "Apellidos",
               "Email": "Correo",
               "Password": "Contraseña",
-              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deje esto en blanco si no desea cambiar la contraseña.",
+              "Leave_this_blank_if_you_dont_want_to_change_the_password": "Deje esto en blanco si no desea cambiar la contraseña.",
               "Confirm_Password": "Confirmar Contraseña",
               "Language": "Idioma",
               "Spanish": "Español",

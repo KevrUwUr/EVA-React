@@ -7,9 +7,11 @@ import i18n from "../../assets/js/i18n.jsx";
 import { useEffect,useContext,useState} from "react";
 import { UserContext } from "../../context/UserContext";
 const Index = () => {
-  const { t } = useTranslation();
-  const userContext = useContext(UserContext);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const { t,i18n } = useTranslation();
+  const {userType,languageUser} = useContext(UserContext)
+  useEffect(() => {
+    i18n.changeLanguage(languageUser)
+  }, []);
 
  
   return (

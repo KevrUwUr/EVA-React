@@ -5,13 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { useState,useContext,useEffect} from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from 'axios'
+import { useTranslation } from "react-i18next";
 const HeaderLT2 = () => {
+  
 
- 
   useEffect(()=>{
     checkinfo()
+    i18n.changeLanguage(languageUser)
   },[])
   const [userInfo,SetUserInfo]=useState([])
+  const { accessToken,userId,setLanguageUser,languageUser} = useContext(UserContext);
+  const { t,i18n } = useTranslation();
   const nav = useNavigate();
   const logout=()=>{
     localStorage.removeItem('userId');
@@ -19,7 +23,8 @@ const HeaderLT2 = () => {
     localStorage.removeItem('accessToken');
     nav("/")
   }
-  const { accessToken,userId,setLanguageUser  } = useContext(UserContext);
+  
+
   
   const config = {
     headers: {
@@ -107,7 +112,7 @@ const HeaderLT2 = () => {
                           data-bs-toggle="modal"
                           data-bs-target="#modalManageUser"
                         >
-                          Gestionar cuentas
+                          {/* {t(headerlt.Manage_account)} */}
                         </button>
                       </li>
                       <li>
@@ -115,7 +120,7 @@ const HeaderLT2 = () => {
                           className=" btn btn-primary dropdown-item"
                           onClick={()=>logout()}
                         >
-                          Cerrar sesión
+{/*                            {t(headerlt.Logout)} */}
                         </button>
                          
                       </li>
