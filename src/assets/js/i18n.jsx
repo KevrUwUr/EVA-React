@@ -18,7 +18,7 @@ import Backend from "i18next-http-backend";
               "title": "Experiencia del cliente",
               "description": "Encuestas / Gráficos / Informes",
             },
-            sidebarlt: {
+            sidebarlt:{
               "First_name": "Primer nombre",
               "Middle_name": "Segundo nombre",
               "Last_name": "Apellidos",
@@ -230,7 +230,7 @@ import Backend from "i18next-http-backend";
               "Last_name": "Sobrenome",
               "Email": "Email",
               "Password": "Senha",
-              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deixe em branco se não deseja alterar a senha.",
+              "Leave_this_blank_if_you_dont_want_to_change_the_password": "Deixe em branco se não deseja alterar a senha.",
               "Confirm_Password": "Confirmar senha",
               "Language": "Idioma",
               "Spanish": "Espanhol",
@@ -248,7 +248,7 @@ import Backend from "i18next-http-backend";
               "Last_name": "Sobrenome",
               "Email": "Email",
               "Password": "Senha",
-              "Leave_this_blank_if_you_don't_want_to_change_the_password.": "Deixe em branco se não deseja alterar a senha.",
+              "Leave_this_blank_if_you_dont_want_to_change_the_password": "Deixe em branco se não deseja alterar a senha.",
               "Confirm_Password": "Confirmar senha",
               "Language": "Idioma",
               "Spanish": "Espanhol",

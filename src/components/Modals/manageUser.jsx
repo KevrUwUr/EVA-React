@@ -7,7 +7,7 @@ import '../../assets/css/ManageUser.css';
 const ManageUser = ({ closeModal }) => {
   const { accessToken, userId,languageUser } = useContext(UserContext);
   const { t,i18n } = useTranslation();
-  
+
   const [userInfo, setUserInfo] = useState({
     id: '',
     firstname: '',
@@ -58,7 +58,7 @@ const ManageUser = ({ closeModal }) => {
               <div id="msg"></div>
 
               <div className="form-group m-2">
-                <label htmlFor="firstname" className="form-label">{t(sidebar.First_name)}</label>
+                <label htmlFor="firstname" className="form-label">{t("sidebar.First_name")}</label>
                 <input
                   type="text"
                   name="firstname"

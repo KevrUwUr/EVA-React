@@ -5,13 +5,18 @@ import { toggleBlackMode } from "../../assets/js/toggleBlackMode";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { Modal,ModalBody,ModalHeader,Button,ModalFooter} from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 import useInput from "../../components/hooks/useInput";
 import "../../assets/css/header_aside.css"
 const HeaderLT1 = () => {
+  const { accessToken,userId,languageUser,setLanguageUser  } = useContext(UserContext);
+  const { t,i18n } = useTranslation();
 
 useEffect(()=>{
   checkinfo()
+  i18n.changeLanguage(languageUser)
+
 },[])
 const [userLanguage,setUserLanguaje]=useState({language:''})
 const [userInfo, setUserInfo] = useState({
@@ -49,7 +54,6 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
     localStorage.removeItem('accessToken');
     nav("/")
   }
-  const { accessToken,userId,languageUser,setLanguageUser  } = useContext(UserContext);
   
   const config = {
     headers: {
@@ -213,11 +217,11 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                     >
                       <li>
                         <button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#userModalInfo2"  onClick={()=> openModal()}> 
-                          Gestionar cuenta
+                        {t("headerlt.Manage_account")}
                         </button>
                       </li>
                       <li>
-                        <button className="dropdown-item" onClick={()=>logout()}>Cerrar sesión</button>
+                        <button className="dropdown-item" onClick={()=>logout()}>{t("headerlt.Logout")}</button>
                       </li>
                       {/* [//! Cerrar sesión] */}
                     </ul>
@@ -230,13 +234,13 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
       </nav>
       {/* <ManageUser data={fakeData}/> */}
       <Modal isOpen={modal} toggle={openModal} centered>
-        <ModalHeader toggle={closeModal}>Gestionar cuenta</ModalHeader>
+        <ModalHeader toggle={closeModal}>{t("headerlt.Manage_account")}</ModalHeader>
         <ModalBody>
         
               <div id="msg"></div>
 
               <div className="form-group m-2">
-                <label htmlFor="firstname" className="form-label">Primer nombre</label>
+                <label htmlFor="firstname" className="form-label">{t("headerlt.First_name")}</label>
                 <input
                   type="text"
                   name="firstname"
@@ -250,7 +254,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="middlename" className="form-label">Segundo nombre</label>
+                <label htmlFor="middlename" className="form-label">{t("headerlt.Middle_name")}</label>
                 <input
                   type="text"
                   name="middlename"
@@ -263,7 +267,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="lastname" className="form-label">Apellidos</label>
+                <label htmlFor="lastname" className="form-label">{t("headerlt.Last_name")}</label>
                 <input
                   type="text"
                   name="lastname"
@@ -277,7 +281,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="email" className="form-label">Correo</label>
+                <label htmlFor="email" className="form-label">{t("headerlt.Email")}</label>
                 <input
                   type="email"
                   name="email"
@@ -292,7 +296,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="password" className="form-label">Contraseña</label>
+                <label htmlFor="password" className="form-label">{t("headerlt.Password")}</label>
                 <input
                   type="password"
                   name="password"
@@ -302,12 +306,12 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                   onChange={(e) => password.handleChange(e.target.value)}
                 />
                 <small>
-                  <i>Deje esto en blanco si no desea cambiar la contraseña.</i>
+                  <i>{t("headerlt.Leave_this_blank_if_you_dont_want_to_change_the_password")}</i>
                 </small>
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="cpass" className="form-label">Confirmar Contraseña</label>
+                <label htmlFor="cpass" className="form-label">{t("headerlt.Confirm_Password")}</label>
                 <input
                   type="password"
                   name="cpass"
@@ -318,7 +322,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                 <small id="pass_match" data-status=""></small>
               </div>
 
-              <p className="lang m-2" key="titulo26">Idioma</p>
+              <p className="lang m-2" key="titulo26">{t("headerlt.Language")}</p>
               <div className="btn-group flex-wrap m-2" role="group" aria-label="Basic radio toggle button group">
                 <input
                   type="radio"
@@ -330,7 +334,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                   checked={language.input === "es"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">Español</label>
+                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">{t("headerlt.Spanish")}</label>
 
                 <input
                   type="radio"
@@ -342,7 +346,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                   checked={language.input === "en"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">Inglés</label>
+                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">{t("headerlt.English")}</label>
 
                 <input
                   type="radio"
@@ -354,7 +358,7 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                   checked={language.input === "it"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">Italiano</label>
+                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">{t("headerlt.Italian")}</label>
 
                 <input
                   type="radio"
@@ -366,15 +370,15 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
                   checked={language.input === "pt"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">Portugués</label>
+                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">{t("headerlt.Portuguese")}</label>
               </div>
 
        
        
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={closeModal}>Cerrar</Button>
-          <Button color="primary" onClick={updateInfo}>Guardar cambios</Button>
+          <Button color="secondary" onClick={closeModal}>{t("headerlt.Close")}</Button>
+          <Button color="primary" onClick={updateInfo}>{t("headerlt.Save_changes")}</Button>
         </ModalFooter>
       </Modal>
     </header>

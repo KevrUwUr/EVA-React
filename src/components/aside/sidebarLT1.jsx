@@ -3,12 +3,15 @@ import "../../assets/css/header_aside.css";
 import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import useInput from "../../components/hooks/useInput";
+import { useTranslation } from "react-i18next";
 
 import axios from 'axios'
 /* import ManageUser from "../Modals/manageUser"; */
 
 const SidebarLT1 = () => {
-  const { accessToken, userId } = useContext(UserContext);
+  const { accessToken, userId,languageUser } = useContext(UserContext);
+  const { t,i18n } = useTranslation();
+  
   const [userInfo, setUserInfo] = useState({
     firstname: '',
     middlename: '',
@@ -32,6 +35,8 @@ const SidebarLT1 = () => {
 
   useEffect(()=>{
    getInfo();
+   i18n.changeLanguage(languageUser)
+
   },[])
 
 
@@ -132,10 +137,10 @@ const SidebarLT1 = () => {
           <li className="nav-item dropdown">
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li>
-                <button className="dropdown-item"  onClick={()=>getInfo()} data-bs-toggle="modal" data-bs-target="#userModalInfo">Gestionar cuenta</button>
+                <button className="dropdown-item"  onClick={()=>getInfo()} data-bs-toggle="modal" data-bs-target="#userModalInfo">{t("sidebarlt.Manage_account")}</button>
               </li>
               <li>
-                <button className="dropdown-item" onClick={logout}>Cerrar sesión</button>
+                <button className="dropdown-item" onClick={logout}>{t("sidebarlt.Logout")}</button>
               </li>
             </ul>
           </li>
@@ -152,7 +157,7 @@ const SidebarLT1 = () => {
               <div id="msg"></div>
 
               <div className="form-group m-2">
-                <label htmlFor="firstname" className="form-label">Primer nombre</label>
+                <label htmlFor="firstname" className="form-label">{t("sidebarlt.First_name")}</label>
                 <input
                   type="text"
                   name="firstname"
@@ -166,7 +171,7 @@ const SidebarLT1 = () => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="middlename" className="form-label">Segundo nombre</label>
+                <label htmlFor="middlename" className="form-label">{t("sidebarlt.Middle_name")}</label>
                 <input
                   type="text"
                   name="middlename"
@@ -179,7 +184,7 @@ const SidebarLT1 = () => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="lastname" className="form-label">Apellidos</label>
+                <label htmlFor="lastname" className="form-label">{t("sidebarlt.Last_name")}</label>
                 <input
                   type="text"
                   name="lastname"
@@ -193,7 +198,7 @@ const SidebarLT1 = () => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="email" className="form-label">Correo</label>
+                <label htmlFor="email" className="form-label">{t("sidebarlt.Email")}</label>
                 <input
                   type="email"
                   name="email"
@@ -208,7 +213,7 @@ const SidebarLT1 = () => {
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="password" className="form-label">Contraseña</label>
+                <label htmlFor="password" className="form-label">{t("sidebarlt.Password")}</label>
                 <input
                   type="password"
                   name="password"
@@ -218,12 +223,12 @@ const SidebarLT1 = () => {
                   onChange={(e) => password.handleChange(e.target.value)}
                 />
                 <small>
-                  <i>Deje esto en blanco si no desea cambiar la contraseña.</i>
+                  <i>{t("sidebarlt.Leave_this_blank_if_you_dont_want_to_change_the_password")}</i>
                 </small>
               </div>
 
               <div className="form-group m-2">
-                <label htmlFor="cpass" className="form-label">Confirmar Contraseña</label>
+                <label htmlFor="cpass" className="form-label">{t("sidebarlt.Confirm_Password")}</label>
                 <input
                   type="password"
                   name="cpass"
@@ -234,7 +239,7 @@ const SidebarLT1 = () => {
                 <small id="pass_match" data-status=""></small>
               </div>
 
-              <p className="lang m-2" key="titulo26">Idioma</p>
+              <p className="lang m-2" key="titulo26">{t("sidebarlt.Language")}</p>
               <div className="btn-group flex-wrap m-2" role="group" aria-label="Basic radio toggle button group">
                 <input
                   type="radio"
@@ -246,7 +251,7 @@ const SidebarLT1 = () => {
                   checked={language.input === "es"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">Español</label>
+                <label className="btn btn-outline-dark lang" htmlFor="es" key="titulo27">{t("sidebarlt.Spanish")}</label>
 
                 <input
                   type="radio"
@@ -258,7 +263,7 @@ const SidebarLT1 = () => {
                   checked={language.input === "en"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">Inglés</label>
+                <label className="btn btn-outline-dark lang" htmlFor="en" key="titulo28">{t("sidebarlt.English")}</label>
 
                 <input
                   type="radio"
@@ -270,7 +275,7 @@ const SidebarLT1 = () => {
                   checked={language.input === "it"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">Italiano</label>
+                <label className="btn btn-outline-dark lang" htmlFor="it" key="titulo29">{t("sidebarlt.Italian")}</label>
 
                 <input
                   type="radio"
@@ -282,15 +287,15 @@ const SidebarLT1 = () => {
                   checked={language.input === "pt"}
                   onChange={(e) => language.handleChange(e.target.value)}
                 />
-                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">Portugués</label>
+                <label className="btn btn-outline-dark lang" htmlFor="pt" key="titulo30">{t("sidebarlt.Portuguese")}</label>
               </div>
 
               <div className="modal-footer">
                 <button className="btn bg-gradient-guardar mr-2" id="btn-send-survey" type="submit">
-                  Guardar
+                {t("sidebarlt.Save")}
                 </button>
                 <button className="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                  Cancelar
+                {t("sidebarlt.Cancel")}
                 </button>
               </div>
             </form>

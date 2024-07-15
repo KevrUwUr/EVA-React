@@ -23,7 +23,7 @@ const HeaderLT2 = () => {
     localStorage.removeItem('accessToken');
     nav("/")
   }
-  
+
 
   
   const config = {
@@ -112,7 +112,7 @@ const HeaderLT2 = () => {
                           data-bs-toggle="modal"
                           data-bs-target="#modalManageUser"
                         >
-                          {/* {t(headerlt.Manage_account)} */}
+                          {t("headerlt.Manage_account")}
                         </button>
                       </li>
                       <li>
@@ -120,7 +120,7 @@ const HeaderLT2 = () => {
                           className=" btn btn-primary dropdown-item"
                           onClick={()=>logout()}
                         >
-{/*                            {t(headerlt.Logout)} */}
+                           {t("headerlt.Logout")}
                         </button>
                          
                       </li>
