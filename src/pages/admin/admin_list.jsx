@@ -11,6 +11,9 @@ import HeaderLT1 from "../../components/header/headerLT1";
 import useInput from "../../components/hooks/useInput";
 import { UserContext } from "../../context/UserContext";
 import { Toast,smallAlertDelete } from "../../assets/js/alertConfig";
+import { useTranslation } from "react-i18next";
+
+
 const AdminList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
   const selectedKeys = ["firstname", "lastname","type", "state"];
@@ -28,6 +31,8 @@ const AdminList = () => {
   const [userclients,setUserClients]=useState([]);
   const [selectedClients,setSelectedClients]=useState([])
 
+  const { t,i18n } = useTranslation();
+  const { accessToken,languageUser } = useContext(UserContext);
  
   useEffect(() => {
     
@@ -40,10 +45,9 @@ const AdminList = () => {
     
     
     getAdmins();
-    
+    i18n.changeLanguage(languageUser)
     getClients();
-  }, []); 
-  const { accessToken } = useContext(UserContext);
+  }, [languageUser]); 
   const config = {
     headers: {
       "Authorization": `Bearer ${accessToken}`,
@@ -178,10 +182,10 @@ const AdminList = () => {
     
     smallAlertDelete
       .fire({
-        text: `El registro de ${name} se eliminará de forma permanente.`,
+        text: `${t("alerDeactivate.InitialPhrase")}${name} ${t("alerDeactivate.FinalPhrase")}`,
         showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
+        confirmButtonText: `${t("alerDeactivate.Confirm")}`,
+        cancelButtonText: `${t("alerDeactivate.Cancel")}`,
       })
       .then(async (result) => {
         if (result.isConfirmed) {
@@ -208,10 +212,10 @@ const AdminList = () => {
 
     smallAlertDelete
       .fire({
-        text: `El usuario ${name} se activara.`,
+        text: `${t("alerActivate.InitialPhrase")}${name}${t("alerActivate.FinalPhrase")}`,
         showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
+        confirmButtonText: `${t("alertActivate.Confirm")}`,
+        cancelButtonText:  `${t("alertActivate.Cancel")}`,
       })
       .then(async (result) => {
         if (result.isConfirmed) {
@@ -219,14 +223,14 @@ const AdminList = () => {
             await axios.patch(`${url}/${id}`, parametros,{headers: {Authorization: `Bearer ${accessToken}`}});
             Toast.fire({
               icon: "success",
-              title: `El usuario ${admin.firstname} se ha activado exitosamente`,
+              title: `${t("alerActivate.InitialPhrase")}${admin.firstname}${t("alerActivate.SuccessAlert")}`,
             });
 
             // getAdmins();
           } catch (error) {
             Toast.fire({
               icon: "error",
-              title: `El usuario ${admin.firstName} no ha sido activado`,
+              title: `${t("alerActivate.InitialPhrase")}${admin.firstName}${t("alerActivate.ErrorAlert")}`,
             });
             console.error(error);
           }
@@ -242,7 +246,7 @@ const AdminList = () => {
   const openModal = (op, admin) => {
     setOperation(op);
     if (op == 1) {
-      setTitle("Registrar usuario");
+      setTitle(t("UserModal.RegisterUser"));
       lastName.handleChange("");
       firstName.handleChange("");
       middleName.handleChange("");
@@ -257,7 +261,7 @@ const AdminList = () => {
     } 
     else if (op == 2) {
       getUserClients(admin.id)
-      setTitle("Editar Usuario");
+      setTitle(t("UserModal.EditUser"));
       lastName.handleChange(admin?.lastname || "");
       firstName.handleChange(admin?.firstname || "");
       middleName.handleChange(admin?.middlename || "");
@@ -335,9 +339,6 @@ const AdminList = () => {
 
   //? Select //
   const animatedComponents = makeAnimated();
-
-
- 
   const handleClientChange=(selectedOption)=>{
     setUserClients(selectedOption)
     console.log(selectedOption)
@@ -395,7 +396,7 @@ const AdminList = () => {
             <div className="modal-body d-flex justify-content-between">
               <div className="row flex-column m-0 w-50">
                 <div className="col text-center fs-4 mb-2">
-                  Datos de usuario
+                {t("UserModal.UserData")}
                 </div>
                 <div className="col mb-3">
                   <label id="labelAnimation">
@@ -407,7 +408,7 @@ const AdminList = () => {
                       value={firstName.input}
                       onChange={(e) => firstName.handleChange(e.target.value)}
                     />
-                    <span className="labelName">Primer nombre</span>
+                    <span className="labelName">{t("UserModal.FirstName")}:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -420,7 +421,7 @@ const AdminList = () => {
                       value={middleName.input}
                       onChange={(e) => middleName.handleChange(e.target.value)}
                     />
-                    <span className="labelName">Segundo nombre:</span>
+                    <span className="labelName">{t("UserModal.MiddleName")}:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -433,7 +434,7 @@ const AdminList = () => {
                       value={lastName.input}
                       onChange={(e) => lastName.handleChange(e.target.value)}
                     />
-                    <span className="labelName">Apellido:</span>
+                    <span className="labelName">{t("UserModal.LastName")}:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -448,13 +449,13 @@ const AdminList = () => {
                       loadOptions={loadOptions}
                       onChange={handleClientChange}
                     />
-                    <span className="labelName">Clientes:</span>
+                    <span className="labelName">{t("UserModal.Clients")}:</span>
                   </label>
                 </div>
               </div>
               <div className="row flex-column m-0 w-50">
                 <div className="col text-center fs-4 mb-2">
-                  Datos administrativos
+                {t("UserModal.AdminData")}
                 </div>
                 <div className="col mb-3">
                   <label id="labelAnimation">
@@ -466,7 +467,7 @@ const AdminList = () => {
                       value={email.input}
                       onChange={(e) => email.handleChange(e.target.value)}
                     />
-                    <span className="labelName">E-mail:</span>
+                    <span className="labelName">{t("UserModal.Email")}:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -478,7 +479,7 @@ const AdminList = () => {
                       name="password"
                       onChange={(e) => password.handleChange(e.target.value)}
                     />
-                    <span className="labelName">Contraseña:</span>
+                    <span className="labelName">{t("UserModal.Password")}:</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -489,9 +490,10 @@ const AdminList = () => {
                       type="password"
                       name="cPassword"
                     />
-                    <span className="labelName">Confirmar contraseña:</span>
+                    <span className="labelName">{t("UserModal.ConfirmPassword")}:</span>
                     <small>
-                      Si no desea cambiar la contraseña dejar en blanco
+
+                     {t("headerlt.Leave_this_blank_if_you_don't_want_to_change_the_password.")}
                     </small>
                   </label>
                 </div>
@@ -499,12 +501,12 @@ const AdminList = () => {
                   <label id="labelAnimation">
                     <select className="input-new text-center" name="type" onChange={(e) => type.handleChange(e.target.value)} value={type.input}>
                      {/*  <option value="0" disabled selected>Seleccione un rol</option> */}
-                      <option value="1">Super Administrador</option>
-                      <option value="2">Administrador</option>
-                      <option value="3">Editor</option>
-                      <option value="4">Visualizador</option>
+                      <option value="1">{t("UserModal.SuperAdmin")}</option>
+                      <option value="2">{t("UserModal.Admin")}</option>
+                      <option value="3">{t("UserModal.Editor")}</option>
+                      <option value="4">{t("UserModal.Viwer")}</option>
                     </select>
-                    <span className="labelName">Tipo:</span>
+                    <span className="labelName">{t("UserModal.Type")}</span>
                   </label>
                 </div>
                 <div className="col mb-3">
@@ -521,13 +523,13 @@ const AdminList = () => {
                 data-bs-dismiss="modal"
                 onClick={() => setSelectedClients()}
               >
-                Cerrar
+                {t("UserModal.Close")}
               </button>
               <button
                 onClick={() => validar(idToEdit)}
                 className="btn-primary btn"
               >
-                Guardar
+                {t("UserModal.Save")}
               </button>
             </div>
           </div>
@@ -540,7 +542,7 @@ const AdminList = () => {
           <div className="modal-content">
             <div
               className="modal-header mb-0 pb-0" style={{ borderBottom:"none" }} >
-                <label className="h5">Detalles del usuario</label>
+                <label className="h5">{t("viewUserModal.UserDetails")}</label>
               <button
                 type="button"
                 className="btn-close"

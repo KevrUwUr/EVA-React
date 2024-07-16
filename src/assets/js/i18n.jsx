@@ -57,7 +57,13 @@ import { initReactI18next } from "react-i18next";
               "Actions":"Acciones",
               "Show":"Mostrar",
               "Registered":"Registros",
-              "newUser":"Nuevo usuario"
+              "newUser":"Nuevo usuario",
+              "Active":"Activo",
+              "Inactive":"Inactivo",
+              "Admin":"Administrador",
+              "Editor":"Editor",
+              "SuperAdmin":"SuperAdmin",
+              "Viwer":"Visualizador"
             },
             qualitySite: {
               "Quality_system": "Sistema de calidad",
@@ -121,9 +127,38 @@ import { initReactI18next } from "react-i18next";
             viewUserModal:{
               "UserDetails":"Detalles del usuario",
               "Name":"Nombre",
+              "Email":"Correo electronico",
+              "Role":"Rol",
+              "State":"Estado",
+              "RegisterDate":"Fecha de registro",
+              "LastVisit":"Ultima visita",
+              "Language":"Lenguaje",
+              "Clients":"Clientes"
+
             },
             alertDeactivate:{
-
+              "InitialPhrase":"El registro de ",
+              "FinalPhrase":"de forma permanente. ",
+              "Confirm":"Confirmar",
+              "Cancel":"Cancelar",
+            },
+            alertActivate:{
+              "InitialPhrase":"El usuario ",
+              "FinalPhrase":" se activara.",
+              "Confirm":"Confirmar",
+              "Cancel":"Cancelar",
+              "SuccessAlert":" se ha activado exitosamente.",
+              "ErrorAlert":" no ha sido activado."
+            },
+            clientModal:{
+              "NewClient":"Añadir cliente",
+              "EditClient":"Editar cliente",
+              "ClientName":"Nombre del cliente"
+            },
+            clientViewModal:{
+              "Client":"Cliente",
+              "ClientInfo":"Información detallada del cliente.",
+              "State":"Estado"
             },
             
           },
@@ -156,13 +191,70 @@ import { initReactI18next } from "react-i18next";
               "description": "Surveys / Charts / Reports",
             },
             clientTable: {
-            "newClient": "New client",
-            "Search": "Search",
-            "Actions": "Actions",
-            "Show": "Show",
-            "Registered": "Records",
-            "newUser":"New User"
-
+              "newClient": "New client",
+              "Search": "Search",
+              "Actions": "Actions",
+              "Show": "Show",
+              "Registered": "Records",
+              "newUser": "New user",
+              "Active": "Active",
+              "Inactive": "Inactive",
+              "Admin": "Administrator",
+              "Editor": "Editor",
+              "SuperAdmin": "SuperAdmin",
+              "Viwer": "Viewer"
+            },
+            UserModal: {
+              "RegisterUser": "Register User",
+              "EditUser": "Edit user",
+              "UserData": "User data",
+              "AdminData": "Administrative data",
+              "FirstName": "First name",
+              "MiddleName": "Middle name",
+              "LastName": "Last name",
+              "Email": "Email",
+              "Password": "Password",
+              "ConfirmPassword": "Confirm password",
+              "Type": "Type",
+              "SuperAdmin": "Super Administrator",
+              "Admin": "Administrator",
+              "Editor": "Editor",
+              "Viwer": "Viewer",
+              "Close": "Close",
+              "Save": "Save"
+            },
+            viewUserModal: {
+              "UserDetails": "User details",
+              "Name": "Name",
+              "Email": "Email",
+              "Role": "Role",
+              "State": "State",
+              "RegisterDate": "Registration date",
+              "LastVisit": "Last visit",
+              "Language": "Language",
+              "Clients": "Clients"
+            },
+            alertDeactivate: {
+              "InitialPhrase": "The record of ",
+              "FinalPhrase": "permanently. ",
+              "Confirm": "Confirm",
+              "Cancel": "Cancel"
+            },
+            alertActivate: {
+              "InitialPhrase": "The user ",
+              "FinalPhrase": "will be activated. ",
+              "Confirm": "Confirm",
+              "Cancel": "Cancel"
+            },
+            clientModal: {
+              "NewClient": "Add client",
+              "EditClient": "Edit client",
+              "ClientName": "Client name"
+            },
+            clientViewModal: {
+              "Client": "Client",
+              "ClientInfo": "Detailed client information.",
+              "State": "State"
             },
             sidebarlt: {
               "First_name": "First Name",
@@ -276,8 +368,66 @@ import { initReactI18next } from "react-i18next";
               "Search": "Cerca",
               "Actions": "Azioni",
               "Show": "Mostra",
-              "Registered": "Record",
-              "newUser":"Nuovo utente"
+              "Registered": "Registrazioni",
+              "newUser": "Nuovo utente",
+              "Active": "Attivo",
+              "Inactive": "Inattivo",
+              "Admin": "Amministratore",
+              "Editor": "Editore",
+              "SuperAdmin": "SuperAdmin",
+              "Viwer": "Visualizzatore"
+            },
+            UserModal: {
+              "RegisterUser": "Registrare utente",
+              "EditUser": "Modifica utente",
+              "UserData": "Dati dell'utente",
+              "AdminData": "Dati amministrativi",
+              "FirstName": "Nome",
+              "MiddleName": "Secondo nome",
+              "LastName": "Cognomi",
+              "Email": "Email",
+              "Password": "Password",
+              "ConfirmPassword": "Conferma password",
+              "Type": "Tipo",
+              "SuperAdmin": "Super Amministratore",
+              "Admin": "Amministratore",
+              "Editor": "Editore",
+              "Viwer": "Visualizzatore",
+              "Close": "Chiudi",
+              "Save": "Salva"
+            },
+            viewUserModal: {
+              "UserDetails": "Dettagli dell'utente",
+              "Name": "Nome",
+              "Email": "Email",
+              "Role": "Ruolo",
+              "State": "Stato",
+              "RegisterDate": "Data di registrazione",
+              "LastVisit": "Ultima visita",
+              "Language": "Lingua",
+              "Clients": "Clienti"
+            },
+            alertDeactivate: {
+              "InitialPhrase": "La registrazione di ",
+              "FinalPhrase": "permanentemente. ",
+              "Confirm": "Conferma",
+              "Cancel": "Annulla"
+            },
+            alertActivate: {
+              "InitialPhrase": "L'utente ",
+              "FinalPhrase": "sarà attivato. ",
+              "Confirm": "Conferma",
+              "Cancel": "Annulla"
+            },
+            clientModal: {
+              "NewClient": "Aggiungi cliente",
+              "EditClient": "Modifica cliente",
+              "ClientName": "Nome del cliente"
+            },
+            clientViewModal: {
+              "Client": "Cliente",
+              "ClientInfo": "Informazioni dettagliate del cliente.",
+              "State": "Stato"
             },
             qualitySite: {
               "Quality_system": "Sistema di qualità",
@@ -336,7 +486,65 @@ import { initReactI18next } from "react-i18next";
               "Actions": "Ações",
               "Show": "Mostrar",
               "Registered": "Registros",
-              "newUser":"Novo usuário"
+              "newUser": "Novo usuário",
+              "Active": "Ativo",
+              "Inactive": "Inativo",
+              "Admin": "Administrador",
+              "Editor": "Editor",
+              "SuperAdmin": "SuperAdmin",
+              "Viwer": "Visualizador"
+            },
+            UserModal: {
+              "RegisterUser": "Registrar usuário",
+              "EditUser": "Editar usuário",
+              "UserData": "Dados do usuário",
+              "AdminData": "Dados administrativos",
+              "FirstName": "Primeiro nome",
+              "MiddleName": "Segundo nome",
+              "LastName": "Sobrenomes",
+              "Email": "Email",
+              "Password": "Senha",
+              "ConfirmPassword": "Confirmar senha",
+              "Type": "Tipo",
+              "SuperAdmin": "Super Administrador",
+              "Admin": "Administrador",
+              "Editor": "Editor",
+              "Viwer": "Visualizador",
+              "Close": "Fechar",
+              "Save": "Salvar"
+            },
+            viewUserModal: {
+              "UserDetails": "Detalhes do usuário",
+              "Name": "Nome",
+              "Email": "Email",
+              "Role": "Função",
+              "State": "Estado",
+              "RegisterDate": "Data de registro",
+              "LastVisit": "Última visita",
+              "Language": "Idioma",
+              "Clients": "Clientes"
+            },
+            alertDeactivate: {
+              "InitialPhrase": "O registro de ",
+              "FinalPhrase": "permanentemente. ",
+              "Confirm": "Confirmar",
+              "Cancel": "Cancelar"
+            },
+            alertActivate: {
+              "InitialPhrase": "O usuário ",
+              "FinalPhrase": "será ativado. ",
+              "Confirm": "Confirmar",
+              "Cancel": "Cancelar"
+            },
+            clientModal: {
+              "NewClient": "Adicionar cliente",
+              "EditClient": "Editar cliente",
+              "ClientName": "Nome do cliente"
+            },
+            clientViewModal: {
+              "Client": "Cliente",
+              "ClientInfo": "Informações detalhadas do cliente.",
+              "State": "Estado"
             },
             sidebarlt: {
               "First_name": "Primeiro nome",
@@ -391,28 +599,28 @@ import { initReactI18next } from "react-i18next";
               "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a qualidade do atendimento ao cliente fornecido pelo agente",
             },
             satisfactionSite: {
-    "Survey_system": "Sistema de Pesquisa",
-    "Grid_mode": "Modo de Grade",
-    "List_mode": "Modo de Lista",
-    "Surveys_section": "Seção de Pesquisas",
-    "Card_sections": "Seções de Cartões",
-    "User_surveys": "Pesquisas de Usuário",
-    "Total_Surveys": "Total de Pesquisas",
-    "Create_and_or_edit_survey": "Criar e/ou Editar Pesquisa",
-    "Survey_report": "Relatório de Pesquisa",
-    "Generate_report": "Gerar Relatório",
-    "Send_survey": "Enviar Pesquisa",
-    "Surveys": "Pesquisas",
-    "GenerateGraphs": "Gerar Gráficos",
-    "GenerateGraphsAndSurveyReport": "Gerar Gráficos e Relatório de Pesquisa",
-    "SurveyReport": "Relatório de Pesquisa",
-    "CreateSurvey": "Criar Pesquisa",
-    "SendMailsurvey": "Enviar Pesquisa por E-mail",
-    "SendSurvey": "Enviar Pesquisa",
-    "SendMail": "Enviar E-mails",
-    "FinalUserSurveys": "Pesquisas de Usuário Final",
-    "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a Qualidade do Serviço ao Cliente Fornecido pelo Agente"
-  }
+              "Survey_system": "Sistema de Pesquisa",
+              "Grid_mode": "Modo de Grade",
+              "List_mode": "Modo de Lista",
+              "Surveys_section": "Seção de Pesquisas",
+              "Card_sections": "Seções de Cartões",
+              "User_surveys": "Pesquisas de Usuário",
+              "Total_Surveys": "Total de Pesquisas",
+              "Create_and_or_edit_survey": "Criar e/ou Editar Pesquisa",
+              "Survey_report": "Relatório de Pesquisa",
+              "Generate_report": "Gerar Relatório",
+              "Send_survey": "Enviar Pesquisa",
+              "Surveys": "Pesquisas",
+              "GenerateGraphs": "Gerar Gráficos",
+              "GenerateGraphsAndSurveyReport": "Gerar Gráficos e Relatório de Pesquisa",
+              "SurveyReport": "Relatório de Pesquisa",
+              "CreateSurvey": "Criar Pesquisa",
+              "SendMailsurvey": "Enviar Pesquisa por E-mail",
+              "SendSurvey": "Enviar Pesquisa",
+              "SendMail": "Enviar E-mails",
+              "FinalUserSurveys": "Pesquisas de Usuário Final",
+              "Rate_the_quality_of_customer_service_being_provided_by_the_agent": "Avalie a Qualidade do Serviço ao Cliente Fornecido pelo Agente"
+          }
 
           },
         },
