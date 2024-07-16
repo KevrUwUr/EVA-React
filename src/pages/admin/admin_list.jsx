@@ -556,50 +556,50 @@ const AdminList = () => {
             <div className="modal-body d-flex ">
               <div className="col  m-2 ">
                 <div className="m-1 p-1">
-                   <label  className="fw-semibold ">Nombre</label>
+                   <label  className="fw-semibold ">{t("viewUserModal.Name")}</label>
                   <input type="text" className="form-control mt-1"   value={`${firstName.input} ${middleName.input} ${lastName.input}`} readOnly />
                 </div>
                 <div  className="m-1 p-1">
-                <span  className="fw-semibold "> state</span>
-                  <p className="form-control mt-1">{`${state.input === 1 ? "Activo" : "Inactivo"}`} </p>
+                <span  className="fw-semibold "> {t("viewUserModal.State")}</span>
+                  <p className="form-control mt-1">{`${state.input === 1 ? `${t("clientTable.Active")}` : `${t("clientTable.Inactive")}`}`} </p>
                 </div>
                 <div className="m-1 p-1">
-                <span  className="fw-semibold ">Fecha de registro</span>
+                <span  className="fw-semibold ">{t("viewUserModal.RegisterDate")}</span>
                   <p  className="form-control mt-1" > {registration_date.input}</p>
                 </div>
                 <div  className="m-1 p-1">
-                <span  className="fw-semibold ">Lenguaje</span>
+                <span  className="fw-semibold ">{t("viewUserModal.Language")}</span>
                   <p  className="form-control mt-1" > {`${language.input == "es"
-                      ? "Español"
+                      ? `${t("headerlt.Spanish")}`
                       : language.input == "en"
-                      ? "Inglés"
+                      ? `${t("headerlt.English")}`
                       : language.input == "it"
-                      ? "Italiano"
-                      : "Portugués"}`}</p>
+                      ? `${t("headerlt.Italian")}`
+                      : `${t("headerlt.Portuguese")}`}`}</p>
                </div>
               </div>
               <div className="col  m-2  ">
               <div className="m-1 p-1">
-                <span className="fw-semibold ">Correo electronico</span>
+                <span className="fw-semibold ">{t("viewUserModal.Email")}</span>
                   <input type="text"  className="form-control mt-1" value={email.input}/> 
                </div>
                <div className="m-1 p-1">
-                <span  className="fw-semibold ">Rol</span>
+                <span  className="fw-semibold ">{t("viewUserModal.Role")}</span>
                   <p type="text" className="form-control mt-1"  > {` ${type.input === 1? "Super Administrador": type.input === 2? "Administrador": type.input == 3? "Editor": "Visualizador"}`} </p>
                 </div>
                 <div className="m-1 p-1">
-                <span className="fw-semibold ">Última visita</span>
+                <span className="fw-semibold ">{t("viewUserModal.LastVisit")}</span>
                   <p className="form-control mt-1">{last_visit_date.input} </p>
                </div>
                <div className="m-1 p-1">
-                <span className="fw-semibold ">Clientes</span>
+                <span className="fw-semibold ">{t("viewUserModal.Clients")}</span>
                 
                   <ul className="form-control mt-1">
                     
                       {userclients.length>0?(userclients.map((client)=>(
                    <li key={client.value}>
                     {client.label},
-                   </li>))) : ( <li>No se presentan clientes</li>)}
+                   </li>))) : ( <li>{t("viewUserModal.NotClients")}</li>)}
                    </ul>
                  
                </div>

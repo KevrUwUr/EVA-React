@@ -133,7 +133,8 @@ import { initReactI18next } from "react-i18next";
               "RegisterDate":"Fecha de registro",
               "LastVisit":"Ultima visita",
               "Language":"Lenguaje",
-              "Clients":"Clientes"
+              "Clients":"Clientes",
+              "NotClients":"No se presentan clientes"
 
             },
             alertDeactivate:{
@@ -232,7 +233,8 @@ import { initReactI18next } from "react-i18next";
               "RegisterDate": "Registration date",
               "LastVisit": "Last visit",
               "Language": "Language",
-              "Clients": "Clients"
+              "Clients": "Clients",
+              "NotClients": "No clients present"
             },
             alertDeactivate: {
               "InitialPhrase": "The record of ",
@@ -405,7 +407,8 @@ import { initReactI18next } from "react-i18next";
               "RegisterDate": "Data di registrazione",
               "LastVisit": "Ultima visita",
               "Language": "Lingua",
-              "Clients": "Clienti"
+              "Clients": "Clienti",
+              "NotClients": "Nessun cliente presente"
             },
             alertDeactivate: {
               "InitialPhrase": "La registrazione di ",
@@ -522,7 +525,8 @@ import { initReactI18next } from "react-i18next";
               "RegisterDate": "Data de registro",
               "LastVisit": "Última visita",
               "Language": "Idioma",
-              "Clients": "Clientes"
+              "Clients": "Clientes",
+              "NotClients": "Nenhum cliente presente"
             },
             alertDeactivate: {
               "InitialPhrase": "O registro de ",
