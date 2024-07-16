@@ -58,10 +58,10 @@ const TableSurvey = ({
   };
 
   const filteredData = data.filter((item) =>
-    userClients.some(client => client.id === item.idClient) &&
+    userClients.some(client => client.id  ==  item.idClient) &&
     Object.values(item).some(
       (val) =>
-        typeof val === "string" &&
+        typeof val  ==  "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -111,11 +111,11 @@ const TableSurvey = ({
             <tr key={idx}>
               {header.map((col, i) => (
                 <td key={i}>
-                  {col==="state"?(item.state===1? "Activo":"Inactivo"):(item[col.toLowerCase()] || item[col])}
+                  {col == "state"?(item.state == 1? "Activo":"Inactivo"):(item[col.toLowerCase()] || item[col])}
                 </td>
               ))}
              
-                {item.state===1?( <td>  <button
+                {item.state == 1?( <td>  <button
                   className="btn btn-rect"
                   data-bs-toggle="modal"
                   data-bs-target={`#${modalId}`}

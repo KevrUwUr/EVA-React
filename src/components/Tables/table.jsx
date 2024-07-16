@@ -41,7 +41,7 @@ const TableDetalle = ({
   const filteredData = data.filter((item) =>
     Object.values(item).some(
       (val) =>
-        typeof val === "string" &&
+        typeof val == "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -94,7 +94,7 @@ const TableDetalle = ({
             <tr key={idx}>
               {header.map((itemkey, i) => (
                 <td key={i}>
-                  {itemkey==="state"? (item.state===1? "Activo":"Inactivo"): (itemkey==="logo"? null:item[itemkey])}
+                  {itemkey=="state"? (item.state==1? "Activo":"Inactivo"): (itemkey=="logo"? null:item[itemkey])}
                 </td>
               ))}
               {item.state!=1?(<td>

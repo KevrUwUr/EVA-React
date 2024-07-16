@@ -33,7 +33,7 @@ const TableUsers = ({
   const filteredData = data.filter((item) =>
     Object.values(item).some(
       (val) =>
-        typeof val === "string" &&
+        typeof val == "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -87,14 +87,14 @@ const TableUsers = ({
     <tr key={idx}>
       {header.map((key, i) => (
         <td key={i}>
-          {key === "estado" ? (
-            item.estado === 1 ? "Activo" : "Inactivo"
-          ) : key === "type" ? (
-            item.type === 1
+          {key == "estado" ? (
+            item.estado == 1 ? "Activo" : "Inactivo"
+          ) : key == "type" ? (
+            item.type == 1
               ? "SuperAdmin"
-              : item.type === 2
+              : item.type == 2
               ? "Administrador"
-              : item.type === 3
+              : item.type == 3
               ? "Editor"
               : "Visualizador"
           ) : (
@@ -102,7 +102,7 @@ const TableUsers = ({
           )}
         </td>
       ))}
-      {item.estado === 1 ? (
+      {item.estado == 1 ? (
         <td>
           <div className="row">
             <div className="col">

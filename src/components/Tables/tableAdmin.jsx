@@ -40,7 +40,7 @@ const TableAdmin = ({
   const filteredData = Array.isArray(data) ? data.filter((item) =>
     Object.values(item).some(
       (val) =>
-        typeof val === "string" &&
+        typeof val == "string" &&
         val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   ) : [];
@@ -94,12 +94,12 @@ const TableAdmin = ({
                 <tr key={idx}>
                   {header.map((key, i) => (
                     <td key={i}>
-                      {key === "state" ? (item.state === 1 ? "Activo" : "Inactivo"):(
-                        key==="type"? (item.type===1? "SuperAdmin":(item.type===2? "Administrador":(item.type===3? "Editor":"Visualizador"))): item[key]) }
+                      {key == "state" ? (item.state == 1 ? "Activo" : "Inactivo"):(
+                        key=="type"? (item.type==1? "SuperAdmin":(item.type==2? "Administrador":(item.type==3? "Editor":"Visualizador"))): item[key]) }
                     
                   </td>
                   ))}
-                  {item.state===1?(
+                  {item.state==1?(
                     <td>
                     <div className="row">
                       <div className="col">
