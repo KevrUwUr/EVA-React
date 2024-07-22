@@ -8,10 +8,11 @@ import TableSurvey from "../../components/Tables/tableSurvey";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { smallAlertDelete, Toast } from "../../assets/js/alertConfig";
-import Select from "react-select";
+import { smallAlertDelete, Toast,Toast2 } from "../../assets/js/alertConfig";
+import { generateRandomLink } from "../../components/survey/encrypt";
 const SurveyList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
+
   const url = "http://localhost/API-EVA/surveyController/surveys";
   const headers = ["Title", "Start_date", "End_date", "state"];
   const [operation, setOperation] = useState([1]);
@@ -25,11 +26,11 @@ const SurveyList = () => {
   const title = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const start_date = useInput({
     defaultValue: "",
-    validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
+    validate: /^\d{4}-\d{2}-\d{2}$/,
   });
   const end_date = useInput({
     defaultValue: "",
-    validate: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
+    validate: /^\d{4}-\d{2}-\d{2}$/,
   });
   const description = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
@@ -55,6 +56,7 @@ const SurveyList = () => {
     try {
       const response = await axios.get(url, config);
       setSurvey(response.data);
+      console.log (response.data)
     } catch (error) {
       console.error(error);
     }
@@ -66,12 +68,8 @@ const SurveyList = () => {
         config
       );
       console.log("clientes relacionados: ", response.data);
-      setClients(
-        response.data.map((client) => ({
-          value: client.id,
-          label: client.client,
-        }))
-      );
+      setClients(response.data)
+     
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -177,18 +175,22 @@ const SurveyList = () => {
       title.input.trim() == "" ||
       start_date.input.trim() == "" ||
       end_date.input.trim() == "" ||
-      description.input.trim() == "" ||
-      idClient.input == ""
+      description.input.trim() == ""
+      
     ) {
       alert("Campos mal diligenciados");
     } else {
       if (operation == 1) {
+        const link=generateRandomLink(title.input,idClient.input);
+        console.log(link)
         parametros = {
           title: title.input,
           start_date: start_date.input,
           end_date: end_date.input,
           description: description.input,
           idClient: idClient.input,
+          link: link,
+          type:"survey"
         };
         metodo = "post";
       } else if (operation == 2) {
@@ -198,13 +200,15 @@ const SurveyList = () => {
           end_date: end_date.input,
           description: description.input,
           idClient: idClient.input,
+          link: link.input,
+          type:"survey"
         };
         metodo = "put";
       }
-      sendData(metodo, parametros, id);
+      sendData(metodo, parametros,id);
     }
   };
-  const sendData = async (metodo, parametros, clientes) => {
+  const sendData = async (metodo, parametros) => {
     try {
       if (metodo.toUpperCase() == "POST") {
         const handleCreateSurvey = async () => {
@@ -237,7 +241,7 @@ const SurveyList = () => {
           parametros,
           config
         );
-        const responseData = response.data;
+       
         document.getElementById("btnCerrar").click();
         getSurveys();
       }
@@ -246,7 +250,7 @@ const SurveyList = () => {
     }
   };
   const openModalCont = (survey) => {
-    /*  await getClient(survey.id) */ //!llamar cliente para nombrarlo en el modal!
+    /*  await getClient(survey.id) */ 
     setModalTitle("Información de la encuesta");
     title.handleChange(survey?.title || "");
     start_date.handleChange(survey?.start_date || "");
@@ -256,24 +260,40 @@ const SurveyList = () => {
     link.handleChange(survey?.link || "No presenta link anexado");
     idClient.handleChange(survey?.idClient || "");
   };
-  const handleRedirect = (id) => {
-    navigate(`/survey/${id}`);
-  };
+  
+  const duplicateSurvey=(survey)=>{
 
-  const handleClientChange = (selectedOption) => {
-    setSelectedClients(selectedOption);
-    console.log(selectedOption);
-  };
+    console.log(survey)
+  smallAlertDelete
+      .fire({
+        text: `La encuesta ${survey.title} se duplicará.`,
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const link=generateRandomLink(survey.title,survey.idClient);
+          const randomLink=(link+Math.floor(Math.random() * 100) + 1);
+          const DataToDuplicate ={
+            description: survey.description,
+            end_date:survey.end_date,
+            idClient:survey.idClient,
+            start_date:survey.start_date,
+            state:survey.state,
+            title:survey.title,
+            type:survey.type,
+            link:randomLink
+          }
+          sendData("post",DataToDuplicate);
+        getSurveys();
+      }})
+    
+  }
 
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    console.log(date);
-  };
+  const openSurvey=(survey)=>{
+    navigate(`/view_survey/${survey.id}`);
+  }
 
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    console.log(date);
-  };
 
   return (
     <div className="App">
@@ -292,13 +312,114 @@ const SurveyList = () => {
                 onUpdate={(payload) => openModal(2, payload)}
                 modalId={"modalSurvey"}
                 modalId2={"modalViewSurvey"}
-                onView={(payload) => openModalCont(payload)}
+                onView={(payload) =>openModalCont(payload)}
+                onCheck={(payload) => openSurvey(payload)}
                 onRemove={(item) => deactivateSurvey(item)}
                 onActive={(payload) => activeSurvey(payload)}
+                onDuplicate={(item)=>duplicateSurvey(item)}
               />
             )}
           </div>
         </section>
+      </div>
+      <div id="modalViewSurvey" className="modal fade" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <label className="h5">{modalTitle}</label>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="close"
+              ></button>
+            </div>
+            <div className="modal-body ">
+              <div className="row">
+                <div className="col-8 mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      placeholder=" "
+                      className="input-new"
+                      type="text"
+                      name="title"
+                      value={title.input}
+                     readOnly
+                    />
+                    <span className="labelName">Titulo</span>
+                  </label>
+                </div>
+                <div className="col-4 mb-3">
+                  <label id="labelAnimation">
+                    <select readOnly onChange={(e) => idClient.handleChange(e.target.value)}  value={idClient.input} className="input-new" >
+                      {clients.map((client)=>(
+                        <option value={client.id} key={client.id}>{client.client}</option>
+
+                      ))}
+                  
+                    </select>
+                    <span className="labelName">Cliente</span>
+                  </label>
+                </div>
+              </div>
+              <div className="row mt-2">
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="date"
+                      name="start_date"
+                      value={start_date.input}
+                      readOnly
+                    />
+                    <span className="labelName">Fecha de inicio:</span>
+                  </label>
+                </div>
+                <div className="col mb-3">
+                  <label id="labelAnimation">
+                    <input
+                      className="input-new"
+                      placeholder=" "
+                      type="date"
+                      name="end_date"
+                      value={end_date.input}
+                      readOnly
+                    />
+                    <span className="labelName">Fecha de finalización:</span>
+                  </label>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col mb-3 ">
+                  <span>Descripción</span>
+                  <label id="labelAnimation">
+                    <textarea
+                      className="input-new "
+                      placeholder="Descripción"
+                      type="text-area"
+                      name="descripcion"
+                      value={description.input}
+                      readOnly
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                id="btnCerrar"
+                className="btn-primary btn"
+                data-bs-dismiss="modal"
+                onClick={() => setSelectedClients([])}
+              >
+                Cerrar
+              </button>
+             
+            </div>
+          </div>
+        </div>
       </div>
       <div id="modalSurvey" className="modal fade" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -330,14 +451,15 @@ const SurveyList = () => {
                 </div>
                 <div className="col-4 mb-3">
                   <label id="labelAnimation">
-                    <Select
-                      options={clients}
-                      isSearchable={true}
-                      onChange={handleClientChange}
-                      isClearable={true}
-                      placeholder={"Cliente"}
-                      className="input-new"
-                    />
+                    <select onChange={(e) => idClient.handleChange(e.target.value)}  value={idClient.input} className="input-new" >
+                    <option value="" disabled>Seleccione un cliente</option>
+                      {clients.map((client)=>(
+                        <option value={client.id} key={client.id}>{client.client}</option>
+
+                      ))}
+                  
+                    </select>
+                    <span className="labelName">Cliente</span>
                   </label>
                 </div>
               </div>

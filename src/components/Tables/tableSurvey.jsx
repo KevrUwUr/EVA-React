@@ -2,6 +2,7 @@ import { useState,useEffect,useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from 'axios'
 import "../../assets/css/tabla.css";
+import { useTranslation } from "react-i18next";
 
 const TableSurvey = ({
   header,
@@ -12,20 +13,26 @@ const TableSurvey = ({
   onView,
   modalId,
   modalId2,
-  onActive
+  onActive,
+  onDuplicate,
+  onCheck
 }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
   const [userClients,setUserClients]=useState([])
-  const {userId,accessToken}=useContext(UserContext)
+  const {userId,accessToken,languageUser}=useContext(UserContext)
+  const { t,i18n } = useTranslation();
 
 
   useEffect(()=>{
+    i18n.changeLanguage(languageUser)
     getUserClients(userId)
     filteredData
-  },[])
+ 
+
+  },[languageUser])
 
 
   const getUserClients = async (id) => {
@@ -111,7 +118,7 @@ const TableSurvey = ({
             <tr key={idx}>
               {header.map((col, i) => (
                 <td key={i}>
-                  {col == "state"?(item.state == 1? "Activo":"Inactivo"):(item[col.toLowerCase()] || item[col])}
+                  {col == "state"?(item.state == 1? `${t("clientTable.Active")}`:`${t("clientTable.Inactive")}`):(item[col.toLowerCase()] || item[col])}
                 </td>
               ))}
              
@@ -126,13 +133,14 @@ const TableSurvey = ({
                 <button className="btn btn-rect" onClick={() => onRemove(item)}>
                   <i className="fa-solid fa-power-off"></i>
                 </button>
-                <a href={`./view_survey`}>
+               
                   <button
                     className="btn btn-rect"
+                    onClick={()=> onCheck(item)}
                   >
                     <i className="fa-solid fa-circle-question"></i>
                   </button>
-                </a>
+          
                 <button
                   className="btn btn-rect"
                   data-bs-toggle="modal"
@@ -140,6 +148,13 @@ const TableSurvey = ({
                   onClick={() => onView(item)}
                 >
                   <i className="fa-solid fa-envelopes-bulk"></i>
+                </button>
+                <button
+                  className="btn btn-rect"
+                  onClick={() => onDuplicate(item)}
+                  
+                >
+                  <i className="fa-solid fa-clone"></i>
                 </button>
               </td>):( <td>
                     <div className="row">
@@ -150,7 +165,6 @@ const TableSurvey = ({
                         >
                          <i className="fa-solid fa-power-off"></i>
                         </button>
-                      
                         <button
                           className="btn btn-rect"
                           data-bs-toggle="modal"

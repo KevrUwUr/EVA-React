@@ -65,7 +65,7 @@ export const  App=() =>{
         <Route path="/survey_list" element={<SurveyList />} />
         <Route path="/editor" element={<IndexEditor/>} />
          <Route path="/public_survey" element={<Public_survey />} />
-         <Route path="/view_survey" element={<View_survey/>} />
+         <Route path="/view_survey/:id" element={<View_survey/>} />
         </Route>
         <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1,2,4]} />}>
         

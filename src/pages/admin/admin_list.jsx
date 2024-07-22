@@ -182,10 +182,10 @@ const AdminList = () => {
     
     smallAlertDelete
       .fire({
-        text: `${t("alerDeactivate.InitialPhrase")}${name} ${t("alerDeactivate.FinalPhrase")}`,
+        text: `${t("alertDeactivate.InitialPhrase")}${name} ${t("alertDeactivate.FinalPhrase")}`,
         showCancelButton: true,
-        confirmButtonText: `${t("alerDeactivate.Confirm")}`,
-        cancelButtonText: `${t("alerDeactivate.Cancel")}`,
+        confirmButtonText: `${t("alertDeactivate.Confirm")}`,
+        cancelButtonText: `${t("alertDeactivate.Cancel")}`,
       })
       .then(async (result) => {
         if (result.isConfirmed) {
@@ -212,7 +212,7 @@ const AdminList = () => {
 
     smallAlertDelete
       .fire({
-        text: `${t("alerActivate.InitialPhrase")}${name}${t("alerActivate.FinalPhrase")}`,
+        text: `${t("alertActivate.InitialPhrase")} ${name} ${t("alertActivate.FinalPhrase")}`,
         showCancelButton: true,
         confirmButtonText: `${t("alertActivate.Confirm")}`,
         cancelButtonText:  `${t("alertActivate.Cancel")}`,
@@ -223,14 +223,14 @@ const AdminList = () => {
             await axios.patch(`${url}/${id}`, parametros,{headers: {Authorization: `Bearer ${accessToken}`}});
             Toast.fire({
               icon: "success",
-              title: `${t("alerActivate.InitialPhrase")}${admin.firstname}${t("alerActivate.SuccessAlert")}`,
+              title: `${t("alertActivate.InitialPhrase")} ${admin.firstname} ${t("alertActivate.SuccessAlert")}`,
             });
 
             // getAdmins();
           } catch (error) {
             Toast.fire({
               icon: "error",
-              title: `${t("alerActivate.InitialPhrase")}${admin.firstName}${t("alerActivate.ErrorAlert")}`,
+              title: `${t("alertActivate.InitialPhrase")}${admin.firstName}${t("alertActivate.ErrorAlert")}`,
             });
             console.error(error);
           }
@@ -449,7 +449,7 @@ const AdminList = () => {
                       loadOptions={loadOptions}
                       onChange={handleClientChange}
                     />
-                    <span className="labelName">{t("UserModal.Clients")}:</span>
+                    <span className="labelName">{t("viewUserModal.Clients")}:</span>
                   </label>
                 </div>
               </div>

@@ -59,7 +59,6 @@ const SidebarLT1 = () => {
 
   const getInfo = async () => {
     try {
-      console.log(userId);
       const response = await axios.get(`${url}${userId}`, config);
       setUserInfo(response.data);
       console.log(hours,":",minutes,":",seconds)
@@ -69,7 +68,6 @@ const SidebarLT1 = () => {
       email.handleChange(userInfo.email || "");
       password.handleChange(userInfo.password || "");
       language.handleChange(userInfo.language || "en");
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

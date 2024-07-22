@@ -63,11 +63,9 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
  
   const checkinfo= async() =>{
     try{
-    console.log(userId)
     const response=await axios.get (`http://localhost/API-EVA/userController/userbyId/${userId}`,config)
     setUserInfo(response.data)
     setLanguageUser(response.data.language)
-    console.log(userInfo)
   } catch(error){
     console.error(error)
   }
@@ -76,7 +74,6 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
   const urlp="http://localhost/API-EVA/userController/putUser/"
   const getInfo = async () => {
     try {
-      console.log(userId);
       const response = await axios.get(`${url}${userId}`, config);
       setUserInfo(response.data);
       console.log(hours,":",minutes,":",seconds)
@@ -86,7 +83,6 @@ const seconds = String(now.getSeconds()).padStart(2, '0');
       email.handleChange(userInfo.email || "");
       password.handleChange(userInfo.password || "");
       language.handleChange(userInfo.language || "en");
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

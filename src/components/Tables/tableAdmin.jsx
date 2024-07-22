@@ -16,7 +16,7 @@ const TableAdmin = ({
   const { languageUser } = useContext(UserContext);
   useEffect(()=>{
     i18n.changeLanguage(languageUser)
-  })
+  },[languageUser])
  
   const { t,i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,8 +94,8 @@ const TableAdmin = ({
                 <tr key={idx}>
                   {header.map((key, i) => (
                     <td key={i}>
-                      {key == "state" ? (item.state == 1 ? "Activo" : "Inactivo"):(
-                        key=="type"? (item.type==1? "SuperAdmin":(item.type==2? "Administrador":(item.type==3? "Editor":"Visualizador"))): item[key]) }
+                      {key == "state" ? (item.state == 1 ? `${t("clientTable.Active")}` : `${t("clientTable.Inactive")}`):(
+                        key=="type"? (item.type==1? `${t("clientTable.SuperAdmin")}`:(item.type==2? `${t("clientTable.Admin")}`:(item.type==3? `${t("clientTable.Editor")}`:`${t("clientTable.Viwer")}`))): item[key]) }
                     
                   </td>
                   ))}

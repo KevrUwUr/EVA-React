@@ -7,8 +7,6 @@ import { UserContext } from "../../context/UserContext";
 import axios from 'axios'
 import { useTranslation } from "react-i18next";
 const HeaderLT2 = () => {
-  
-
   useEffect(()=>{
     checkinfo()
     i18n.changeLanguage(languageUser)

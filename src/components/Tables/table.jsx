@@ -2,7 +2,6 @@ import { useState,useContext, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useTranslation } from "react-i18next";
 import "../../assets/css/tabla.css";
-
 const TableDetalle = ({
   header,
   data,
@@ -17,7 +16,7 @@ const TableDetalle = ({
   const { languageUser } = useContext(UserContext);
   useEffect(()=>{
     i18n.changeLanguage(languageUser)
-  })
+  },[languageUser])
  
   const { t,i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,7 +93,7 @@ const TableDetalle = ({
             <tr key={idx}>
               {header.map((itemkey, i) => (
                 <td key={i}>
-                  {itemkey=="state"? (item.state==1? "Activo":"Inactivo"): (itemkey=="logo"? null:item[itemkey])}
+                  {itemkey=="state"? (item.state==1? `${t("clientTable.Active")}`:`${t("clientTable.Inactive")}`): (itemkey=="logo"? null:item[itemkey])}
                 </td>
               ))}
               {item.state!=1?(<td>

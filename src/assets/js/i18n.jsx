@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
   i18n.use(initReactI18next).init({
-      debug: true,
       fallbackLng: "es",
       resources : {
         "es": {
@@ -139,7 +138,7 @@ import { initReactI18next } from "react-i18next";
             },
             alertDeactivate:{
               "InitialPhrase":"El registro de ",
-              "FinalPhrase":"de forma permanente. ",
+              "FinalPhrase":"se desactivara. ",
               "Confirm":"Confirmar",
               "Cancel":"Cancelar",
             },
@@ -149,7 +148,9 @@ import { initReactI18next } from "react-i18next";
               "Confirm":"Confirmar",
               "Cancel":"Cancelar",
               "SuccessAlert":" se ha activado exitosamente.",
-              "ErrorAlert":" no ha sido activado."
+              "ErrorAlert":" no ha sido activado.",
+              "TheClient":"El cliente",
+              "Created":"se ha creado exitosamente.",
             },
             clientModal:{
               "NewClient":"Añadir cliente",
@@ -238,7 +239,7 @@ import { initReactI18next } from "react-i18next";
             },
             alertDeactivate: {
               "InitialPhrase": "The record of ",
-              "FinalPhrase": "permanently. ",
+              "FinalPhrase": "will be disabled. ",
               "Confirm": "Confirm",
               "Cancel": "Cancel"
             },
@@ -246,7 +247,9 @@ import { initReactI18next } from "react-i18next";
               "InitialPhrase": "The user ",
               "FinalPhrase": "will be activated. ",
               "Confirm": "Confirm",
-              "Cancel": "Cancel"
+              "Cancel": "Cancel",
+              "TheClient":"The client",
+              "Created": "has been created successfully."
             },
             clientModal: {
               "NewClient": "Add client",
@@ -412,7 +415,7 @@ import { initReactI18next } from "react-i18next";
             },
             alertDeactivate: {
               "InitialPhrase": "La registrazione di ",
-              "FinalPhrase": "permanentemente. ",
+              "FinalPhrase": "sarà disabilitato. ",
               "Confirm": "Conferma",
               "Cancel": "Annulla"
             },
@@ -420,7 +423,9 @@ import { initReactI18next } from "react-i18next";
               "InitialPhrase": "L'utente ",
               "FinalPhrase": "sarà attivato. ",
               "Confirm": "Conferma",
-              "Cancel": "Annulla"
+              "Cancel": "Annulla",
+              "TheClient":"Il cliente",
+              "Created": "è stato creato con successo."
             },
             clientModal: {
               "NewClient": "Aggiungi cliente",
@@ -530,7 +535,7 @@ import { initReactI18next } from "react-i18next";
             },
             alertDeactivate: {
               "InitialPhrase": "O registro de ",
-              "FinalPhrase": "permanentemente. ",
+              "FinalPhrase": "será desativado. ",
               "Confirm": "Confirmar",
               "Cancel": "Cancelar"
             },
@@ -538,7 +543,9 @@ import { initReactI18next } from "react-i18next";
               "InitialPhrase": "O usuário ",
               "FinalPhrase": "será ativado. ",
               "Confirm": "Confirmar",
-              "Cancel": "Cancelar"
+              "Cancel": "Cancelar",
+              "TheClient":"O cliente",
+              "Created": "criado com sucesso."
             },
             clientModal: {
               "NewClient": "Adicionar cliente",

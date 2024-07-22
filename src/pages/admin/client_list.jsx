@@ -8,6 +8,10 @@ import useInput from "../../components/hooks/useInput";
 import { UserContext } from "../../context/UserContext";
 import "../../assets/css/newUser.css";
 import {Toast,smallAlertDelete} from '../../assets/js/alertConfig'
+import { useTranslation } from "react-i18next";
+
+
+
 export default function Client_list() {
   const [logoFile, setLogoFile] = useState(null);
   const [operation, setOperation] = useState([1]);
@@ -16,20 +20,27 @@ export default function Client_list() {
   const [title, setTitle] = useState();
   const selectedKeys = ["id", "client", "state"];
   const [data, setData] = useState([]);
-  const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const idClient = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
-  const url = "http://localhost/API-EVA/clientController/Clients";
   const [selectedFile, setSelectedFile] = useState(null);
   const [titleToSend, setTitleTosend] = useState('');
 
+  const url = "http://localhost/API-EVA/clientController/Clients";
+  const { t,i18n } = useTranslation();
+
+
+  const link = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+  const idClient = useInput({ defaultValue: "", validate: /^[1-4]+$/ });
   const client = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const logo = useInput({ defaultValue: "", validate: "" });
   const estado = useInput({ defaultValue: "", validate: /^[0-1]+$/ });
+
+  const { accessToken,languageUser } = useContext(UserContext);
   useEffect(() => {
     
     fetchData();
-  }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
-  const { accessToken } = useContext(UserContext);
+    i18n.changeLanguage(languageUser)
+
+  }, [languageUser]); // Arreglo dependiente de que se tenga languageUser para carga de idioma
+
   const config = {
     headers: {
       "Authorization": `Bearer ${accessToken}`,
@@ -55,12 +66,12 @@ export default function Client_list() {
   const openModal = (op, clientData) => {
     setOperation(op);
       if (op == 1) {
-      setTitle("Añadir Cliente");
+      setTitle(t("clientModal.NewClient"));
       client.handleChange("");
       logo.handleChange("");
 
     } else if (op == 2) {
-      setTitle("Editar Cliente");
+      setTitle(t("clientModal.EditClient"));
       client.handleChange(clientData?.client || "");
       setLogoToEdit(clientData?.logo || "")
       logo.handleChange("");
@@ -78,10 +89,10 @@ export default function Client_list() {
     };
     smallAlertDelete
       .fire({
-        text: `El cliente ${name} se activara.`,
+        text: `${t("alertActivate.TheClient")} ${name} ${t("alertActivate.FinalPhrase")}`,
         showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
+        confirmButtonText: `${t("alertActivate.Confirm")}`,
+        cancelButtonText: `${t("alertActivate.Cancel")}`,
       })
       .then(async (result) => {
         if (result.isConfirmed) {
@@ -90,13 +101,13 @@ export default function Client_list() {
             
             Toast.fire({
               icon: "success",
-              title: `El cliente ${clientData.client} se ha activado exitosamente`,
+              title: `${t("alertActivate.TheClient")} ${clientData.client} ${t("alertActivate.SuccessAlert")}`,
             });
            
           } catch (error) {
             Toast.fire({
               icon: "error",
-              title: `El cliente ${clientData.client} no ha sido activado`,
+              title: `${t("alertActivate.TheClient")} ${clientData.client}${t("alertActivate.ErrorAlert")} `,
             });
             console.error(error);
           }
@@ -113,7 +124,7 @@ export default function Client_list() {
     };
     smallAlertDelete
       .fire({
-        text: `El cliente ${name} se desactivará de forma permantente.`,
+        text: `${t("alertActivate.TheClient")} ${name} ${t("alertDeactivate.FinalPhrase")}`,
         showCancelButton: true,
         confirmButtonText: "Confirmar",
         cancelButtonText: "Cancelar",
@@ -124,13 +135,13 @@ export default function Client_list() {
             await axios.patch(`${url}/${id}`,parametros,config);
             Toast.fire({
               icon: "success",
-              title: `El cliente ${clientData.client} se ha desactivado exitosamente`,
+              title: `${t("alertActivate.TheClient")} ${clientData.client} ${t("alertActivate.SuccessAlert")}`,
             });
             fetchData();
           } catch (error) {
             Toast.fire({
               icon: "error",
-              title: `El cliente ${clientData.client} no ha sido desactivado`,
+              title: `${t("alertActivate.TheClient")} ${clientData.client} ${t("alertActivate.ErrorAlert")}`,
             });
             console.error(error);
           }
@@ -170,7 +181,7 @@ export default function Client_list() {
       if (response.data.status){
         Toast.fire({
           icon: "success",
-          title: `El cliente ${client.input} se ha creado exitosamente`,
+          title: `${t("alertActivate.TheClient")} ${client.input} ${t("alertActivate.Created")} `,
         });
         fetchData();
       }
@@ -236,7 +247,7 @@ export default function Client_list() {
               className="modal-header mb-0 pb-0 text-center"
               style={{ borderBottom: "none" }}
             >
-              <label className="fw-bold fs-5">cliente</label>
+              <label className="fw-bold fs-5">{t("clientViewModal.Client")}</label>
               <button
                 type="button"
                 className="btn-close"
@@ -255,7 +266,7 @@ export default function Client_list() {
                   fontSize: "small",
                 }}
               >
-                Información detallada del cliente.
+               {t("clientViewModal.ClientInfo")}
               </p>
             </div>
 
@@ -273,7 +284,7 @@ export default function Client_list() {
                     <p className="text-secondary">
                       {" "}
                       <span>{`${
-                        estado.input === 1 ? "Activo" : "Inactivo"
+                        estado.input === 1 ? `${t("clientTable.Active")}` : `${t("clientTable.Inactive")}`
                       }`}</span>
                     </p>
                   </div>
@@ -320,7 +331,7 @@ export default function Client_list() {
                   <label id="labelAnimation" className="text-center">
 
                       <input type="text" placeholder=" " className="input-new" name="client" value={client.input} onChange={(e)=>client.handleChange(e.target.value)}/>
-                      <span className="labelName">Nombre del cliente</span>
+                      <span className="labelName">{t("clientModal.ClientName")}</span>
                
                   </label>
                 </div>
@@ -333,13 +344,13 @@ export default function Client_list() {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Cerrar
+                 {t("sidebarlt.Cancel")}
               </button>
               <button
                 onClick={() => validar(idToEdit)}
                 className="btn-primary btn"
               >
-                Guardar
+                {t("sidebarlt.Save")}
               </button>
             </div>
           </div>

@@ -5,13 +5,27 @@ import { useEffect,useState,useContext } from 'react'
 import SidebarLT1 from '../../../components/aside/sidebarLT1'
 import useInput from '../../../components/hooks/useInput'
 import { UserContext } from '../../../context/UserContext'
+import { useParams } from 'react-router-dom'
+import '../../../assets/css/view_survey.css'
+import { smallAlertDelete,loadingAlert, Toast2,Toast} from '../../../assets/js/alertConfig'
+import { useTranslation } from "react-i18next";
+
+
+
 export default function View_survey() {
-  const [data,setData]=useState([])
+
+  const {id}=useParams();
+  const [data,setData]=useState([]);
   const [operation, setOperation] = useState([1]);
   const [title, setTitle] = useState();
-  const [idToEdit, setidToEdit] = useState(null); 
+  const [surveyData,setSurveyData]=useState([])
+  const [loading,setLoading]=useState(false)
+  const [idToEdit, setidToEdit] = useState(null);
+  const [error,setError]=useState('')
   const question = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-  const type = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+  const description = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
+
+  const questionType = useInput({ defaultValue: '', validate: /^[A-Za-z_]+$/ });
   const section = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const percentage = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/});
   const frm_option = useInput({defaultValue: "", validate:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/});
@@ -19,106 +33,44 @@ export default function View_survey() {
   const id_conditional = useInput({ defaultValue: "", validate: /^[0-9]*$/ });
   const survey_id = useInput({defaultValue: "",validate: /^[0-9]*$/});
   const conditional_answer=useInput({defaultValue: "", validatE: /^[A-Za-z ]*$/});
-  
 
 
+  const { t,i18n } = useTranslation();
+  const { accessToken,languageUser} = useContext(UserContext);
   useEffect(() => {
+    i18n.changeLanguage(languageUser)
+    getSurvey();
+    getSurveyQuestions();
+   
+   
 
-    const questions = [    
-      {
-        "id": "19",
-        "question": "¿Qué tan satisfecho estás con el servicio que acabas de recibir?",
-        "type": "range_onetofive",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      },
-      {
-        "id": "20",
-        "question": "¿Qué tanto recomiendas nuestro servicio a un familiar o amigo?",
-        "type": "range_zerototen",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      },
-      {
-        "id": "21",
-        "question": "¿Su consulta o solicitud fue resuelta?",
-        "type": "yes_no",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      },
-      {
-        "id": "22",
-        "question": "¿Qué tan fácil fue gestionar tu consulta o solicitud?",
-        "type": "range_difficulty",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      },
-      {
-        "id": "23",
-        "question": "Cuéntanos más sobre tu experiencia:",
-        "type": "textfield_s",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      },
-      {
-        "id": "27",
-        "question": "Emoji Test:",
-        "type": "range_emoji",
-        "section": "",
-        "percentage": "0",
-        "frm_option": "",
-        "conditional": "NO",
-        "id_conditional": "0",
-        "conditional_answer": "NO",
-        "survey_id": "3"
-      }
-    ];
+  }, [id,languageUser]);
 
-    setData(questions);
-  }, []);
-
-
-
-  const { accessToken, userType } = useContext(UserContext);
   const config = {
     headers: {
       "Authorization": `Bearer ${accessToken}`,
     }
   };
-  const getSurveys=()=>{
-    
+
+  const getSurvey=async()=>{
+    const url="http://localhost/API-EVA/surveyController/surveybyid/"
+    const response= await axios.get(`${url}${id}`,config)
+    console.log(response.data)
+    setSurveyData(response.data)
   }
-  const openModal = (op, idsurvey) => {
+  const getSurveyQuestions=async()=>{
+    const url="http://localhost/API-EVA/surveyController/QuestionxSurvey/"
+    const response= await axios.get(`${url}${id}`,config)
+    const responseData=(response.data.data)
+    console.log(responseData)
+    setData(responseData) 
+  }
+  const openModal = (op, idsurvey,questionDetails) => {
     setOperation(op);
     if (op === 1) {
       setTitle("Añadir Pregunta");
-      question.handleChange("");
-      type.handleChange("");
+      description.handleChange("");
+      questionType.handleChange("");
       section.handleChange("");
       percentage.handleChange("");
       frm_option.handleChange("");
@@ -127,20 +79,129 @@ export default function View_survey() {
       conditional_answer.handleChange("NO");
       survey_id.handleChange(idsurvey);
     } 
-    /* else if (op === 2) {
-      setTitle("Editar Pregunta");
-      question.handleChange(survey?.question);
-      type.handleChange(survey?.type);
-      section.handleChange(survey?.section);
-      percentage.handleChange(survey?.percentage);
-      frm_option.handleChange(survey?.frm_option);
-      conditional.handleChange(survey?.conditional);
-      id_conditional.handleChange(survey?.id_conditional);
-      conditional_answer.handleChange(survey?.conditional_answer);
-      survey_id.handleChange(survey?.survey_id);
-      setIdToEdit(survey?.id);
-    } */
+    else if (op == 2) {
+      console.log(question)
+      description.handleChange(questionDetails?.question|| "");
+      questionType.handleChange(questionDetails?.type|| "");
+      setidToEdit(question?.id); 
+    }
   };
+
+
+  const validar = (id,survey_idt) => {
+    var parametros;
+    var metodo;
+
+    if (
+      questionType.input.trim() === "" ||
+      description.input.trim() === "" 
+     
+    ) {
+      setError('Ingresa una pregunta valida.')
+    } else {
+      console.log(survey_idt)
+      if (operation === 1) {
+        parametros = {
+          type: questionType.input,
+          percentage:0,
+          conditional:"NO",
+          question:description.input,
+          survey_id: survey_idt,
+          frm_option:frm_option.input,
+          id_conditional:id_conditional.input,
+          conditional_answer:conditional_answer.input,
+          section:section.input,
+
+        };
+        metodo = "post";
+      } else if (operation === 2) {
+        parametros = {
+          type: questionType.input,
+          percentage:0,
+          conditional:"NO",
+          question:description.input,
+          survey_id:survey_idt,
+          frm_option:frm_option.input,
+          id_conditional:id_conditional.input,
+          conditional_answer:conditional_answer.input,
+          section:section.input
+        };
+        metodo = "put";
+
+      }
+      sendData(metodo, parametros, id);
+    }
+  };
+
+  const sendData = async (metodo, parametros) => {
+    try {
+      if (metodo.toUpperCase() === "POST") {
+    
+        const handleCreateQuestion = async () => {
+            setLoading(true);
+            try {
+                const url= 'http://localhost/API-EVA/QuestionController/postQuestion'
+                const response = await axios.post(url, parametros, config);
+                const responseData = response.data;
+                console.log('Respuesta solicitud Post:', responseData);
+                if (responseData.status){
+                  setLoading(false);
+                  setError('')
+                  document.getElementById("btnClose").click();
+                  Toast2.fire({
+                    icon: "success",
+                    title: `${t("Pregunta añadida exitosamente.")}`,
+                  });
+                  getSurveyQuestions();
+                }
+            } catch (error) {
+                console.error(error);
+            } 
+        }
+        handleCreateQuestion();
+      } else if (metodo.toUpperCase() === "PUT") {
+        const url = `http://localhost/API-EVA/QuestionController/putquestion/`;
+        const response = await axios.put(`${url}/${idToEdit}`,parametros,config);
+        const responseData = response.data;
+        if (responseData.success){
+          document.getElementById("btnCerrar").click();
+          getSurveyQuestions();
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const deleteQuestion =(questiondetails)=>{
+    const questiontext= questiondetails.question
+    const idquestion=questiondetails.id
+      smallAlertDelete.fire({
+        text: `${t("alertDeactivate.InitialPhrase")}${questiontext} ${t("alertDeactivate.FinalPhrase")}`,
+        showCancelButton: true,
+        confirmButtonText: `${t("alertDeactivate.Confirm")}`,
+        cancelButtonText: `${t("alertDeactivate.Cancel")}`,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+             const url= 'http://localhost/API-EVA/questionController/DeleteQuestion/'
+             const {data} = await axios.delete(`${url}${idquestion}`,config)
+             if (data.status){
+              Toast.fire({
+                icon: "success",
+                title: `${t("la pregunta")} ${questiontext} ${t("ha sido eliminada.")}`,
+              });
+             }
+            
+          } catch (error) {
+            alert("error", "Error al eliminar pregunta");
+            console.error(error);
+          }
+        }
+        getSurveyQuestions();
+      });
+  }
   return (
     <div className="App">
       <div id="body">
@@ -158,12 +219,12 @@ export default function View_survey() {
                   <div className="container-fluid">
                     <div className="row d-flex align-items-center">
                       <div className="col-6">
-                        <h5>Titulo traido por el id de la encuesta</h5>
-                        <p className="fs-6">Descripcion de la encuesta</p>
+                        <h5>{surveyData.title}</h5>
+                        <p className="fs-6">{surveyData.description}</p>
                       </div>
                       <div className="col-6 text-end">
-                        <p className="fs-6">Fecha</p>
-                        <p className="fs-6">Cantidad de muestras: </p>
+                        <p className="fs-6">{surveyData.start_date} / {surveyData.end_date}</p>
+                        <p className="fs-6">Cantidad de muestras:   </p>
                       </div>
                     </div>
                   </div>
@@ -175,176 +236,176 @@ export default function View_survey() {
                 <div>
                   <h3 className="text-center">Preguntas de Encuesta</h3>
                   <div className="card-tools">
-                    <button className="btn fw-bold btn-sm acces-tabla" data-bs-toggle="modal"  data-bs-target="#modalManageQuestion" onClick={() => openModal(1,3)}> + Agregar Nueva pregunta</button>
+                    <button className="btn fw-bold btn-sm acces-tabla" data-bs-toggle="modal"  data-bs-target="#modalManageQuestion" onClick={() => openModal(1,id)}> + Agregar Nueva pregunta</button>
                   </div>
                 </div>
                 <form action="" id='manage-sort'>
                   <div className="card-body ui-sorteable">
                                 
                       {data.map(question=>(
-                        <div className="callout callout info">
+                        <div key={question.id} className="callout callout info">
                           <div className="row">
                             <div className="col-md-12">
                            
                             </div>
                           </div>
-                          <div className="d-flex justify-content-between"> <h5 className='mt-2'>{question.question}</h5><div class="dropdown">
-                          <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="fa-solid fa-ellipsis-vertical">
+                          <div className="d-flex justify-content-between"> <h5 className='mt-2'>{question.question}</h5><div className="dropdown">
+                          <a className="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i className="fa-solid fa-ellipsis-vertical">
                             </i>
                           </a>
-                            <ul class="dropdown-menu">
-                              <li><button class="dropdown-item">Editar</button></li>
-                              <li><button class="dropdown-item">Eliminar</button></li>
+                            <ul className="dropdown-menu">
+                              <li><button className="dropdown-item"  type='button'  data-bs-toggle="modal" data-bs-target="#modalManageQuestion" onClick={() => openModal(2,id,question)}>Editar</button></li>
+                              <li><button className="dropdown-item"  type='button' onClick={()=> deleteQuestion(question)}>Eliminar</button></li>
                             </ul>
                           </div> </div>
                          
                           {question.type=='range_onetofive'?(
-                            <div class="input-group justify-content-center">
-                            <div class="me-2">
-                              <p class="ms-2 fw-normal fs-6">Muy insatisfecho</p>
+                            <div className="input-group justify-content-center">
+                            <div className="me-2">
+                              <p className="ms-2 fw-normal fs-6">Muy insatisfecho</p>
                             </div>
-                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
                               <a data-bs-toggle="tooltip" data-bs-title="Muy insatisfecho">
-                                <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="satisfaccion1" autocomplete="off" value="1"/>
-                                <label class="btn btn-outline-danger" for="satisfaccion1">1</label>
+                                <input type="radio" className="btn-check" name="satisfaction" id="satisfaccion1" autoComplete="off" value="1"/>
+                                <label className="btn btn-outline-danger" htmlFor="satisfaccion1">1</label>
                               </a>
       
                               <a data-bs-toggle="tooltip" data-bs-title="Insatisfecho">
-                                <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="satisfaccion2" autocomplete="off" value="2"/>
-                                <label class="btn btn-outline-danger" for="satisfaccion2">2</label>
+                                <input type="radio" className="btn-check" name="probability" id="satisfaccion2" autoComplete="off" value="2"/>
+                                <label className="btn btn-outline-danger" htmlFor="satisfaccion2">2</label>
                               </a>
       
                               <a data-bs-toggle="tooltip" data-bs-title="Ni satisfecho/ni insatisfecho">
-                                <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="satisfaccion3" autocomplete="off" value="3"/>
-                                <label class="btn btn-outline-primary" for="satisfaccion3">3</label>
+                                <input type="radio" className="btn-check" name="probability" id="satisfaccion3" autoComplete="off" value="3"/>
+                                <label className="btn btn-outline-primary" htmlFor="satisfaccion3">3</label>
                               </a>
       
                               <a data-bs-toggle="tooltip" data-bs-title="Satisfecho">
-                                <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="satisfaccion4" autocomplete="off" value="4"/>
-                                <label class="btn btn-outline-success" for="satisfaccion4">4</label>
+                                <input type="radio" className="btn-check" name="probability" id="satisfaccion4" autoComplete="off" value="4"/>
+                                <label className="btn btn-outline-success" htmlFor="satisfaccion4">4</label>
                               </a>
       
                               <a data-bs-toggle="tooltip" data-bs-title="Muy satisfecho">
-                                <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="satisfaccion5" autocomplete="off" value="5"/>
-                                <label class="btn btn-outline-success" for="satisfaccion5">5</label>
+                                <input type="radio" className="btn-check" name="probability" id="satisfaccion5" autoComplete="off" value="5"/>
+                                <label className="btn btn-outline-success" htmlFor="satisfaccion5">5</label>
                               </a>
                             </div>
-                            <div class="ms-2">
-                              <p class="ms-2 fw-normal fs-6">Muy satisfecho</p>
+                            <div className="ms-2">
+                              <p className="ms-2 fw-normal fs-6">Muy satisfecho</p>
                             </div>
                           </div>
                           ):(question.type=="range_zerototen"?(
-                            <div class="input-group justify-content-center">
-											<div class="me-2">
-												<p class="ms-2 fw-normal fs-6">Nada probable</p>
+                            <div className="input-group justify-content-center">
+											<div className="me-2">
+												<p className="ms-2 fw-normal fs-6">Nada probable</p>
 											</div>
-											<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+											<div className="btn-group" role="group" aria-label="Basic radio toggle button group">
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar1" autocomplete="off" value="0"/>
-													<label class="btn btn-outline-danger" for="recomendar1">0</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar1" autoComplete="off" value="0"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar1">0</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar2" autocomplete="off" value="1"/>
-													<label class="btn btn-outline-danger" for="recomendar2">1</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar2" autoComplete="off" value="1"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar2">1</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar3" autocomplete="off" value="2"/>
-													<label class="btn btn-outline-danger" for="recomendar3">2</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar3" autoComplete="off" value="2"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar3">2</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar4" autocomplete="off" value="3"/>
-													<label class="btn btn-outline-danger" for="recomendar4">3</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar4" autoComplete="off" value="3"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar4">3</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar5" autocomplete="off" value="4"/>
-													<label class="btn btn-outline-danger" for="recomendar5">4</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar5" autoComplete="off" value="4"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar5">4</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar6" autocomplete="off" value="5"/>
-													<label class="btn btn-outline-danger" for="recomendar6">5</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar6" autoComplete="off" value="5"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar6">5</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Nada probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar7" autocomplete="off" value="6"/>
-													<label class="btn btn-outline-danger" for="recomendar7">6</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar7" autoComplete="off" value="6"/>
+													<label className="btn btn-outline-danger" htmlFor="recomendar7">6</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Neutro">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar8" autocomplete="off" value="7"/>
-													<label class="btn btn-outline-primary" for="recomendar8">7</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar8" autoComplete="off" value="7"/>
+													<label className="btn btn-outline-primary" htmlFor="recomendar8">7</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Neutro">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar9" autocomplete="off" value="8"/>
-													<label class="btn btn-outline-primary" for="recomendar9">8</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar9" autoComplete="off" value="8"/>
+													<label className="btn btn-outline-primary" htmlFor="recomendar9">8</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Muy probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar10" autocomplete="off" value="9"/>
-													<label class="btn btn-outline-success" for="recomendar10">9</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar10" autoComplete="off" value="9"/>
+													<label className="btn btn-outline-success" htmlFor="recomendar10">9</label>
 												</a>
 
 												<a data-bs-toggle="tooltip" data-bs-title="Muy probable">
-													<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="recomendar11" autocomplete="off" value="10"/>
-													<label class="btn btn-outline-success" for="recomendar11">10</label>
+													<input type="radio" className="btn-check" name="probability" id="recomendar11" autoComplete="off" value="10"/>
+													<label className="btn btn-outline-success" htmlFor="recomendar11">10</label>
 												</a>
 											</div>
-											<div class="me-2">
-												<p class="ms-2 fw-normal fs-6">Muy probable</p>
+											<div className="me-2">
+												<p className="ms-2 fw-normal fs-6">Muy probable</p>
 											</div>
 										</div>
-                          ):(question.type=="range_difficulty"? (<div class="input-group justify-content-center">
-											<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="dificultad1" autocomplete="off" value="Muy difícil"/>
-												<label class="btn btn-outline-danger" for="dificultad1">Muy difícil</label>
+                          ):(question.type=="range_difficulty"? (<div className="input-group justify-content-center">
+											<div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+												<input type="radio" className="btn-check" name="dificult" id="dificultad1" autoComplete="off" value="Muy difícil"/>
+												<label className="btn btn-outline-danger" htmlFor="dificultad1">Muy difícil</label>
 
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="dificultad2" autocomplete="off" value="Difícil"/>
-												<label class="btn btn-outline-danger" for="dificultad2">Difícil</label>
+												<input type="radio" className="btn-check" name="dificult" id="dificultad2" autoComplete="off" value="Difícil"/>
+												<label className="btn btn-outline-danger" htmlFor="dificultad2">Difícil</label>
 
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="dificultad3" autocomplete="off" value="Ni fácil/ni difícil"/>
-												<label class="btn btn-outline-primary" for="dificultad3">Ni fácil/ni difícil</label>
+												<input type="radio" className="btn-check" name="dificult" id="dificultad3" autoComplete="off" value="Ni fácil/ni difícil"/>
+												<label className="btn btn-outline-primary" htmlFor="dificultad3">Ni fácil/ni difícil</label>
 
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="dificultad4" autocomplete="off" value="Fácil"/>
-												<label class="btn btn-outline-success" for="dificultad4">Fácil</label>
+												<input type="radio" className="btn-check" name="dificult" id="dificultad4" autoComplete="off" value="Fácil"/>
+												<label className="btn btn-outline-success" htmlFor="dificultad4">Fácil</label>
 
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="dificultad5" autocomplete="off" value="Muy fácil"/>
-												<label class="btn btn-outline-success" for="dificultad5">Muy fácil</label>
+												<input type="radio" className="btn-check" name="dificult" id="dificultad5" autoComplete="off" value="Muy fácil"/>
+												<label className="btn btn-outline-success" htmlFor="dificultad5">Muy fácil</label>
 											</div>
-										</div>):(question.type=="yes_no"? (<div class="input-group justify-content-center">
-											<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                      <input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="si_no2" autocomplete="off" value="NO"/>
-                      <label class="btn btn-outline-danger" for="si_no2">NO</label>
+										</div>):(question.type=="yes_no"? (<div className="input-group justify-content-center">
+											<div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+                      <input type="radio" className="btn-check" name="yes_no" id="si_no1" autoComplete="off" value="NO"/>
+                      <label className="btn btn-outline-danger" htmlFor="si_no1">NO</label>
 
-												<input type="radio" class="btn-check" name="answer[<?php echo $row['id'] ?>]" id="si_no1" autocomplete="off" value="SI"/>
-												<label class="btn btn-outline-success" for="si_no1">SI</label>
+												<input type="radio" className="btn-check" name="yes_no" id="si_no2" autoComplete="off" value="SI"/>
+												<label className="btn btn-outline-success" htmlFor="si_no2">SI</label>
 
 												
 											</div>
 										</div>):(question.type=="range_emoji"?
                       (<div className="input-group justify-content-center">
-                      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                      <input type="radio"   class="btn-check" autocomplete="off" value="ok"  id='notBad' name="emojis"/>
-									      <label class="btn btn-outline-danger fs-5" for="notBad">😐</label>
-                        <input type="radio"   class="btn-check" autocomplete="off" value="ok"  id='bad' name="emojis"/>
-									      <label class="btn btn-outline-danger fs-5" for="bad">☹</label>
-                        <input type="radio"   class="btn-check" autocomplete="off" value="ok"  id='ok' name="emojis"/>
-									      <label class="btn btn-outline-primary  fs-5" for="ok">🙂</label>
-                        <input type="radio"   class="btn-check" autocomplete="off" value="good"  id='good' name="emojis"/>
-									      <label class="btn btn-outline-success fs-5" for="good">😄</label>
-									      <input type="radio"   class="btn-check btn-light" autocomplete="off" value="awesome"  id='awesome' name="emojis"/>
-									      <label class="btn btn-outline-success fs-5" for="awesome">😊</label>
+                      <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+                      <input type="radio"   className="btn-check" autoComplete="off" value="ok"  id='notBad' name="emojis"/>
+									      <label className="btn btn-outline-danger fs-5" htmlFor="notBad">😐</label>
+                        <input type="radio"   className="btn-check" autoComplete="off" value="ok"  id='bad' name="emojis"/>
+									      <label className="btn btn-outline-danger fs-5" htmlFor="bad">☹</label>
+                        <input type="radio"   className="btn-check" autoComplete="off" value="ok"  id='ok' name="emojis"/>
+									      <label className="btn btn-outline-primary  fs-5" htmlFor="ok">🙂</label>
+                        <input type="radio"   className="btn-check" autoComplete="off" value="good"  id='good' name="emojis"/>
+									      <label className="btn btn-outline-success fs-5" htmlFor="good">😄</label>
+									      <input type="radio"   className="btn-check btn-light" autoComplete="off" value="awesome"  id='awesome' name="emojis"/>
+									      <label className="btn btn-outline-success fs-5" htmlFor="awesome">😊</label>
                        
                         
                        
 							        	</div>
-                       </div>):(<div class="form-group">
-											<textarea name="answer[<?php echo $row['id'] ?>]" id="" cols="30" rows="4" class="form-control" placeholder="Escriba su respuesta aquí..."></textarea>
+                       </div>):(<div className="form-group">
+											<textarea name="" id="" cols="30" rows="4" className="form-control" placeholder="Escriba su respuesta aquí..."></textarea>
 										</div>)))))}
                     
                         </div>
@@ -368,60 +429,60 @@ export default function View_survey() {
       <div className="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
         <div className="modal-content">
           <div className="modal-body">
-            <form action="" id="manage-user-self">
+       
               <div id="msg"></div>
-
-              <div className="form-group m-2">
-                <label htmlFor="firstname" className="form-label">
-                  Pregunta
-                </label>
-                <input
-                  type="text"
-                  name="firstname"
-                  id="firstname"
-                  className="form-control"
-                  placeholder=" "
-                    value={question.input}
-                    onChange={(e) => question.handleChange(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="form-group m-2">
-                <label htmlFor="middlename" className="form-label">
-                  Tipo de pregunta
-                </label>
-                <select name="type" id="type" className='form-control text-center'>
-                  <option value="">Si o No </option>
-                  <option value="">Emoji</option>
-                  <option value="">1-5</option>
-                  <option value="">1-10</option>
-                  <option value="">Por dificultad</option>
+                <h5 className='text-start m-2 '>Añadir pregunta</h5>
+                <small>
+                <p className='text-start mb-4 ms-2 text-secondary'>Elige un tipo de pregunta de acuerdo a tus necesidades.</p>
+                </small>
+              <div className="form-group m-2 ">
+                <label htmlFor="middlename" id="labelAnimation">
+                <select   className="input-new text-center" placeholder=" "   name='questionType' onChange={(e)=> questionType.handleChange(e.target.value)} value={questionType.input} >
+                  <option value="" disabled>Seleccione una pregunta</option>
+                  <option value="yes_no">Si/No</option>
+                  <option value="range_emoji">Rango de emojis</option>
+                  <option value="range_onetofive">Rango de 1/5</option>
+                  <option value="range_zerototen">Rango de 0/10</option>
+                  <option value="range_difficulty">Rango de dificultad</option>
+                  <option value="textfield_s">Campo de texto</option>
                 </select>
-                {/* <input
-                  type="text"
-                  name="middlename"
-                  id="middlename"
-                  className="form-control"
-                  placeholder=" "
-                  value={type.input}
-                  onChange={(e) => type.handleChange(e.target.value)}
-                /> */}
+                <span className="labelName">Tipo de pregunta:</span>
+                </label>
               </div>
-
-              
+              {questionType.input && (
+              <div className="form-group m-2 mt-4" >
+                <label id="labelAnimation" htmlFor="question" >
+                  <input
+                    type="text"
+                    name="question"
+                    id="question"
+                    className="input-new"
+                    placeholder=" "
+                      value={description.input}
+                      onChange={(e) => description.handleChange(e.target.value)}
+                    required
+                  />
+                      <span className="labelName">Pregunta:</span>
+                      </label>
+                  
+              </div>
+              )}
+               {error && <p className='text-danger text-center'>{error}</p>}
               <div className="modal-footer">
-                <button className="btn bg-gradient-guardar mr-2" id="btn-send-survey" type="submit">
+              {questionType.input && (
+                <button className="btn bg-gradient-guardar mr-2" id="btn-send-survey"  onClick={() => validar(idToEdit,id)}>
                   Guardar
                 </button>
-                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal">
+                )}
+                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id='btnClose'>
                   Cancelar
                 </button>
               </div>
-            </form>
+          
           </div>
         </div>
       </div>
+      
     </div> 
 
 

@@ -74,7 +74,6 @@ const SidebarLT2 = () => {
   const updateInfo=async(event)=>{
     event.preventDefault();
     var parameters
-    console.log(userInfo)
     if (
       lastName.input.trim() === "" ||
       firstName.input.trim() === "" ||

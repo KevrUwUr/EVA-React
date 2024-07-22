@@ -58,7 +58,6 @@ const ProtectedRoute = ({ redirectPath = '/',allowedUserTypes = []}) => {
           });
       }
     };
-    console.log(allowedUserTypes,"    numero de rol:   ",parseInt(userType))
     if (accessToken) {
       getToken();
     }else {
