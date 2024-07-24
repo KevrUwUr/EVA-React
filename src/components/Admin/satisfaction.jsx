@@ -1,20 +1,28 @@
-import { useEffect,useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import "../../assets/css/experiencia.css";
-import { toggleGridMode, toggleListMode} from "../../assets/js/toggleListGridMode";
+import {
+  toggleGridMode,
+  toggleListMode,
+} from "../../assets/js/toggleListGridMode";
 import SidebarLT1 from "../aside/sidebarLT1";
 import HeaderLT1 from "../header/headerLT1";
 import SidebarLT2 from "../aside/sidebarLT2";
 import HeaderLT2 from "../header/headerLT2";
 import { useTranslation } from "react-i18next";
-
+import { getSurveys } from "../../services/surveyRequest";
+import axios from "axios";
 
 const Satisfaction = () => {
-  const { t,i18n } = useTranslation();
-  const { userType,languageUser } = useContext(UserContext);
+  const { t, i18n } = useTranslation();
+  const { userType, languageUser } = useContext(UserContext);
+  const { accessToken } = useContext(UserContext);
+  const urlSurveys = "http://localhost/API-EVA/surveyController/surveys";
+  const [surveys, setSurveys] = useState("");
 
   useEffect(() => {
-   i18n.changeLanguage(languageUser);
+    cSurveys();
+    i18n.changeLanguage(languageUser);
     document
       .getElementById("grid-button-mode")
       .addEventListener("click", toggleGridMode);
@@ -32,6 +40,20 @@ const Satisfaction = () => {
     };
   }, []);
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const cSurveys = function () {
+    getSurveys(urlSurveys, config)
+      .then(setSurveys)
+      .catch((error) => {
+        console.error("Error fetching survey questions", error);
+      });
+  }
+
   const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses empiezan desde 0
@@ -43,11 +65,14 @@ const Satisfaction = () => {
   return (
     <div className="App">
       <div id="body">
-        {userType==="1" || userType==="2"? <HeaderLT1 /> :  <HeaderLT2 />}
-        
+        {userType === "1" || userType === "2" ? <HeaderLT1 /> : <HeaderLT2 />}
+
         <section>
-        {userType==="1" || userType==="2"? <SidebarLT1/>:  <SidebarLT2/>}
-          
+          {userType === "1" || userType === "2" ? (
+            <SidebarLT1 />
+          ) : (
+            <SidebarLT2 />
+          )}
 
           <div className="container cards-EVA">
             <div className="row">
@@ -72,7 +97,7 @@ const Satisfaction = () => {
                   </div>
                   <div className="row d-flex">
                     <div className="col-4 col-lg-4 text-start">
-                      <h4 className="cardElement">1</h4>
+                      <h4 className="cardElement">{surveys}</h4>
                     </div>
                     <div className="col-8 col-lg-8 text-end d-none d-lg-block">
                       <button
@@ -89,19 +114,23 @@ const Satisfaction = () => {
 
                   <div className=" row ">
                     <div className=" col-lg-4 col-8 text-start">
-                      <h6 className="cardElement"> {t("satisfactionSite.Total_Surveys")}</h6>
+                      <h6 className="cardElement">
+                        {" "}
+                        {t("satisfactionSite.Total_Surveys")}
+                      </h6>
                     </div>
                   </div>
                 </div>
                 <div className="row  text-center">
-                  
-
                   <div className="col-lg">
                     <div className="card card4">
                       <div className="card-body d-grid">
                         <div className="row">
                           <div className="col-10 card-title">
-                            <span className=""> {t("satisfactionSite.FinalUserSurveys")}</span>
+                            <span className="">
+                              {" "}
+                              {t("satisfactionSite.FinalUserSurveys")}
+                            </span>
                           </div>
                           <div className="col-2">
                             <div className="dropdown">
@@ -118,24 +147,24 @@ const Satisfaction = () => {
                         </div>
                         <div className="row">
                           <div className="col-12">
-                            <h3 className="card-text">{t("satisfactionSite.Surveys")}</h3>
+                            <h3 className="card-text">
+                              {t("satisfactionSite.Surveys")}
+                            </h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">{t("satisfactionSite.Create_and_or_edit_survey")}</span>
+                            <span className="">
+                              {t("satisfactionSite.Create_and_or_edit_survey")}
+                            </span>
                           </div>
                         </div>
                         <div className="row button-container">
-                          
-                          <div
-                            className="col-10"
-                            onClick="./survey_list"
-                          >
+                          <div className="col-10" onClick="./survey_list">
                             <a href="/survey_list">
-                            <button className="card-btn check">
-                            {t("satisfactionSite.CreateSurvey")}
-                            </button>
+                              <button className="card-btn check">
+                                {t("satisfactionSite.CreateSurvey")}
+                              </button>
                             </a>
                           </div>
                           <div className="col-2">
@@ -153,7 +182,9 @@ const Satisfaction = () => {
                         <div className="row">
                           <div className="col-10 card-title">
                             <span className="">
-                            {t("satisfactionSite.GenerateGraphsAndSurveyReport")}
+                              {t(
+                                "satisfactionSite.GenerateGraphsAndSurveyReport"
+                              )}
                             </span>
                           </div>
                           <div className="col-2">
@@ -172,19 +203,21 @@ const Satisfaction = () => {
                         <div className="row">
                           <div className="col-12">
                             <h3 className="card-text w-100 m-0 p-0">
-                            {t("satisfactionSite.SurveyReport")}
+                              {t("satisfactionSite.SurveyReport")}
                             </h3>
                           </div>
                         </div>
                         <div className="row d-flex align-items-start justify-content-start mb-2">
                           <div className="col card-second-text  ">
-                            <span className="">{t("satisfactionSite.Generate_report")}</span>
+                            <span className="">
+                              {t("satisfactionSite.Generate_report")}
+                            </span>
                           </div>
                         </div>
                         <div className="row button-container">
                           <div className="col-10">
                             <button className="card-btn check">
-                            {t("satisfactionSite.GenerateGraphs")}
+                              {t("satisfactionSite.GenerateGraphs")}
                             </button>
                           </div>
                           <div className="col-2">
@@ -210,7 +243,7 @@ const Satisfaction = () => {
                   <div className="row d-flex">
                     <div className="col-8">
                       <h2 className="text-start  fw-bolder w-100 tituloCardGroup">
-                      {t("satisfactionSite.Survey_system")}
+                        {t("satisfactionSite.Survey_system")}
                       </h2>
                     </div>
                     <div className="col-4">
@@ -221,7 +254,7 @@ const Satisfaction = () => {
                   </div>
                   <div className="row d-flex">
                     <div className="col-12 col-lg-4 text-start">
-                      <h4 className="cardElement">1</h4>
+                      <h4 className="cardElement">{surveys}</h4>
                     </div>
                     <div className="col-8 col-lg-8 text-end d-none d-lg-block">
                       <button
@@ -241,7 +274,10 @@ const Satisfaction = () => {
 
                   <div className="row ">
                     <div className="col-12 col-lg-4 text-start">
-                      <h6 className="cardElement">  {t("satisfactionSite.Total_Surveys")}</h6>
+                      <h6 className="cardElement">
+                        {" "}
+                        {t("satisfactionSite.Total_Surveys")}
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -251,16 +287,19 @@ const Satisfaction = () => {
                       <ul className="list-item item-4 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                          {t("satisfactionSite.FinalUserSurveys")}
+                            {t("satisfactionSite.FinalUserSurveys")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                          {t("satisfactionSite.Create_and_or_edit_survey")}
+                            {t("satisfactionSite.Create_and_or_edit_survey")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">  {t("satisfactionSite.CreateSurvey")}</button>
+                          <button className="card-btn ">
+                            {" "}
+                            {t("satisfactionSite.CreateSurvey")}
+                          </button>
 
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -282,16 +321,21 @@ const Satisfaction = () => {
                       <ul className="list-item item-5 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                          {t("satisfactionSite.GenerateGraphsAndSurveyReport")}
+                            {t(
+                              "satisfactionSite.GenerateGraphsAndSurveyReport"
+                            )}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                          {t("satisfactionSite.Generate_report")}
+                            {t("satisfactionSite.Generate_report")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">     {t("satisfactionSite.Generate_report")}</button>
+                          <button className="card-btn ">
+                            {" "}
+                            {t("satisfactionSite.Generate_report")}
+                          </button>
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
                           </button>
@@ -312,16 +356,19 @@ const Satisfaction = () => {
                       <ul className="list-item item-6 d-flex justify-content-between">
                         <div className="col-6 col-lg-5">
                           <h5 className="text-white fw-bolder">
-                          {t("satisfactionSite.SendMailsurvey")}
+                            {t("satisfactionSite.SendMailsurvey")}
                           </h5>
                         </div>
                         <div className="col-lg-2 ms-3 d-none d-lg-block">
                           <span className="text-white text-start">
-                          {t("satisfactionSite.SendSurvey")}
+                            {t("satisfactionSite.SendSurvey")}
                           </span>
                         </div>
                         <div className="col-lg-3  justify-content-center  col ">
-                          <button className="card-btn ">     {t("satisfactionSite.SendMail")}</button>
+                          <button className="card-btn ">
+                            {" "}
+                            {t("satisfactionSite.SendMail")}
+                          </button>
 
                           <button className="btn-plus ms-2">
                             <i className="fa-solid fa-plus"></i>
@@ -348,7 +395,7 @@ const Satisfaction = () => {
               <div className="col-12 col-lg-4 col-sm-12">
                 <div className="card outstanding-card2 extern">
                   <div className="card-body div-title">
-                    <h5 className="">     {t("satisfactionSite.Surveys")}</h5>
+                    <h5 className=""> {t("satisfactionSite.Surveys")}</h5>
                     <div className="row">
                       <div className="col-12">
                         <span className=" text-start fw-bold">
@@ -359,7 +406,9 @@ const Satisfaction = () => {
                     </div>
                     <div className="row">
                       <p className="text-start ">
-                      {t("satisfactionSite.Rate_the_quality_of_customer_service_being_provided_by_the_agent")}
+                        {t(
+                          "satisfactionSite.Rate_the_quality_of_customer_service_being_provided_by_the_agent"
+                        )}
                       </p>
                     </div>
                   </div>

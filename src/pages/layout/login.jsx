@@ -21,9 +21,10 @@ const LogIn = () => {
         "password":password
       }
       const response= await axios.post(`http://localhost/API-EVA/LoginController/Auth`,parameters)
-      const responseData=response.data
+      const responseData = response.data
+      console.log({responseData})
    
-      if(responseData.status===true){
+      if(responseData.status==true){
         if(responseData.userLogin.state==1){
           console.log(responseData)
           setUserId(responseData.userLogin.id)
@@ -31,9 +32,9 @@ const LogIn = () => {
           setAccessToken(responseData.userLogin.accessToken)
           if(responseData.userLogin.type==1 || responseData.userLogin.type==2 ){
             nav("/admin")
-          } else if(responseData.userLogin.type===3){
+          } else if(responseData.userLogin.type==3){
             nav("/editor")
-          } else if(responseData.userLogin.type===4){
+          } else if(responseData.userLogin.type==4){
             nav("/index=Quality")
           }
           else{

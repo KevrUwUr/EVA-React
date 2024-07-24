@@ -8,7 +8,7 @@ import TableSurvey from "../../components/Tables/tableSurvey";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { smallAlertDelete, Toast,Toast2 } from "../../assets/js/alertConfig";
+import { smallAlertDelete, Toast, Toast2 } from "../../assets/js/alertConfig";
 import { generateRandomLink } from "../../components/survey/encrypt";
 const SurveyList = () => {
   // //todo Poner Tokens const {accessToken, RefreshToken} = useAuth(AuthContext)
@@ -23,6 +23,8 @@ const SurveyList = () => {
   const [selectedClients, setSelectedClients] = useState([]);
   const [endDate, setEndDate] = useState(null);
   const [startDate, setStartDate] = useState(null);
+  const [errorFechas, setErrorFechas] = useState(false);
+  const [errorFechasMessage, setErrorFechasMessage] = useState("");
   const title = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const start_date = useInput({
     defaultValue: "",
@@ -40,10 +42,9 @@ const SurveyList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Se establecen los survey una vez que el componente se monta
     getSurveys();
     getClients(userId);
-  }, []); // Se pasa un arreglo vacío como dependencia para que el efecto se ejecute solo una vez
+  }, []);
 
   const { accessToken, userType, userId } = useContext(UserContext);
   const config = {
@@ -56,7 +57,7 @@ const SurveyList = () => {
     try {
       const response = await axios.get(url, config);
       setSurvey(response.data);
-      console.log (response.data)
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -68,8 +69,7 @@ const SurveyList = () => {
         config
       );
       console.log("clientes relacionados: ", response.data);
-      setClients(response.data)
-     
+      setClients(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -146,6 +146,25 @@ const SurveyList = () => {
       });
   };
 
+  const validateDates = (dateStart, dateEnd) => {
+    const start = new Date(dateStart);
+    const end = new Date(dateEnd);
+
+    if (end < start) {
+      setErrorFechas(true);
+      setErrorFechasMessage("La fecha de inicio no puede ser posterior a la fecha de fin")
+      document.getElementById("saveButton").disabled = true;
+      return false;
+    } 
+    setErrorFechas(false);
+    document.getElementById("saveButton").disabled = false;
+    return true;
+  };
+
+  useEffect(() => {
+    validateDates(start_date.input, end_date.input);
+  }, [start_date.input, end_date.input]);
+
   const openModal = (op, survey) => {
     setOperation(op);
     if (op == 1) {
@@ -170,19 +189,18 @@ const SurveyList = () => {
   const validar = (id) => {
     var parametros;
     var metodo;
-
+    const dates = validateDates();
     if (
       title.input.trim() == "" ||
       start_date.input.trim() == "" ||
       end_date.input.trim() == "" ||
       description.input.trim() == ""
-      
     ) {
       alert("Campos mal diligenciados");
     } else {
       if (operation == 1) {
-        const link=generateRandomLink(title.input,idClient.input);
-        console.log(link)
+        const link = generateRandomLink(title.input, idClient.input);
+        console.log(link);
         parametros = {
           title: title.input,
           start_date: start_date.input,
@@ -190,7 +208,7 @@ const SurveyList = () => {
           description: description.input,
           idClient: idClient.input,
           link: link,
-          type:"survey"
+          type: "survey",
         };
         metodo = "post";
       } else if (operation == 2) {
@@ -201,11 +219,11 @@ const SurveyList = () => {
           description: description.input,
           idClient: idClient.input,
           link: link.input,
-          type:"survey"
+          type: "survey",
         };
         metodo = "put";
       }
-      sendData(metodo, parametros,id);
+      sendData(metodo, parametros, id);
     }
   };
   const sendData = async (metodo, parametros) => {
@@ -241,7 +259,7 @@ const SurveyList = () => {
           parametros,
           config
         );
-       
+        alert("Encuesta editada exitosamente");
         document.getElementById("btnCerrar").click();
         getSurveys();
       }
@@ -250,7 +268,7 @@ const SurveyList = () => {
     }
   };
   const openModalCont = (survey) => {
-    /*  await getClient(survey.id) */ 
+    /*  await getClient(survey.id) */
     setModalTitle("Información de la encuesta");
     title.handleChange(survey?.title || "");
     start_date.handleChange(survey?.start_date || "");
@@ -260,40 +278,39 @@ const SurveyList = () => {
     link.handleChange(survey?.link || "No presenta link anexado");
     idClient.handleChange(survey?.idClient || "");
   };
-  
-  const duplicateSurvey=(survey)=>{
 
-    console.log(survey)
-  smallAlertDelete
+  const duplicateSurvey = (survey) => {
+    console.log(survey);
+    smallAlertDelete
       .fire({
         text: `La encuesta ${survey.title} se duplicará.`,
         showCancelButton: true,
         confirmButtonText: "Confirmar",
         cancelButtonText: "Cancelar",
-      }).then(async (result) => {
+      })
+      .then(async (result) => {
         if (result.isConfirmed) {
-          const link=generateRandomLink(survey.title,survey.idClient);
-          const randomLink=(link+Math.floor(Math.random() * 100) + 1);
-          const DataToDuplicate ={
+          const link = generateRandomLink(survey.title, survey.idClient);
+          const randomLink = link + Math.floor(Math.random() * 100) + 1;
+          const DataToDuplicate = {
             description: survey.description,
-            end_date:survey.end_date,
-            idClient:survey.idClient,
-            start_date:survey.start_date,
-            state:survey.state,
-            title:survey.title,
-            type:survey.type,
-            link:randomLink
-          }
-          sendData("post",DataToDuplicate);
-        getSurveys();
-      }})
-    
-  }
+            end_date: survey.end_date,
+            idClient: survey.idClient,
+            start_date: survey.start_date,
+            state: survey.state,
+            title: survey.title,
+            type: survey.type,
+            link: randomLink,
+          };
+          sendData("post", DataToDuplicate);
+          getSurveys();
+        }
+      });
+  };
 
-  const openSurvey=(survey)=>{
+  const openSurvey = (survey) => {
     navigate(`/view_survey/${survey.id}`);
-  }
-
+  };
 
   return (
     <div className="App">
@@ -312,11 +329,11 @@ const SurveyList = () => {
                 onUpdate={(payload) => openModal(2, payload)}
                 modalId={"modalSurvey"}
                 modalId2={"modalViewSurvey"}
-                onView={(payload) =>openModalCont(payload)}
+                onView={(payload) => openModalCont(payload)}
                 onCheck={(payload) => openSurvey(payload)}
                 onRemove={(item) => deactivateSurvey(item)}
                 onActive={(payload) => activeSurvey(payload)}
-                onDuplicate={(item)=>duplicateSurvey(item)}
+                onDuplicate={(item) => duplicateSurvey(item)}
               />
             )}
           </div>
@@ -328,6 +345,7 @@ const SurveyList = () => {
             <div className="modal-header">
               <label className="h5">{modalTitle}</label>
               <button
+                id="btnCerrar"
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
@@ -344,19 +362,24 @@ const SurveyList = () => {
                       type="text"
                       name="title"
                       value={title.input}
-                     readOnly
+                      readOnly
                     />
                     <span className="labelName">Titulo</span>
                   </label>
                 </div>
                 <div className="col-4 mb-3">
                   <label id="labelAnimation">
-                    <select readOnly onChange={(e) => idClient.handleChange(e.target.value)}  value={idClient.input} className="input-new" >
-                      {clients.map((client)=>(
-                        <option value={client.id} key={client.id}>{client.client}</option>
-
+                    <select
+                      readOnly
+                      onChange={(e) => idClient.handleChange(e.target.value)}
+                      value={idClient.input}
+                      className="input-new"
+                    >
+                      {clients.map((client) => (
+                        <option value={client.id} key={client.id}>
+                          {client.client}
+                        </option>
                       ))}
-                  
                     </select>
                     <span className="labelName">Cliente</span>
                   </label>
@@ -371,7 +394,10 @@ const SurveyList = () => {
                       type="date"
                       name="start_date"
                       value={start_date.input}
-                      readOnly
+                      onChange={(e) => {
+                        start_date.handleChange(e.target.value);
+                        validateDates(e.target.value, end_date.input);
+                      }}
                     />
                     <span className="labelName">Fecha de inicio:</span>
                   </label>
@@ -384,12 +410,20 @@ const SurveyList = () => {
                       type="date"
                       name="end_date"
                       value={end_date.input}
-                      readOnly
+                      onChange={(e) => {
+                        end_date.handleChange(e.target.value);
+                        validateDates(start_date.input, e.target.value);
+                      }}
                     />
                     <span className="labelName">Fecha de finalización:</span>
                   </label>
                 </div>
               </div>
+              {errorFechas && (
+                <p className="text-danger">
+                  La fecha de fin no puede ser anterior a la fecha de inicio
+                </p>
+              )}
               <div className="row">
                 <div className="col mb-3 ">
                   <span>Descripción</span>
@@ -416,7 +450,6 @@ const SurveyList = () => {
               >
                 Cerrar
               </button>
-             
             </div>
           </div>
         </div>
@@ -451,13 +484,19 @@ const SurveyList = () => {
                 </div>
                 <div className="col-4 mb-3">
                   <label id="labelAnimation">
-                    <select onChange={(e) => idClient.handleChange(e.target.value)}  value={idClient.input} className="input-new" >
-                    <option value="" disabled>Seleccione un cliente</option>
-                      {clients.map((client)=>(
-                        <option value={client.id} key={client.id}>{client.client}</option>
-
+                    <select
+                      onChange={(e) => idClient.handleChange(e.target.value)}
+                      value={idClient.input}
+                      className="input-new"
+                    >
+                      <option value="" disabled>
+                        Seleccione un cliente
+                      </option>
+                      {clients.map((client) => (
+                        <option value={client.id} key={client.id}>
+                          {client.client}
+                        </option>
                       ))}
-                  
                     </select>
                     <span className="labelName">Cliente</span>
                   </label>
@@ -472,7 +511,10 @@ const SurveyList = () => {
                       type="date"
                       name="start_date"
                       value={start_date.input}
-                      onChange={(e) => start_date.handleChange(e.target.value)}
+                      onChange={(e) => {
+                        start_date.handleChange(e.target.value);
+                        validateDates(e.target.value, end_date.input);
+                      }}
                     />
                     <span className="labelName">Fecha de inicio:</span>
                   </label>
@@ -485,12 +527,20 @@ const SurveyList = () => {
                       type="date"
                       name="end_date"
                       value={end_date.input}
-                      onChange={(e) => end_date.handleChange(e.target.value)}
+                      onChange={(e) => {
+                        end_date.handleChange(e.target.value);
+                        validateDates(start_date.input, e.target.value);
+                      }}
                     />
                     <span className="labelName">Fecha de finalización:</span>
                   </label>
                 </div>
               </div>
+              {errorFechas && (
+                <p className="text-danger">
+                  {errorFechasMessage}
+                </p>
+              )}
               <div className="row mt-3">
                 <div className="col mb-3 ">
                   <label id="labelAnimation">
@@ -517,6 +567,7 @@ const SurveyList = () => {
                 Cerrar
               </button>
               <button
+                id="saveButton"
                 onClick={() => validar(idToEdit)}
                 className="btn-primary btn"
               >

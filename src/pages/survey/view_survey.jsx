@@ -59,7 +59,7 @@ export default function View_survey() {
       });
   };
 
-  const openModal = (op, idsurvey,questionDetails) => {
+  const openModal = (op, idsurvey, questionDetails) => {
     setOperation(op);
     console.log("operation: ",operation)
     if (op === 1) {
@@ -76,57 +76,67 @@ export default function View_survey() {
       survey_id.handleChange(idsurvey);
     }   
     else if (op === 2) {
-      console.log(question)
+      console.log({ questionDetails})
       setTitle("Editar pregunta");
       setDescriptionText('Modifica la pregunta de acuerdo a tus necesidades.')
       description.handleChange(questionDetails?.question|| "");
       questionType.handleChange(questionDetails?.type|| "");
-      setidToEdit(question?.id); 
+      setidToEdit(questionDetails?.id); 
     }
   };
-  const validar = (id,survey_idt) => {
+
+  const validar = (id, survey_idt) => {
     var parametros;
     var metodo;
 
-    if (
-      questionType.input.trim() === "" ||
-      description.input.trim() === "" 
-     
-    ) {
-      setError('Ingresa una pregunta valida.')
+    if (questionType.input.trim() === "" || description.input.trim() === "") {
+      setError("Ingresa una pregunta valida.");
     } else {
-     
       if (operation == 1) {
         parametros = {
           type: questionType.input,
-          percentage:0,
-          conditional:"NO",
-          question:description.input,
+          percentage: 0,
+          conditional: "NO",
+          question: description.input,
           survey_id: survey_idt,
-          frm_option:frm_option.input,
-          id_conditional:id_conditional.input,
-          //fmr_option cambiar null en db, section e id_conditional 
-          conditional_answer:conditional_answer.input,
-          section:section.input,
-
+          frm_option: frm_option.input,
+          id_conditional: id_conditional.input,
+          //fmr_option cambiar null en db, section e id_conditional
+          conditional_answer: conditional_answer.input,
+          section: section.input,
         };
         metodo = "post";
       } else if (operation == 2) {
-        console.log('pasa la validacion')
+        console.log("pasa la validacion");
         parametros = {
           type: questionType.input,
-          percentage:0,
-          conditional:"NO",
-          question:description.input,
-          survey_id:survey_idt,
-        
-          conditional_answer:conditional_answer.input,
-          
+          percentage: 0,
+          conditional: "NO",
+          question: description.input,
+          survey_id: survey_idt,
+          conditional_answer: conditional_answer.input,
         };
+        console.log({ parametros });
         metodo = "put";
-
       }
-      sendData(metodo, parametros,config,idToEdit,setLoading,setError, updateSurveyQuestions,t);
+      sendData(
+        metodo,
+        parametros,
+        config,
+        id,
+        setLoading,
+        setError,
+        updateSurveyQuestions,
+        t
+      )
+        .then(() => {
+          // Actualizar preguntas después de la llamada a sendData
+          updateSurveyQuestions();
+          document.getElementById("btnClose").click();
+        })
+        .catch((error) => {
+          console.error("Error en la actualización de preguntas:", error);
+        });
     }
   };
 
