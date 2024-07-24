@@ -23,8 +23,6 @@ export default function View_survey() {
   const [error,setError]=useState('')
   const question = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const description = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
-
-  
   const questionType = useInput({ defaultValue: '', validate: /^[A-Za-z_]+$/ });
   const section = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const percentage = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/});
@@ -107,6 +105,7 @@ export default function View_survey() {
           survey_id: survey_idt,
           frm_option:frm_option.input,
           id_conditional:id_conditional.input,
+          //fmr_option cambiar null en db, section e id_conditional 
           conditional_answer:conditional_answer.input,
           section:section.input,
 
@@ -131,6 +130,9 @@ export default function View_survey() {
     }
   };
 
+  //agregar input de pregunta tipo radio para una sola opcion y otro input para opcion multiple
+  //seleccion unica radio_opt
+  //seleccion multiple check_opt
   return (
     <div className="App">
       <div id="body">
