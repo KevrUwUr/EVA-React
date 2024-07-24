@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useState, useEffect,useContext } from "react";
 import HeaderLT1 from "../../components/header/headerLT1";
 import SidebarLT1 from "../../components/aside/sidebarLT1";
-import TableDetalle from "../../components/Tables/table";
+import TableDetalle from "../../components/Tables/tableClients";
 import useInput from "../../components/hooks/useInput";
 import { UserContext } from "../../context/UserContext";
 import "../../assets/css/newUser.css";

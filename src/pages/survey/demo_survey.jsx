@@ -1,7 +1,7 @@
 import React from 'react';
-import "../../../assets/css/encuesta.css"
-import img1 from "../../../assets/img/clientes/700.png";
-import img2 from "../../../assets/img/encuesta.png";
+import '../../assets/css/encuesta.css'
+import img1 from "../../assets/img/clientes/700.png";
+import img2 from "../../assets/img/encuesta.png";
 
 export default function Public_survey() {
   return (

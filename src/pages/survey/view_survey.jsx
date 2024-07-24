@@ -1,16 +1,14 @@
 import React from 'react'
-import HeaderLT1 from '../../../components/header/headerLT1'
+import HeaderLT1 from '../../components/header/headerLT1'
 import axios from "axios"
 import { useEffect,useState,useContext } from 'react'
-import SidebarLT1 from '../../../components/aside/sidebarLT1'
-import useInput from '../../../components/hooks/useInput'
-import { UserContext } from '../../../context/UserContext'
+import SidebarLT1 from '../../components/aside/sidebarLT1'
+import useInput from '../../components/hooks/useInput'
+import { UserContext } from '../../context/UserContext'
 import { useParams } from 'react-router-dom'
-import '../../../assets/css/view_survey.css'
-import { smallAlertDelete,loadingAlert, Toast2,Toast} from '../../../assets/js/alertConfig'
+import { smallAlertDelete,loadingAlert, Toast2,Toast} from '../../assets/js/alertConfig'
 import { useTranslation } from "react-i18next";
-
-
+import { sendData,deleteQuestion,getSurvey,getSurveyQuestions } from '../../services/surveyRequest'
 
 export default function View_survey() {
 
@@ -18,6 +16,7 @@ export default function View_survey() {
   const [data,setData]=useState([]);
   const [operation, setOperation] = useState([1]);
   const [title, setTitle] = useState();
+  const [descriptionText,setDescriptionText]=useState()
   const [surveyData,setSurveyData]=useState([])
   const [loading,setLoading]=useState(false)
   const [idToEdit, setidToEdit] = useState(null);
@@ -25,6 +24,7 @@ export default function View_survey() {
   const question = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const description = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
 
+  
   const questionType = useInput({ defaultValue: '', validate: /^[A-Za-z_]+$/ });
   const section = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const percentage = useInput({defaultValue: "",validate: /^[^\s@]+@[^\s@]+\.[^\s@]*$/});
@@ -39,8 +39,8 @@ export default function View_survey() {
   const { accessToken,languageUser} = useContext(UserContext);
   useEffect(() => {
     i18n.changeLanguage(languageUser)
-    getSurvey();
-    getSurveyQuestions();
+    getSurvey(id,config,setSurveyData);
+    updateSurveyQuestions() 
    
    
 
@@ -52,23 +52,21 @@ export default function View_survey() {
     }
   };
 
-  const getSurvey=async()=>{
-    const url="http://localhost/API-EVA/surveyController/surveybyid/"
-    const response= await axios.get(`${url}${id}`,config)
-    console.log(response.data)
-    setSurveyData(response.data)
-  }
-  const getSurveyQuestions=async()=>{
-    const url="http://localhost/API-EVA/surveyController/QuestionxSurvey/"
-    const response= await axios.get(`${url}${id}`,config)
-    const responseData=(response.data.data)
-    console.log(responseData)
-    setData(responseData) 
-  }
+
+  const updateSurveyQuestions = () => {
+    getSurveyQuestions(id, config)
+      .then(setData)
+      .catch(error => {
+        console.error('Error fetching survey questions', error);
+      });
+  };
+
   const openModal = (op, idsurvey,questionDetails) => {
     setOperation(op);
+    console.log("operation: ",operation)
     if (op === 1) {
       setTitle("Añadir Pregunta");
+      setDescriptionText('Elige un tipo de pregunta de acuerdo a tus necesidades.')
       description.handleChange("");
       questionType.handleChange("");
       section.handleChange("");
@@ -78,16 +76,16 @@ export default function View_survey() {
       id_conditional.handleChange("0");
       conditional_answer.handleChange("NO");
       survey_id.handleChange(idsurvey);
-    } 
-    else if (op == 2) {
+    }   
+    else if (op === 2) {
       console.log(question)
+      setTitle("Editar pregunta");
+      setDescriptionText('Modifica la pregunta de acuerdo a tus necesidades.')
       description.handleChange(questionDetails?.question|| "");
       questionType.handleChange(questionDetails?.type|| "");
       setidToEdit(question?.id); 
     }
   };
-
-
   const validar = (id,survey_idt) => {
     var parametros;
     var metodo;
@@ -99,8 +97,8 @@ export default function View_survey() {
     ) {
       setError('Ingresa una pregunta valida.')
     } else {
-      console.log(survey_idt)
-      if (operation === 1) {
+     
+      if (operation == 1) {
         parametros = {
           type: questionType.input,
           percentage:0,
@@ -114,94 +112,25 @@ export default function View_survey() {
 
         };
         metodo = "post";
-      } else if (operation === 2) {
+      } else if (operation == 2) {
+        console.log('pasa la validacion')
         parametros = {
           type: questionType.input,
           percentage:0,
           conditional:"NO",
           question:description.input,
           survey_id:survey_idt,
-          frm_option:frm_option.input,
-          id_conditional:id_conditional.input,
+        
           conditional_answer:conditional_answer.input,
-          section:section.input
+          
         };
         metodo = "put";
 
       }
-      sendData(metodo, parametros, id);
+      sendData(metodo, parametros,config,idToEdit,setLoading,setError, updateSurveyQuestions,t);
     }
   };
 
-  const sendData = async (metodo, parametros) => {
-    try {
-      if (metodo.toUpperCase() === "POST") {
-    
-        const handleCreateQuestion = async () => {
-            setLoading(true);
-            try {
-                const url= 'http://localhost/API-EVA/QuestionController/postQuestion'
-                const response = await axios.post(url, parametros, config);
-                const responseData = response.data;
-                console.log('Respuesta solicitud Post:', responseData);
-                if (responseData.status){
-                  setLoading(false);
-                  setError('')
-                  document.getElementById("btnClose").click();
-                  Toast2.fire({
-                    icon: "success",
-                    title: `${t("Pregunta añadida exitosamente.")}`,
-                  });
-                  getSurveyQuestions();
-                }
-            } catch (error) {
-                console.error(error);
-            } 
-        }
-        handleCreateQuestion();
-      } else if (metodo.toUpperCase() === "PUT") {
-        const url = `http://localhost/API-EVA/QuestionController/putquestion/`;
-        const response = await axios.put(`${url}/${idToEdit}`,parametros,config);
-        const responseData = response.data;
-        if (responseData.success){
-          document.getElementById("btnCerrar").click();
-          getSurveyQuestions();
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const deleteQuestion =(questiondetails)=>{
-    const questiontext= questiondetails.question
-    const idquestion=questiondetails.id
-      smallAlertDelete.fire({
-        text: `${t("alertDeactivate.InitialPhrase")}${questiontext} ${t("alertDeactivate.FinalPhrase")}`,
-        showCancelButton: true,
-        confirmButtonText: `${t("alertDeactivate.Confirm")}`,
-        cancelButtonText: `${t("alertDeactivate.Cancel")}`,
-      })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-             const url= 'http://localhost/API-EVA/questionController/DeleteQuestion/'
-             const {data} = await axios.delete(`${url}${idquestion}`,config)
-             if (data.status){
-              Toast.fire({
-                icon: "success",
-                title: `${t("la pregunta")} ${questiontext} ${t("ha sido eliminada.")}`,
-              });
-             }
-            
-          } catch (error) {
-            alert("error", "Error al eliminar pregunta");
-            console.error(error);
-          }
-        }
-        getSurveyQuestions();
-      });
-  }
   return (
     <div className="App">
       <div id="body">
@@ -256,7 +185,7 @@ export default function View_survey() {
                           </a>
                             <ul className="dropdown-menu">
                               <li><button className="dropdown-item"  type='button'  data-bs-toggle="modal" data-bs-target="#modalManageQuestion" onClick={() => openModal(2,id,question)}>Editar</button></li>
-                              <li><button className="dropdown-item"  type='button' onClick={()=> deleteQuestion(question)}>Eliminar</button></li>
+                              <li><button className="dropdown-item"  type='button' onClick={()=> deleteQuestion(question,config, updateSurveyQuestions,t)}>Eliminar</button></li>
                             </ul>
                           </div> </div>
                          
@@ -270,22 +199,18 @@ export default function View_survey() {
                                 <input type="radio" className="btn-check" name="satisfaction" id="satisfaccion1" autoComplete="off" value="1"/>
                                 <label className="btn btn-outline-danger" htmlFor="satisfaccion1">1</label>
                               </a>
-      
                               <a data-bs-toggle="tooltip" data-bs-title="Insatisfecho">
                                 <input type="radio" className="btn-check" name="probability" id="satisfaccion2" autoComplete="off" value="2"/>
                                 <label className="btn btn-outline-danger" htmlFor="satisfaccion2">2</label>
                               </a>
-      
                               <a data-bs-toggle="tooltip" data-bs-title="Ni satisfecho/ni insatisfecho">
                                 <input type="radio" className="btn-check" name="probability" id="satisfaccion3" autoComplete="off" value="3"/>
                                 <label className="btn btn-outline-primary" htmlFor="satisfaccion3">3</label>
                               </a>
-      
                               <a data-bs-toggle="tooltip" data-bs-title="Satisfecho">
                                 <input type="radio" className="btn-check" name="probability" id="satisfaccion4" autoComplete="off" value="4"/>
                                 <label className="btn btn-outline-success" htmlFor="satisfaccion4">4</label>
                               </a>
-      
                               <a data-bs-toggle="tooltip" data-bs-title="Muy satisfecho">
                                 <input type="radio" className="btn-check" name="probability" id="satisfaccion5" autoComplete="off" value="5"/>
                                 <label className="btn btn-outline-success" htmlFor="satisfaccion5">5</label>
@@ -407,7 +332,6 @@ export default function View_survey() {
                        </div>):(<div className="form-group">
 											<textarea name="" id="" cols="30" rows="4" className="form-control" placeholder="Escriba su respuesta aquí..."></textarea>
 										</div>)))))}
-                    
                         </div>
                       ))}
                   </div>
@@ -419,21 +343,14 @@ export default function View_survey() {
         </section>
         </div>
     <div
-      className="modal fade"
-      id="modalManageQuestion"
-      tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-      
-    >
+      className="modal fade" id="modalManageQuestion" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div className="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
         <div className="modal-content">
           <div className="modal-body">
-       
               <div id="msg"></div>
-                <h5 className='text-start m-2 '>Añadir pregunta</h5>
+                <h5 className='text-start m-2 '>{title}</h5>
                 <small>
-                <p className='text-start mb-4 ms-2 text-secondary'>Elige un tipo de pregunta de acuerdo a tus necesidades.</p>
+                <p className='text-start mb-4 ms-2 text-secondary'>{descriptionText}</p>
                 </small>
               <div className="form-group m-2 ">
                 <label htmlFor="middlename" id="labelAnimation">
@@ -464,7 +381,6 @@ export default function View_survey() {
                   />
                       <span className="labelName">Pregunta:</span>
                       </label>
-                  
               </div>
               )}
                {error && <p className='text-danger text-center'>{error}</p>}
@@ -478,17 +394,10 @@ export default function View_survey() {
                   Cancelar
                 </button>
               </div>
-          
           </div>
         </div>
       </div>
-      
     </div> 
-
-
         </div>
-        
       )       
-    
-   
 }

@@ -35,9 +35,9 @@ import IndexQuality from "./pages/quality/indexQuality";
 /* ---------------------------------------------------------*/
 
 /* Survey */
-import Public_survey from "./pages/admin/survey/public_survey";
-import SurveyList from "./pages/admin/survey_list";
-import View_survey from "./pages/admin/survey/view_survey";
+import Public_survey from "./pages/survey/demo_survey"
+import SurveyList from "./pages/survey/survey_list";
+import View_survey from "./pages/survey/view_survey";
 
 /* ---------------------------------------------------------*/
 
