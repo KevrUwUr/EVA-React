@@ -323,8 +323,6 @@ export default function Client_list() {
                   
                   <input type="file" className="btn btn-primary"   accept=".jpg, .jpeg, .png"  name="logo" onChange={handleFileChange}
 />
-
-                
                   </div>
                 </div>
                 <div className="col  m-2 ">
