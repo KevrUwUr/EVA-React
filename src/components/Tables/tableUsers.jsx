@@ -10,7 +10,7 @@ const TableUsers = ({
   onView,
   onActive,
   modalId,
-  modalId2
+  modalId2,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,143 +82,140 @@ const TableUsers = ({
             </tr>
           </thead>
           <tbody>
-          {currentRecords.map((item, idx) => (
-  (item.type !== 1 && item.type !== 2) ? (
-    <tr key={idx}>
-      {header.map((key, i) => (
-        <td key={i}>
-          {key == "estado" ? (
-            item.estado == 1 ? "Activo" : "Inactivo"
-          ) : key == "type" ? (
-            item.type == 1
-              ? "SuperAdmin"
-              : item.type == 2
-              ? "Administrador"
-              : item.type == 3
-              ? "Editor"
-              : "Visualizador"
-          ) : (
-            item[key]
-          )}
-        </td>
-      ))}
-      {item.estado == 1 ? (
-        <td>
-          <div className="row">
-            <div className="col">
+            {currentRecords.map((item, idx) =>
+              item.type !== 1 && item.type !== 2 ? (
+                <tr key={idx}>
+                  {header.map((key, i) => (
+                    <td key={i}>
+                      {key == "estado"
+                        ? item.estado == 1
+                          ? "Activo"
+                          : "Inactivo"
+                        : key == "type"
+                        ? item.type == 1
+                          ? "SuperAdmin"
+                          : item.type == 2
+                          ? "Administrador"
+                          : item.type == 3
+                          ? "Editor"
+                          : "Visualizador"
+                        : item[key]}
+                    </td>
+                  ))}
+                  {item.estado == 1 ? (
+                    <td>
+                      <div className="row">
+                        <div className="col">
+                          <button
+                            className="btn btn-rect"
+                            data-bs-toggle="modal"
+                            data-bs-target={`#${modalId}`}
+                            onClick={() => onUpdate(item)}
+                          >
+                            <i className="fa-solid fa-edit"></i>
+                          </button>
+                          <button
+                            className="btn btn-rect"
+                            onClick={() => onRemove(item)}
+                          >
+                            <i className="fa-solid fa-power-off"></i>
+                          </button>
+                          <button
+                            className="btn btn-rect"
+                            data-bs-toggle="modal"
+                            data-bs-target={`#${modalId2}`}
+                            onClick={() => onView(item)}
+                          >
+                            <i className="fa-solid fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  ) : (
+                    <td>
+                      <div className="row">
+                        <div className="col">
+                          <button
+                            className="btn btn-rect"
+                            onClick={() => onActive(item)}
+                          >
+                            <i className="fa-solid fa-power-off"></i>
+                          </button>
+                          <button
+                            className="btn btn-rect"
+                            data-bs-toggle="modal"
+                            data-bs-target={`#${modalId2}`}
+                            onClick={() => onView(item)}
+                          >
+                            <i className="fa-solid fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ) : null
+            )}
+          </tbody>
+        </table>
+        <div className="row d-flex ps-5 pe-5 mt-3">
+          <div className="col-6 col-sm-6 col-md-6 col-lg-6">
+            <label>
+              Mostrar
               <button
-                className="btn btn-rect"
-                data-bs-toggle="modal"
-                data-bs-target={`#${modalId}`}
-                onClick={() => onUpdate(item)}
+                className="dropdown-toggle inp-search"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
-                <i className="fa-solid fa-edit"></i>
+                {recordsPerPage}
               </button>
+              <ul className="dropdown-menu">
+                {[25, 50, 75].map((num) => (
+                  <li key={num}>
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={() => handleRecordsPerPageChange(num)}
+                    >
+                      {num}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              registros
+            </label>
+          </div>
+          <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
+            <div
+              className="btn-group"
+              role="group"
+              aria-label="Basic outlined example"
+            >
               <button
-                className="btn btn-rect"
-                onClick={() => onRemove(item)}
+                type="button"
+                className="btn"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               >
-                <i className="fa-solid fa-power-off"></i>
+                &lt;
               </button>
+              <label className="btn" htmlFor="btncheck2">
+                {currentPage}
+              </label>
               <button
-                className="btn btn-rect"
-                data-bs-toggle="modal"
-                data-bs-target={`#${modalId2}`}
-                onClick={() => onView(item)}
+                type="button"
+                className="btn"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
               >
-                <i className="fa-solid fa-search"></i>
+                &gt;
               </button>
             </div>
           </div>
-        </td>
-      ) : (
-        <td>
-          <div className="row">
-            <div className="col">
-              <button
-                className="btn btn-rect"
-                onClick={() => onActive(item)}
-              >
-                <i className="fa-solid fa-power-off"></i>
-              </button>
-              <button
-                className="btn btn-rect"
-                data-bs-toggle="modal"
-                data-bs-target={`#${modalId2}`}
-                onClick={() => onView(item)}
-              >
-                <i className="fa-solid fa-search"></i>
-              </button>
-            </div>
-          </div>
-        </td>
-      )}
-    </tr>
-  ) : null
-))}
-
-            
-     </tbody>
-   </table>
-   <div className="row d-flex ps-5 pe-5 mt-3">
-   <div className="col-6 col-sm-6 col-md-6 col-lg-6">
-     <label>
-       Mostrar
-       <button
-         className="dropdown-toggle inp-search"
-         type="button"
-         data-bs-toggle="dropdown"
-         aria-expanded="false"
-       >
-         {recordsPerPage}
-       </button>
-       <ul className="dropdown-menu">
-         {[25, 50, 75].map((num) => (
-           <li key={num}>
-             <a
-               className="dropdown-item"
-               href="#"
-               onClick={() => handleRecordsPerPageChange(num)}
-             >
-               {num}
-             </a>
-           </li>
-         ))}
-       </ul>
-       registros
-     </label>
-   </div>
-   <div className="d-grid col-6 col-sm-6 col-md-6 col-lg-6 justify-content-end">
-     <div
-       className="btn-group"
-       role="group"
-       aria-label="Basic outlined example"
-     >
-       <button
-         type="button"
-         className="btn"
-         onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-       >
-         &lt;
-       </button>
-       <label className="btn" htmlFor="btncheck2">
-         {currentPage}
-       </label>
-       <button
-         type="button"
-         className="btn"
-         onClick={() =>
-           setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-         }
-       >
-         &gt;
-       </button>
-     </div>
-   </div>
- </div>
- </div>
- 
-</div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -38,6 +38,8 @@ import IndexQuality from "./pages/quality/indexQuality";
 import Public_survey from "./pages/survey/demo_survey"
 import SurveyList from "./pages/survey/survey_list";
 import View_survey from "./pages/survey/view_survey";
+import { LinearScale } from "chart.js";
+import Dashboard from "./components/charts/lineStyle";
 
 /* ---------------------------------------------------------*/
 
@@ -50,6 +52,7 @@ export const  App=() =>{
         {/* Pruebas de barras */}
         {/*error views*/}
         <Route path="/auth/inactive" element={<Inactive />} />
+        <Route path="/charts" element={<Dashboard />} />
         <Route element={<ProtectedRoute redirectPath="/"  allowedUserTypes={[1]} />}>
           <Route path="/client_list" element={<Client_list />} />
         </Route>
