@@ -21,6 +21,9 @@ export default function View_survey() {
   const [loading,setLoading]=useState(false)
   const [idToEdit, setidToEdit] = useState(null);
   const [error,setError]=useState('')
+  const [listConditional,setListConditional]=useState(false)
+  const [valueConditional,setValueConditional]=useState(null)
+
   const question = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const description = useInput({ defaultValue: "", validate: /^[A-Za-z ]*$/ });
   const questionType = useInput({ defaultValue: '', validate: /^[A-Za-z_]+$/ });
@@ -58,6 +61,27 @@ export default function View_survey() {
         console.error('Error fetching survey questions', error);
       });
   };
+  const ButtonAllowConditional=()=> {
+    setConditionalButton(true)
+  }
+  const conditionalHandleChange=(e)=>{
+    const conditional= e
+    console.log("Estado del condicional: ",conditional)
+    setValueConditional(conditional)
+
+   
+  }
+  useEffect(() => {
+    console.log("Estado de salida condicional", valueConditional);
+    if(!valueConditional){
+      setListConditional(false)
+
+   
+    }
+    return setListConditional(true)
+
+    
+}, [valueConditional]);
 
   const openModal = (op, idsurvey, questionDetails) => {
     setOperation(op);
@@ -71,14 +95,17 @@ export default function View_survey() {
       percentage.handleChange("");
       frm_option.handleChange("");
       conditional.handleChange("NO");
-      id_conditional.handleChange("0");
+      id_conditional.handleChange(0);
       conditional_answer.handleChange("NO");
       survey_id.handleChange(idsurvey);
+
     }   
     else if (op === 2) {
       console.log({ questionDetails})
       setTitle("Editar pregunta");
       setDescriptionText('Modifica la pregunta de acuerdo a tus necesidades.')
+      id_conditional.handleChange(questionDetails?.id_conditional||"")
+      conditional.handleChange(questionDetails?.conditional|| "")
       description.handleChange(questionDetails?.question|| "");
       questionType.handleChange(questionDetails?.type|| "");
       setidToEdit(questionDetails?.id); 
@@ -96,7 +123,7 @@ export default function View_survey() {
         parametros = {
           type: questionType.input,
           percentage: 0,
-          conditional: "NO",
+          conditional:valueConditional? "SI": "NO" ,
           question: description.input,
           survey_id: survey_idt,
           frm_option: frm_option.input,
@@ -111,10 +138,11 @@ export default function View_survey() {
         parametros = {
           type: questionType.input,
           percentage: 0,
-          conditional: "NO",
+          conditional: conditional.input,
           question: description.input,
           survey_id: survey_idt,
           conditional_answer: conditional_answer.input,
+          id_conditional: id_conditional.input,
         };
         console.log({ parametros });
         metodo = "put";
@@ -182,7 +210,6 @@ export default function View_survey() {
                 </div>
                 <form action="" id='manage-sort'>
                   <div className="card-body ui-sorteable">
-                                
                       {data.map(question=>(
                         <div key={question.id} className="callout callout info">
                           <div className="row">
@@ -337,13 +364,14 @@ export default function View_survey() {
 									      <label className="btn btn-outline-success fs-5" htmlFor="good">😄</label>
 									      <input type="radio"   className="btn-check btn-light" autoComplete="off" value="awesome"  id='awesome' name="emojis"/>
 									      <label className="btn btn-outline-success fs-5" htmlFor="awesome">😊</label>
-                       
-                        
-                       
 							        	</div>
-                       </div>):(<div className="form-group">
+                       </div>):(question.type=="radio_opt"? (  <SingleChoiceQuestion
+                                key={question.id}
+                                question={question}
+                                onUpdate={(updatedQuestion) => handleUpdate(question.id, updatedQuestion)}
+                       />):(<div className="form-group">
 											<textarea name="" id="" cols="30" rows="4" className="form-control" placeholder="Escriba su respuesta aquí..."></textarea>
-										</div>)))))}
+										</div>))))))}
                         </div>
                       ))}
                   </div>
@@ -365,6 +393,7 @@ export default function View_survey() {
                 <p className='text-start mb-4 ms-2 text-secondary'>{descriptionText}</p>
                 </small>
               <div className="form-group m-2 ">
+           
                 <label htmlFor="middlename" id="labelAnimation">
                 <select   className="input-new text-center" placeholder=" "   name='questionType' onChange={(e)=> questionType.handleChange(e.target.value)} value={questionType.input} >
                   <option value="" disabled>Seleccione una pregunta</option>
@@ -374,11 +403,36 @@ export default function View_survey() {
                   <option value="range_zerototen">Rango de 0/10</option>
                   <option value="range_difficulty">Rango de dificultad</option>
                   <option value="textfield_s">Campo de texto</option>
+                  <option value="radio_opt">Seleccion unica</option>
+                  <option value="check_opt">Seleccion multiple</option>
                 </select>
                 <span className="labelName">Tipo de pregunta:</span>
                 </label>
               </div>
               {questionType.input && (
+                <>
+                {data.length>=1?( <div className="form-check form-switch  m-2">
+                   <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" onChange={(e)=> conditionalHandleChange(e.target.checked)
+                    }/>
+                   <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Condicional</label>
+                    </div>):(" ") }
+                    {listConditional && valueConditional? (
+                      <div className="form-group m-2 mt-4">
+                        <label id='labelAnimation'>
+                        
+                      <select className='input-new text-center'   placeholder=" " name='questionConditional' onChange={(e)=> id_conditional.handleChange(e.target.value)} value={id_conditional.input} >
+                        <option value="0" disabled>Selecciona una pregunta</option>
+                        {data.map((question) => (
+                          <option key={question.id} value={question.id}>
+                            {question.question}
+                          </option>
+                        ))}
+                      </select>
+                     <span className="labelName">Pregunta condicional:</span>
+                        
+                      </label>
+                    </div>
+                    ):("")}
               <div className="form-group m-2 mt-4" >
                 <label id="labelAnimation" htmlFor="question" >
                   <input
@@ -394,6 +448,7 @@ export default function View_survey() {
                       <span className="labelName">Pregunta:</span>
                       </label>
               </div>
+              </>
               )}
                {error && <p className='text-danger text-center'>{error}</p>}
               <div className="modal-footer">
@@ -402,7 +457,7 @@ export default function View_survey() {
                   Guardar
                 </button>
                 )}
-                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id='btnClose'>
+                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id='btnClose' onClick={()=> setValueConditional(false)}>
                   Cancelar
                 </button>
               </div>
